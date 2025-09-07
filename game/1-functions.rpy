@@ -8,6 +8,11 @@ default torso_costume2 = "nothing"
 default currentpos = 0
 default face_mask = "nothing"
 default face_mask_2 = "nothing"
+
+default persistent.yuri_chr = "A-AAAAA-AMAM" # Tracks the last used sprite code
+default persistent.hand_hold_start_time = None # For the sustained touch timer
+default persistent.hand_hold_triggered = False # Prevents the event from firing repeatedly
+
 default faint_effect = None
 default repeat_dialogue_ask = False
 default loop_again = False
@@ -112,6 +117,13 @@ default max_points = float(100)
 #STATEMENTS#
 ############
 python early:
+
+    holdable_hand_suffixes = {
+        "AAAB", "AAAE", "AAAI", "AAAJ", "AAAL", "AAAM",
+        "ABAA", "AEAA", "AIAA", "AJAA", "ALAA", "AMAA",
+        "ABAB", "AEAE", "AIAI", "AJAJ", "ALAL", "AMAM"
+    }
+
     def clamp(value, min_value, max_value):
         return max(min(value, max_value), min_value)
 
@@ -533,6 +545,7 @@ init -999 python:
 
     def show_chr(expression, chr = "yuri_sit", position = ["t11"]):#Head-eye,mouth,eyebrow,blush,cry-Larmup, Larmdown, Rarmup, Larmdown
     #Note TO SELF, FUCKING RETOOL THIS WHOLE FUCKING THING. Post-Valentines is replacement of all code time.
+        persistent.yuri_chr = expression
         global sprite_type
         global yuri_sit
         global yuri_sleep
@@ -1256,30 +1269,49 @@ label tc_transition:
     return
 
 screen jy_bg():
-    #zorder 1
     layer "master"
-    imagemap:
-        idle "jy_bg"
 
-        #if persistent.bg == "space" and persistent.high_gpu == 0:
-        #    $ renpy.call("mask_windows")
-        
+    # Use a single imagemap to construct the entire background.
+    imagemap:
+        # 1. Provide a guaranteed, full-screen transparent ground image.
+        # This solves the "Could not find a ground image" error by giving
+        # the imagemap a defined size and base layer under all conditions.
+        ground Solid("#0000")
+
+        # 2. Add the actual background layers on top of the transparent ground.
+        if persistent.bg == "space":
+            # Layering for the space classroom
+            add "mask_2"
+            add "mask_3"
+
+            if persistent.high_gpu == 0:
+                add "room_mask" at room_mask_pos
+                add "room_mask2" at room_mask2_pos
+
+            add "yuri_room"
+
+        else:
+            # For all other backgrounds, add the layeredimage on top.
+            add "jy_bg"
+
+        # 3. Hotspots are automatically placed on top of all previously added images.
         if persistent.bg == "timecycle" and hide_yuri_sit == False:
-            hotspot (153, 0, 438, 341)action Function(boop_init, "boop_window")
+            hotspot (153, 0, 438, 341) action Function(boop_init, "boop_window")
 
         if hide_yuri_sit == True:
             hotspot (478, 335, 324, 174) action Function(boop_init, "sleepy_headpat")
 
+        # 4. Logic block (runs whenever the screen is evaluated)
         if persistent.bg == "laboratory":
-            if persistent.costume != "lab": #Since the screen constantly repeats, we have to add this to keep track of the previous costume and not have it replaced with the labcoat
-                $persistent.previous_costume = persistent.costume
-                $persistent.hairstyle = "tied_up"
-                $persistent.costume = "lab"
-                $show_chr("A-AAAAA-AAAA")
+            if persistent.costume != "lab":
+                $ persistent.previous_costume = persistent.costume
+                $ persistent.hairstyle = "tied_up"
+                $ persistent.costume = "lab"
+                $ show_chr("A-AAAAA-AAAA")
         elif persistent.costume == "lab":
-            $persistent.hairstyle = "default"
-            $persistent.costume = persistent.previous_costume
-            $show_chr("A-AAAAA-AAAA")
+            $ persistent.hairstyle = "default"
+            $ persistent.costume = persistent.previous_costume
+            $ show_chr("A-AAAAA-AAAA")
 
 
 layeredimage jy_bg:
@@ -1398,27 +1430,6 @@ layeredimage past_yuri_sit:
     if yuri_sit["arms"]["left"]["isBehind"] and yuri_sit["arms"]["right"]["isBehind"] and yuri_sit["arms"]["both"]["down"] != "":
         "[yuri_sit['arms']['both']['costume']['down']][past_timecycle_marker]" #downarm_both_costume
 
-label mask_windows:
-    screen mask_windows():
-        zorder 1
-        modal False
-
-        frame:
-            xpos(30)
-            ypos(200)
-            xsize(320)
-            ysize(180)
-            background room_mask
-
-        frame:
-            xpos(935)
-            ypos(200)
-            xsize(320)
-            ysize(180)
-            background room_mask2
-
-    show screen mask_windows()
-
 label show_mask_timecycle:
     $renpy.show_screen("cur_jy_bg_back")
     if month == 12 and current_timecycle_marker == "_night":
@@ -1453,6 +1464,10 @@ image vid_mask_2_space = Movie(play="images/bg/space_classroom/vid_mask_2.webm",
 image vid_mask_3_space = Movie(play="images/bg/space_classroom/vid_mask_3.webm", xpos=800, ypos=115)
 
 image mask_child:
+    "images/bg/space_classroom/space_child.png"
+    xtile 2
+
+image mask_child2:
     "images/bg/space_classroom/space_child_2.png"
     xtile 2
 
@@ -1492,47 +1507,63 @@ image mask_3:
 image room_mask = LiveComposite((1280, 720), (0, 0), "mask_test", (0, 0), "mask_test2")
 image room_mask2 = LiveComposite((1280, 720), (0, 0), "mask_test3", (0, 0), "mask_test4")
 
-#image room_mask = LiveComposite(
-#    size=(1280, 720),
-#    target_size=(320, 180),
-#    positions=(30, 200),
-#    images=["mask_test", "mask_test2"]
-#    )
+# ATL transforms for positioning the room masks
+transform room_mask_pos:
+    size (320, 180)
+    pos (30, 200)
 
-#image room_mask2 = LiveComposite(
-#    size=(1280, 720),
-#    target_size=(320, 180),
-#    positions=(935, 200),
-#    images=["mask_test3", "mask_test4"]
-#    )
-
-#####UNSORTED!!!!
+transform room_mask2_pos:
+    size (320, 180)
+    pos (935, 200)
 
 screen yuri_sit():
     zorder 11
     layer "master"
-    imagemap:
 
+    # --- TIMER LOGIC FOR SUSTAINED TOUCH ---
+    # This timer runs constantly and checks if the player has held their finger
+    # on the hotspot for 2 seconds.
+    timer 0.1 repeat True action If(
+            persistent.hand_hold_start_time is not None and not persistent.hand_hold_triggered and (renpy.game_time() - persistent.hand_hold_start_time > 2.0),
+            true=[
+                SetVariable("persistent.hand_hold_triggered", True), # Prevents it from firing again
+                Function(boop_init, "hand_hold") # Calls the hand_hold event
+            ]
+        )
+
+    imagemap:
         if hide_yuri_sit:
             idle "nothing"
         else:
             idle "yuri_sit"
 
-        if hide_yuri_sit == True:
-            idle "nothing"
-        else:
-            idle "yuri_sit"
-
-        #hotspot (x_left_side, y_top_side, width, length)
-
+        # --- Your existing boop hotspots ---
         hotspot (654, 225, 13, 13) action Function(boop_init, "boop_nose")
-        hotspot (615, 440, 30, 50) action Function(boop_init, "boop_nose_chibi")#chibi version
+        hotspot (615, 440, 30, 50) action Function(boop_init, "boop_nose_chibi")
         hotspot (585,216,50,50) action Function(boop_init, "boop_cheek")
         hotspot (693,216,50,50) action Function(boop_init, "boop_cheek")
         hotspot (578, 50, 186, 103) action Function(boop_init, "headpat")
         hotspot (478, 335, 13, 13) action Function(boop_init, "sleepy_headpat")
-        #hotspot (615, 440, ) action If(persistent.playername, true=Start(), false=Show(screen="name_input", message="Please enter your name", ok_action=Function(FinishEnterName)))
-        #hotspot (126, 254, 191, 377)action Function(boop_init, "diffuser_boop")
+
+
+        # --- REFINED MOBILE-EXCLUSIVE HAND HOLDING HOTSPOT ---
+        # This block checks three things:
+        # 1. Is the game running on Android or iOS?
+        # 2. Is the current Yuri sprite code known?
+        # 3. Does the 4-letter suffix of the code match one of our "holdable" poses?
+        if (renpy.android or renpy.ios) and (persistent.yuri_chr[-4:] in holdable_hand_suffixes):
+
+            # This hotspot should be placed over Yuri's hand on her lap.
+            # I've made an educated guess on the coordinates. You may need to
+            # use your 'mouse_coords' label to find the perfect position.
+            hotspot (600, 450, 100, 80) hovered [
+                    # When the player's finger enters, start the timer.
+                    SetVariable("persistent.hand_hold_start_time", renpy.game_time()),
+                    SetVariable("persistent.hand_hold_triggered", False)
+                ] unhovered [
+                    # When the player's finger leaves, reset the timer.
+                    SetVariable("persistent.hand_hold_start_time", None)
+                ]
 
 screen yuri_sleep():
     zorder 11

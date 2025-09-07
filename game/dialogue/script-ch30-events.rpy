@@ -1393,7 +1393,6 @@ label vday_start:
         y "I am grateful for every day you spent with me, and I'm looking forward to the things to come."
         $show_chr("A-AAAAA-ALAA")
         y "Do you have any plans for today, my valentine?"
-        $show_chr("A-AAAAA-ALAA")
         return
     elif karma_lvl() < 3:
         $show_chr("A-BFBAA-ALAA")
@@ -1406,7 +1405,6 @@ label vday_start:
         y "Well, but since you are already here, I guess we can spend a bit of time together yes?"
         $show_chr("A-CFBAA-ALAA")
         y "So, what do you have in mind for today...my valentine?"
-        $show_chr("A-CFBAA-ALAA")
         return
 
 label flowergiving:

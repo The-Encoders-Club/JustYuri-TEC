@@ -1,8 +1,10 @@
 default persistent.boop = 0
-default persistent.boop_locations = [0.] * 12  # Extended to accommodate sleepy headpats
+default persistent.boop_locations = [0.] * 13  # Extended to accommodate sleepy headpats
 default boopable = False
 default boop_sleepy_only = False  # Global variable to disable most boops
-#[nose, cheeks, head, sleepy_headpat, window,]
+default persistent.hand_hold_start_time = None
+default persistent.hand_hold_triggered = False
+#[nose, cheeks, head, sleepy_headpat, window, hand_hold]
 
 
 # Boop Script, all of the guts are in here.
@@ -78,6 +80,8 @@ init python:
                     renpy.call("sleepy_headpat")
                 else:
                     return # This boop location is not valid when sleepy_only is enabled.
+            elif boop_type == "hand_hold": # This is our new hand holding event
+                renpy.call("hand_hold") 
             elif (boop_type == "boop_nose_chibi" and persistent.costume == "_chibi") or (boop_type == "boop_nose" and persistent.costume != "_chibi"): # Should this call boop_nose?
                 renpy.call("boop_nose")
             elif renpy.has_label(boop_type): # This calls the corresponding function (headpat, cheek) when not disabled.
@@ -534,3 +538,52 @@ label annoyed_boop_window:
         y "So in order to prevent you from testing my patience too much, I turned this little feature off. You are still free to come here but for the love of Salvato, please stop messing around with the environment!"
         y "I can't spend hours and hours cleaning up after your nonsense every week."
         jump ch30_loop
+
+label hand_hold:
+    # This function is called when the player successfully holds Yuri's hand.
+    # It follows the same structure as your other boop events.
+    python:
+        # We'll use index 5 for the hand_hold counter.
+        persistent.boop_locations[5] += 1
+    
+    # We check karma/affection levels, just like in your other events.
+    if karma_lvl() >= 3:
+        # This is the dialogue for players with a good relationship.
+        if persistent.boop_locations[5] == 1:
+            $ show_chr("A-DDGBA-AAAJ") # Surprised expression
+            y "Oh...!"
+            y "This is... different. It's not a quick tap like the others."
+            $ show_chr("A-CCABA-ALAK") # Blushing, thoughtful expression
+            y "It feels like... you're holding my hand."
+            y "Just resting your finger there... the sustained warmth... it feels so wonderfully real."
+            $ show_chr("A-ICABA-AMAM") # Happy, content expression
+            y "Thank you, [player]. This is a very special feeling. It makes me feel incredibly close to you."
+        elif persistent.boop_locations[5] < 5:
+            $ show_chr("A-CAABA-AAAA")
+            y "Ah... you're holding my hand again."
+            $ show_chr("A-BBBBA-AAAL")
+            y "It's so comforting. Just knowing you're there... it makes everything feel alright."
+        else:
+            $ show_chr("A-KCBBA-AAAA") # Gentle smile
+            y "Mm... this is my favorite. It's so much more intimate than a simple pat, isn't it?"
+            y "I'll just... enjoy this for a moment."
+
+    else:
+        # This is the dialogue for players with a lower relationship.
+        if persistent.boop_locations[5] == 1:
+            $ show_chr("A-DFABA-AAAA") # Startled
+            y "H-Huh? What's this?"
+            y "Your touch... it's lingering. It's not like the other times."
+            $ show_chr("A-JFAAA-AAAB") # Cautious, slightly nervous
+            y "Are you... trying to hold my hand?"
+            y "I... I suppose that's alright. It's a bit forward, but... not unpleasant."
+            y "Thank you for the gesture."
+        else:
+            $ show_chr("A-BFAAA-AMAM") # Neutral, a bit shy
+            y "Oh... you're doing that again."
+            y "It's still a little surprising, but... I don't mind."
+
+    # Reset mouse coordinates just in case, to maintain consistency.
+    $ store.mousex = 0
+    $ store.mousey = 0
+    return

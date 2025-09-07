@@ -18,7 +18,7 @@ init -999 python:
         "id": "",
         "version": "1.0.0",
         "dependencies": [],
-        "developer_mode": False
+        "developer_mode": True
     }
 
     # --- Define Documentation Content ---
@@ -70,7 +70,7 @@ You can feel free to delete these documents if you would like to free up space f
     "dependencies": [],
 
     # Whether to enable debug mode for Just Yuri. Adds additional information to the logs and allows access to the control panel
-    "developer_mode": false
+    "developer_mode": true
 }
 """
     # Note: The above is intended for a TXT file, but the content looks like JSON with comments.
@@ -103,7 +103,7 @@ You can feel free to delete these documents if you would like to free up space f
 
     print("Checking for submods...")
     request_dev_access = False
-    dev_access = False
+    dev_access = True
 
     #==================================================#
     #  Start Submod System

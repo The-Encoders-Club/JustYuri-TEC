@@ -63,6 +63,9 @@ label ch30_loop:
         $ waittime = renpy.random.randint(60, 75)
     window hide(config.window_hide_transition)
 
+    if renpy.random.randint(1, 100) <= 5: # 5% chance to trigger
+         call yuri_check_atmosphere
+
 label ch30_waitloop:
     # (The first part of your waitloop handling queued dialogue remains the same)
     python:

@@ -14,7 +14,7 @@
 define config.name = "Just Yuri (Beta)"
 
 ## The version of the game.
-define config.version = "Beta-1.10.4"
+define config.version = "Beta-1.11.0"
 
 ## Whether debug mode is enabled. Mainly used to change what persistent file is read
 define config.developer = dev_access
@@ -302,6 +302,9 @@ init python:
     #Adding the line to *actually build a BASE to update from. Update building
     #is now set to true.
     build.include_update = True
+
+    # This tells Ren'Py to automatically use the correct GitHub release URLs in updates.json
+    build.updates_base_url = "https://github.com/DarkskullDawnZenith/JustYuri/releases/download/"
 
 ## A Google Play license key is required to download expansion files and perform
 ## in-app purchases. It can be found on the "Services & APIs" page of the Google

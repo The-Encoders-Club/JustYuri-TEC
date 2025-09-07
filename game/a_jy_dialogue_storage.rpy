@@ -1026,6 +1026,34 @@ init -3 python:
         name = None,
         sub_category = None))
 
+# --- NEW IDLE: ATMOSPHERIC INTEGRATION ---
+    add_dialogue(Dialogue(
+        label = 'yuri_check_atmosphere',
+        category = DialogueAPI.category_idle,
+        conditions = ["not renpy.seen_label_in_session('yuri_check_atmosphere')", "karma_lvl() >= 3"],
+        importance = 2, # Give it a slightly higher chance of appearing once per session.
+        name = None,
+        sub_category = None))
+
+    # --- NEW IDLE: DIGITAL BOOKSHELF INTRO ---
+    # This topic introduces the feature to the player for the first time.
+    add_dialogue(Dialogue(
+        label = 'yuri_bookshelf_intro',
+        category = DialogueAPI.category_idle,
+        conditions = ["not renpy.seen_label('yuri_bookshelf_intro')", "persistent.game_session >= 3"],
+        importance = 5, # Give it a good chance of appearing once the condition is met.
+        name = None,
+        sub_category = None))
+        
+    # --- NEW IDLE: SYSTEM HEARTBEAT ---
+    add_dialogue(Dialogue(
+        label = 'yuri_system_heartbeat',
+        category = DialogueAPI.category_idle,
+        conditions = ["psutil_available", "not renpy.seen_label_in_session('yuri_system_heartbeat')", "karma_lvl() >= 4", "renpy.seen_label('webcam')"],
+        importance = 1, # A special, but not overly frequent, topic.
+        name = None,
+        sub_category = None))
+
 ####
 #ACTIVES
 ####
@@ -1530,7 +1558,13 @@ init -3 python:
         name = "I'm ready to revisit the chocolate moment.",
         sub_category = "Love"))
 
-
+    add_dialogue(Dialogue(
+        label = "yuri_scan_for_books",
+        category = DialogueAPI.category_talk,
+        conditions = ["renpy.seen_label('yuri_bookshelf_intro')"], # Only appears after she introduces it.
+        importance = 0,
+        name = "I put a book in the folder for us.",
+        sub_category = "Activities")) # Or any sub-category you prefer.
 
     #add_dialogue(Dialogue(
     #    label = "krampuslore",

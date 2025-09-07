@@ -667,6 +667,17 @@ init -501 screen navigation():
             style_prefix "navigation"
             hbox:
                 if main_menu:
+                    # This action calls Ren'Py's built-in updater and tells it to
+                    # use our custom "updater" screen for its display.
+                    textbutton _("Check for Updates") action updater.Update(url="https://darkskulldawnzenith.github.io/JustYuri/", screen="updater")
+        
+        vbox:
+            # Shift the quit button down
+            xpos 30
+            ypos 460
+            style_prefix "navigation"
+            hbox:
+                if main_menu:
                     textbutton _("Quit") action Quit_no_farewell(confirm=not main_menu)
 
     else:
@@ -720,9 +731,20 @@ init -501 screen navigation():
             hbox:
                 if renpy.variant("pc"):
                     textbutton _("Mod List") action ShowMenu("mod_list")
+
         vbox:
             xpos 30
             ypos 380
+            style_prefix "navigation"
+            hbox:
+                if main_menu:
+                    # This action calls Ren'Py's built-in updater and tells it to
+                    # use our custom "updater" screen for its display.
+                    textbutton _("Check for Updates") action updater.Update(url="https://darkskulldawnzenith.github.io/JustYuri/", screen="updater")
+
+        vbox:
+            xpos 30
+            ypos 460
             style_prefix "navigation"
             hbox:
                 if renpy.variant("pc"):
@@ -2317,6 +2339,146 @@ screen mod_list():
                                 text "  > " + dependency
                 null
 
+# This screen will dynamically generate buttons for every costume found.
+screen wardrobe_menu():
+    tag menu
+    
+    frame:
+        style "frame" # Use your mod's default frame style
+        xalign 0.5
+        yalign 0.5
+        padding (40, 40)
+        
+        vbox:
+            label "Yuri's Wardrobe" style "h2"
+            spacing 20
+
+            # Create a scrolling viewport in case of many costumes
+            viewport:
+                scrollbars "vertical"
+                mousewheel True
+                
+                vbox:
+                    spacing 10
+                    # Loop through our dictionary of discovered costumes
+                    for friendly_name, costume_code in available_costumes.items():
+                        
+                        # A textbutton that sets persistent.costume to the chosen code
+                        textbutton friendly_name action [
+                            SetField(persistent, "costume", costume_code), 
+                            Function(show_chr, "default") # This re-draws Yuri with the new costume
+                            ]
+
+            null height 20
+            textbutton "Return" action Return()
+
+
+# --- START: CORRECTED IN-GAME UPDATER CODE ---
+
+# This is the custom screen that will be displayed during the update process.
+# It no longer requires a custom updater class.
+screen updater(u):
+    # The 'u' variable is the default updater object provided by Ren'Py.
+    
+    # Define screen-local variables to track download progress for speed calculation.
+    default last_time = time.time()
+    default last_bytes = 0
+    default speed_mbps = 0.0
+    
+    python:
+        # This block runs every time the screen updates (many times a second).
+        current_time = time.time()
+        # u.total_downloaded is a built-in property of the updater object.
+        current_bytes = u.total_downloaded
+        
+        # Calculate time and data deltas
+        dt = current_time - last_time
+        db = current_bytes - last_bytes
+
+        if dt > 0.25: # Update speed roughly 4 times a second to prevent flickering
+            # Speed in Megabytes per second
+            speed_mbps = (db / (1024.0 * 1024.0)) / dt
+            
+            # Store current values for the next calculation
+            last_time = current_time
+            last_bytes = current_bytes
+
+    # Add a dark, semi-transparent overlay to focus on the updater
+    add "gui/overlay/confirm.png"
+    
+    frame:
+        style "confirm_frame" # Use the same style as your confirm dialogs
+        xalign 0.5
+        yalign 0.5
+        padding (40, 40)
+        
+        vbox:
+            spacing 20
+            
+            # The content changes based on the updater's current state.
+            if u.state == u.CHECKING:
+                label _("Checking for updates..."):
+                    style "confirm_prompt"
+                    xalign 0.5
+            
+            elif u.state == u.UPDATE_NOT_AVAILABLE:
+                label _("Your mod is up to date."):
+                    style "confirm_prompt"
+                    xalign 0.5
+                null height 15
+                textbutton _("Okay") action u.finish style "confirm_button" xalign 0.5
+            
+            elif u.state == u.UPDATE_AVAILABLE:
+                label _("Version [u.pretty_version] is available!"):
+                    style "confirm_prompt"
+                    xalign 0.5
+                hbox:
+                    style_prefix "confirm"
+                    xalign 0.5
+                    spacing 100
+                    textbutton _("Install") action u.update
+                    textbutton _("Maybe Later") action u.finish
+            
+            elif u.state == u.DOWNLOADING:
+                label _("Downloading update..."):
+                    style "confirm_prompt"
+                    xalign 0.5
+                
+                bar value u.progress range 1.0 xsize 400 xalign 0.5 style "slider_slider"
+                
+                # Display the percentage and the screen-local speed variable
+                hbox:
+                    spacing 20
+                    xalign 0.5
+                    text "[int(u.progress * 100)]%" style "confirm_prompt_text"
+                    text "Speed: [speed_mbps:.2f] MB/s" style "confirm_prompt_text"
+            
+            elif u.state == u.UNPACKING:
+                label _("Unpacking files..."):
+                    style "confirm_prompt"
+                    xalign 0.5
+            
+            elif u.state == u.FINISHING:
+                label _("Finishing installation..."):
+                    style "confirm_prompt"
+                    xalign 0.5
+            
+            elif u.state == u.DONE:
+                label _("Update complete. The mod will now restart."):
+                    style "confirm_prompt"
+                    xalign 0.5
+            
+            elif u.state == u.ERROR:
+                label _("An error occurred:"):
+                    style "confirm_prompt"
+                    xalign 0.5
+                text "[u.error]": # Display the specific error message
+                    style "confirm_prompt_text"
+                    xalign 0.5
+                null height 15
+                textbutton _("Okay") action u.finish style "confirm_button" xalign 0.5
+
+# --- END: CORRECTED IN-GAME UPDATER CODE ---
 
 screen about():
     tag menu

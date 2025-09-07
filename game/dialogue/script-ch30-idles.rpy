@@ -357,7 +357,6 @@ label pretty:
     sanity -2
     $show_chr("A-JBAAA-ALAA") #former code b-A0a
     y "O-Oh, thank you. I'd like to think so too... heh..."
-    $show_chr("A-ACAAA-ALAA") #former code b-A0b
     return
 
 label ugly:
@@ -511,7 +510,6 @@ label idle_9_2:
     y "I... I know... I d-don't blame you for being weirded out... sorry, [player]..."
     $show_chr("A-JCBAA-ALAA") #former code c-A0b
     y "I'll do b-better in the future, I... I promise..."
-    $show_chr("A-ACAAA-ALAA") #former code b-A0b
     return
 
 label idle_9_3:
@@ -963,7 +961,6 @@ label idle_17: #Limited Options and Romantic Dreams.
     y "Watching the sunset while cuddling..."
     $show_chr("A-ICBAA-ALAA") #former code c-A0b
     y "Now {b}that{/b} is a dream I'll be holding onto."
-    $show_chr("A-ACAAA-ALAA") #former code b-A0b
     return
 
 
@@ -1207,8 +1204,8 @@ label idle_21: #Religion, Meaning, and Kierkegaard.
     y "Well, thank you for bearing with my rambling about such a deep subject. I really appreciate it [player]. I hope it helped enlighten you, you're an excellent listener."
     $show_chr("A-ABABA-ALAA") #former code b-B0a
     if persistent.lovecheck:
-        y "I love you with all my heart [player]."
         $show_chr("A-ACAAA-ALAA") #former code b-A0b
+        y "I love you with all my heart [player]."
     return
 
 label idle_22: #Living Together and Shared Dreams.
@@ -4946,7 +4943,6 @@ label idle_77: #Merchandise and Possessiveness
         "No, I don't own any merchandise.":
             $show_chr("A-ACBAA-AAAA")
             y "That's reasonable, some merchandise tends to be overpriced, and if you live in a foreign country, even buying a cheap object like a key chain can turn into an overpriced ordeal."
-            $show_chr("A-BCBAA-AAAA")
     return
 
 label idle_78: #Discovering Metal Music (Nightwish)

@@ -173,8 +173,8 @@ label games_menu:
     menu:
         "Tetris":
             jump tetris
-        #"Khet":
-        #    jump Khet
+        "Khet":
+            jump Khet
         "Chess":
             jump chess
         #"Solitaire":

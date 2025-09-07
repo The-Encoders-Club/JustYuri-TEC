@@ -11,7 +11,7 @@
 # Pre Initialization
 #==================================================#
 python early:
-    import os, shutil, datetime, singleton, random, subprocess, base64, string, math, time, webbrowser, json, traceback, inspect, rstr
+    import os, shutil, datetime, singleton, random, subprocess, base64, string, math, time, webbrowser, json, traceback, inspect, rstr, filecmp
     import re as regex
     #import jycrypt
     from typing import Any

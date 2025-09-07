@@ -244,7 +244,6 @@ label a3: #"How do you feel about our relationship so far?"
         if persistent.lovecheck:
             $ show_chr("A-DBGBA-AAAL")
             y "I want to do everything with you. I want to show you how much I love you..."
-            $ show_chr("A-DCGBA-AAAL")
             return
         else:
             $show_chr("A-GAAAA-ALAL")
@@ -375,7 +374,6 @@ label choose_glasses:
             $ show_chr("A-AEBAA-AAAA")
             y "O-oh... alright. I'll take them back off."
             $persistent.face1 = "nothing"
-    $ show_chr("A-ACGAA-AAAA")
     return
 
 label a6:
@@ -6241,7 +6239,6 @@ label WaitSCP1281:
     $ click_scp_button = click_scp_button + 1
     $show_chr("A-JFAAA-ADAB")
     y "Oh, you are already done? Impressive! Would you please give me a few more moments? I'm not entirely finished myself yet. Thank you."
-    $show_chr("A-IFAAA-ADAB")
     return
 
 label DoneSCP1281:
@@ -6737,24 +6734,44 @@ return
 
 label a_tetris:
     $show_chr("A-BFAAA-AMAM")
-    y "Hey.. [player], I've been experimenting around with my coding."
+    y "Hey.. [player], I've been experimenting with my coding again."
     $show_chr("A-AFAAA-AMAM")
-    y "Would you mind to try something out I have been working on lately?"
-    y "You see, I wanted to start with something small, so I tried to code a little minigame in..."
+    y "Would you mind trying something out I've been working on lately?"
+    y "You see, I wanted to start with something small, so I tried to code a little minigame..."
     $show_chr("A-ACAAA-ABAB")
     y "I was looking up a few simple games online which I could recreate."
-    y "Nothing too big since, well, I doubt that I am advanced enough for something very complicated yet. So please don't expect a new Skyrim here..."
+    y "Nothing too big since, well, I doubt that I'm advanced enough for something very complicated yet. So please don't expect a new Skyrim here..."
     y "You might have already heard of Tetris?"
+    
     menu:
         "Yes, it's a classic.":
-            y "Indeed!"
+            y "Indeed! I thought so, too."
         "Actually no... never heard of it...":
             $show_chr("A-ACDAA-ABAB")
             y "Really? I have to admit I'm a little bit surprised. I thought pretty much everyone did..."
-            y "It's a classic arcade game. A simple puzzle-like game if I had to describe it."
-    $show_chr("A-ACAAA-ABAB")
-    y "I admit it isn't anything too creative but... It was more meant to be a little coding lesson for me."
-    y "So, if you would like to try it out with me, there should appear a button in the bottom corner of your screen."
+            y "It's a classic arcade game. A simple puzzle-like game where you fit falling blocks together."
+
+    # --- Platform Check Starts Here ---
+    # This block checks if the player is on Android OR iOS.
+    if renpy.android or renpy.ios:
+        # This is the mobile-specific dialogue branch.
+        $show_chr("A-ACDAA-ABAB") # A thoughtful or slightly concerned expression
+        y "I was so excited for you to try it... but then I realized something about the environment we're in."
+        y "This is a touch screen, isn't it? Tetris is a game that relies on sharp, instant reflexes."
+        $show_chr("A-BFAAA-AMAM") # A more apologetic or sad expression
+        y "Trying to control it with swipes would feel clumsy and frustrating. It wouldn't be the fun experience I wanted to create for you."
+        y "The quality of our time together is more important to me than having you struggle with broken controls."
+        y "So, I've had to disable it on this device. I'm truly sorry... I hope you understand."
+
+    else:
+        # This is the PC-specific dialogue branch (your original code).
+        $show_chr("A-ACAAA-ABAB")
+        y "I admit it isn't anything too creative but... It was more meant to be a little coding lesson for me."
+        y "So, if you would like to try it out with me, there should appear a button in the left corner of your screen."
+        # Here you would typically show the button for PC users.
+        # For example: show screen tetris_button
+
+    # The label ends for everyone here.
     return
 
 label a_hdy_statue:
@@ -6828,9 +6845,9 @@ label Halloween_2021:
                 $persistent.halloween_2021_no = False
 
             "I still can't quite spare the time...":
+                $show_chr("A-CCBAA-ANAN")
                 y "No need to worry. As I've said there is always the possibility of celebrating in the near future anyhow."
                 #eyes closed, normal eyebrows, arms on the table, slight smile. Changed eyebrows to show a slight hint of disappointment
-                $show_chr("A-CCBAA-ANAN")
                 return
 
     else:
@@ -6852,12 +6869,12 @@ label Halloween_2021:
                 $show_chr("A-CCBAA-ANAN")
                 y "We can always celebrate together later if need be."
                 #eyes closed, slight smile, happi eyebrows, arms on table
+                $show_chr("A-ACBAA-ANAN")
                 y "Now, where were we?"
                 #eyes looking at player, slight smile, happi eyebrows, arms on table
-                $show_chr("A-ACBAA-ANAN")
                 return
 
-                $ show_chr("A-BBAAA-AKAA")
+    $ show_chr("A-BBAAA-AKAA")
     y "Heh! I do have a couple... activities planned."
     if persistent.lovecheck:
         y "What do you think about procuring a couple of love potions?"
@@ -7995,22 +8012,23 @@ label sleepy_yuri:
                             pause 6.0
                             $persistent.sleepy_yuri_is_enabled = True
                             jump sleepy_loop
-                        y "I see, let me just go change into something more comfortable very quickly."
-                        y "I'll be right back [player]."
-                        $ DisableTalk()
-                        $ set_boop_state(True)
-                        show black zorder 100 with Dissolve(2.0)
-                        hide yuri_sit
-                        show yuri_sleepy zorder 20
-                        hide black with Dissolve(2.0)
-                        pause 3.0
-                        hide yuri_sleepy
-                        play sound "<to 0.3>sfx/fall.ogg"
-                        show yuri_sleep zorder 20
-                        $hide_yuri_sit = True
-                        pause 6.0
-                        $persistent.sleepy_yuri_is_enabled = True
-                        jump sleepy_loop
+                        else:
+                            y "I see, let me just go change into something more comfortable very quickly."
+                            y "I'll be right back [player]."
+                            $ DisableTalk()
+                            $ set_boop_state(True)
+                            show black zorder 100 with Dissolve(2.0)
+                            hide yuri_sit
+                            show yuri_sleepy zorder 20
+                            hide black with Dissolve(2.0)
+                            pause 3.0
+                            hide yuri_sleepy
+                            play sound "<to 0.3>sfx/fall.ogg"
+                            show yuri_sleep zorder 20
+                            $hide_yuri_sit = True
+                            pause 6.0
+                            $persistent.sleepy_yuri_is_enabled = True
+                            jump sleepy_loop
 
                     "I'll be asleep for quite a while.":
                         y "In that case, let me go change into something more comfortable."
@@ -8032,21 +8050,22 @@ label sleepy_yuri:
                             pause 6.0
                             $persistent.sleepy_yuri_is_enabled = True
                             jump sleepy_loop
-                        y "I'll be right back [player]."
-                        $ DisableTalk()
-                        $ set_boop_state(True)
-                        show black zorder 100 with Dissolve(2.0)
-                        hide yuri_sit
-                        show yuri_sleepy zorder 11
-                        hide black with Dissolve(2.0)
-                        pause 3.0
-                        hide yuri_sleepy
-                        play sound "<to 0.3>sfx/fall.ogg"
-                        show yuri_sleep zorder 20
-                        $hide_yuri_sit = True
-                        pause 6.0
-                        $persistent.sleepy_yuri_is_enabled = True
-                        jump sleepy_loop
+                        else:
+                            y "I'll be right back [player]."
+                            $ DisableTalk()
+                            $ set_boop_state(True)
+                            show black zorder 100 with Dissolve(2.0)
+                            hide yuri_sit
+                            show yuri_sleepy zorder 11
+                            hide black with Dissolve(2.0)
+                            pause 3.0
+                            hide yuri_sleepy
+                            play sound "<to 0.3>sfx/fall.ogg"
+                            show yuri_sleep zorder 20
+                            $hide_yuri_sit = True
+                            pause 6.0
+                            $persistent.sleepy_yuri_is_enabled = True
+                            jump sleepy_loop
 
 
             "I'm a bit uncomfortable with this [persistent.yuri_nickname]":
@@ -8054,6 +8073,7 @@ label sleepy_yuri:
                 y "In that case, you can just close the game as normal then."
                 y "Sorry about this..."
                 jump ch30_loop
+
     y "Were you planning on just taking a nap, or will you be sleeping for a much longer period of time?"
     y "I don't mean to be intrusive, however I would like to know how long I can expect you to be gone for."
     y "That way I can prepare for a longer sleeping period with certain amenities."
@@ -8076,23 +8096,24 @@ label sleepy_yuri:
                 pause 6.0
                 $persistent.sleepy_yuri_is_enabled = True
                 jump sleepy_loop
-            y "I see, let me just go change into something more comfortable very quickly."
-            y "I'll be right back [player]."
-            $ DisableTalk()
-            $ set_boop_state(True)
-            show black zorder 100 with Dissolve(2.0)
-            hide yuri_sit
-            show yuri_sleepy zorder 20
-            hide black with Dissolve(2.0)
-            y "Have a good nap, [player]"
-            pause 3.0
-            hide yuri_sleepy
-            play sound "<to 0.3>sfx/fall.ogg"
-            show yuri_sleep zorder 20
-            $hide_yuri_sit = True
-            pause 6.0
-            $persistent.sleepy_yuri_is_enabled = True
-            jump sleepy_loop
+            else:
+                y "I see, let me just go change into something more comfortable very quickly."
+                y "I'll be right back [player]."
+                $ DisableTalk()
+                $ set_boop_state(True)
+                show black zorder 100 with Dissolve(2.0)
+                hide yuri_sit
+                show yuri_sleepy zorder 20
+                hide black with Dissolve(2.0)
+                y "Have a good nap, [player]"
+                pause 3.0
+                hide yuri_sleepy
+                play sound "<to 0.3>sfx/fall.ogg"
+                show yuri_sleep zorder 20
+                $hide_yuri_sit = True
+                pause 6.0
+                $persistent.sleepy_yuri_is_enabled = True
+                jump sleepy_loop
 
         "I'll be asleep for quite a while.":
             y "In that case, let me go change into something more comfortable."
@@ -8115,22 +8136,23 @@ label sleepy_yuri:
                 pause 6.0
                 $persistent.sleepy_yuri_is_enabled = True
                 jump sleepy_loop
-            y "I'll be right back [player]."
-            $ DisableTalk()
-            $ set_boop_state(True)
-            show black zorder 100 with Dissolve(2.0)
-            hide yuri_sit
-            show yuri_sleepy zorder 11
-            hide black with Dissolve(2.0)
-            y "Have a good night [player]."
-            pause 3.0
-            hide yuri_sleepy
-            play sound "<to 0.3>sfx/fall.ogg"
-            show yuri_sleep zorder 20
-            $hide_yuri_sit = True
-            pause 6.0
-            $persistent.sleepy_yuri_is_enabled = True
-            jump sleepy_loop
+            else:
+                y "I'll be right back [player]."
+                $ DisableTalk()
+                $ set_boop_state(True)
+                show black zorder 100 with Dissolve(2.0)
+                hide yuri_sit
+                show yuri_sleepy zorder 11
+                hide black with Dissolve(2.0)
+                y "Have a good night [player]."
+                pause 3.0
+                hide yuri_sleepy
+                play sound "<to 0.3>sfx/fall.ogg"
+                show yuri_sleep zorder 20
+                $hide_yuri_sit = True
+                pause 6.0
+                $persistent.sleepy_yuri_is_enabled = True
+                jump sleepy_loop
 
 #label afk_yuri:
 #    pass
