@@ -976,7 +976,11 @@ label a20:
         menu:
             y "Would you like to change the background?"
             "Yes":
-                $tc_class.transition("space")
+                if persistent.costume == "gothic":
+                    y "Ah, sorry [player], I can't go back to the Space Classroom with my goth dress on yet."
+                    y "For now we have to stay here. Or you have to tell me to change my outfit."
+                else:
+                    $tc_class.transition("space")
             "No":
                 $ show_chr("A-IEBAA-AAAA") #former code Ac-A0d
                 y "I see. No problem."
