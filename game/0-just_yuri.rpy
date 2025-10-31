@@ -142,7 +142,7 @@ init -999 python:
     persistent.temp_memory = []
     if persistent.game_session == None:
         persistent.game_session = 0
-    if not persistent.costume in ["school", "sweater", "valentines", "goth_dress"]: #increase this list with new costumes
+    if not persistent.costume in ["school", "sweater", "valentines", "gothic"]: #increase this list with new costumes
         persistent.costume = "school"
     if persistent.bg == None:
         persistent.bg = "space"
