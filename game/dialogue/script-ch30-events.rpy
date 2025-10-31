@@ -468,76 +468,158 @@ label changeoutfit:
             "Your outfit":
                 y "Hmmm, alright."
                 y "However, I have a few outfits, and I really can't decide what to wear..."
+                if persistent.goth_yuri == True:
+                    menu:
+                        y "What do you think I should wear, [player]?"
 
-                menu:
-                    y "What do you think I should wear, [player]?"
+                        "School Uniform" if persistent.costume != "school":
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            y "This brings back some memories..."
+                            $persistent.costume = "school"
+                            $show_chr("A-AAAAA-AAAA")
+                            hide black with Dissolve(2.0)
+                            y "There we go..."
 
-                    "School Uniform" if persistent.costume != "school":
-                        y "Alright, let me put it on..."
-                        show black zorder 100 with Dissolve(2.0)
-                        y "This brings back some memories..."
-                        $persistent.costume = "school"
-                        $show_chr("A-AAAAA-AAAA")
-                        hide black with Dissolve(2.0)
-                        y "There we go..."
+                        #"Valentines (Pink Dress)" if persistent.costume != "pinkdress":
+                            #$show_chr("A-AAAAA-AAAA")
+                            #y "Alright, let me put it on..."
+                            #show black zorder 100 with Dissolve(2.0)
+                            #$persistent.costume = "pinkdress"
+                            #$show_chr("A-AAAAA-AAAA")
+                            #hide black with Dissolve(2.0)
+                            #y "There we go..."
 
-                    #"Valentines (Pink Dress)" if persistent.costume != "pinkdress":
-                        #$show_chr("A-AAAAA-AAAA")
-                        #y "Alright, let me put it on..."
-                        #show black zorder 100 with Dissolve(2.0)
-                        #$persistent.costume = "pinkdress"
-                        #$show_chr("A-AAAAA-AAAA")
-                        #hide black with Dissolve(2.0)
-                        #y "There we go..."
+                        "Sweater" if persistent.costume != "sweater" and karma_lvl() > 3:
+                            $show_chr("A-AAAAA-AAAA")
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            y "S-so soft... so... warm..."
+                            $persistent.costume = "sweater"
+                            $show_chr("A-CABAA-ALAL")
+                            hide black with Dissolve(2.0)
+                            y "There we go..."
 
-                    "Sweater" if persistent.costume != "sweater" and karma_lvl() > 3:
-                        $show_chr("A-AAAAA-AAAA")
-                        y "Alright, let me put it on..."
-                        show black zorder 100 with Dissolve(2.0)
-                        y "S-so soft... so... warm..."
-                        $persistent.costume = "sweater"
-                        $show_chr("A-CABAA-ALAL")
-                        hide black with Dissolve(2.0)
-                        y "There we go..."
+                        "Valentines (Black Dress)" if persistent.costume != "valentines" and renpy.seen_label("enjoy_chocolate") and karma_lvl() > 4:
+                            $show_chr("A-AAAAA-AAAA")
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            $persistent.costume = "valentines"
+                            y "Uuu... this is quite revealing..."
+                            $show_chr("A-BBBBA-ALAA")
+                            hide black with Dissolve(2.0)
+                            y "Th-there we go..."
+                            if not renpy.seen_label("first_valentines_dress_on"):
+                                call first_valentines_dress_on
 
-                    "Valentines (Black Dress)" if persistent.costume != "valentines" and renpy.seen_label("enjoy_chocolate") and karma_lvl() > 4:
-                        $show_chr("A-AAAAA-AAAA")
-                        y "Alright, let me put it on..."
-                        show black zorder 100 with Dissolve(2.0)
-                        $persistent.costume = "valentines"
-                        y "Uuu... this is quite revealing..."
-                        $show_chr("A-BBBBA-ALAA")
-                        hide black with Dissolve(2.0)
-                        y "Th-there we go..."
-                        if not renpy.seen_label("first_valentines_dress_on"):
-                            call first_valentines_dress_on
+                        "Hot Dog Yuri" if hdy_file == True:
+                            $show_chr("A-IEAAA-AAAA")
+                            y "[player]... I don't feel so good..."
+                            $persistent.HDY = True
+                            $hide_yuri_sit = True
+                            show poof zorder 106
+                            show hdy_bg zorder 90
+                            python:
+                                pooflist = ["sfx/HDY/poof1.mp3", "sfx/HDY/poof2.mp3"]
+                                poofsfx = random.choice(pooflist)
+                                hdysonglist = ["music/Hot_Date.ogg", "music/hotdog_Chant_RC.ogg"]
+                                hdysong = random.choice(hdysonglist)
+                            play sound poofsfx
+                            show hdy_inflatable zorder 100
+                            $player = randomplayername()
+                            $current_music = hdysong
+                            $change_music(current_music, 5.0)
+                            hide poof with Dissolve(1.0)
 
-                    "Hot Dog Yuri" if hdy_file == True:
-                        $show_chr("A-IEAAA-AAAA")
-                        y "[player]... I don't feel so good..."
-                        $persistent.HDY = True
-                        $hide_yuri_sit = True
-                        show poof zorder 106
-                        show hdy_bg zorder 90
-                        python:
-                            pooflist = ["sfx/HDY/poof1.mp3", "sfx/HDY/poof2.mp3"]
-                            poofsfx = random.choice(pooflist)
-                            hdysonglist = ["music/Hot_Date.ogg", "music/hotdog_Chant_RC.ogg"]
-                            hdysong = random.choice(hdysonglist)
-                        play sound poofsfx
-                        show hdy_inflatable zorder 100
-                        $player = randomplayername()
-                        $current_music = hdysong
-                        $change_music(current_music, 5.0)
-                        hide poof with Dissolve(1.0)
+                            hdy "I'm back baby!"
+                            hide hdy_inflatable
+                            jump hdy_has_been_seen
 
-                        hdy "I'm back baby!"
-                        hide hdy_inflatable
-                        jump hdy_has_been_seen
+                        "Romantic Goth Dress" if persistent.costume != "gothic" and karma_lvl() > 3:
+                            $show_chr("A-AAAAA-AAAA")
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            y "So elegant..."
+                            $persistent.costume = "gothic"
+                            $show_chr("A-CABAA-ALAL")
+                            hide black with Dissolve(2.0)
+                            y "There we go..."
 
-                    "Nevermind, I'm fine with how you look right now.":
-                        $ show_chr("A-GABAA-AAAA")
-                        y "Alright, then."
+                        "Nevermind, I'm fine with how you look right now.":
+                            $ show_chr("A-GABAA-AAAA")
+                            y "Alright, then."
+
+                else:
+                    menu:
+                        y "What do you think I should wear, [player]?"
+
+                        "School Uniform" if persistent.costume != "school":
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            y "This brings back some memories..."
+                            $persistent.costume = "school"
+                            $show_chr("A-AAAAA-AAAA")
+                            hide black with Dissolve(2.0)
+                            y "There we go..."
+
+                        #"Valentines (Pink Dress)" if persistent.costume != "pinkdress":
+                            #$show_chr("A-AAAAA-AAAA")
+                            #y "Alright, let me put it on..."
+                            #show black zorder 100 with Dissolve(2.0)
+                            #$persistent.costume = "pinkdress"
+                            #$show_chr("A-AAAAA-AAAA")
+                            #hide black with Dissolve(2.0)
+                            #y "There we go..."
+
+                        "Sweater" if persistent.costume != "sweater" and karma_lvl() > 3:
+                            $show_chr("A-AAAAA-AAAA")
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            y "S-so soft... so... warm..."
+                            $persistent.costume = "sweater"
+                            $show_chr("A-CABAA-ALAL")
+                            hide black with Dissolve(2.0)
+                            y "There we go..."
+
+                        "Valentines (Black Dress)" if persistent.costume != "valentines" and renpy.seen_label("enjoy_chocolate") and karma_lvl() > 4:
+                            $show_chr("A-AAAAA-AAAA")
+                            y "Alright, let me put it on..."
+                            show black zorder 100 with Dissolve(2.0)
+                            $persistent.costume = "valentines"
+                            y "Uuu... this is quite revealing..."
+                            $show_chr("A-BBBBA-ALAA")
+                            hide black with Dissolve(2.0)
+                            y "Th-there we go..."
+                            if not renpy.seen_label("first_valentines_dress_on"):
+                                call first_valentines_dress_on
+
+                        "Hot Dog Yuri" if hdy_file == True:
+                            $show_chr("A-IEAAA-AAAA")
+                            y "[player]... I don't feel so good..."
+                            $persistent.HDY = True
+                            $hide_yuri_sit = True
+                            show poof zorder 106
+                            show hdy_bg zorder 90
+                            python:
+                                pooflist = ["sfx/HDY/poof1.mp3", "sfx/HDY/poof2.mp3"]
+                                poofsfx = random.choice(pooflist)
+                                hdysonglist = ["music/Hot_Date.ogg", "music/hotdog_Chant_RC.ogg"]
+                                hdysong = random.choice(hdysonglist)
+                            play sound poofsfx
+                            show hdy_inflatable zorder 100
+                            $player = randomplayername()
+                            $current_music = hdysong
+                            $change_music(current_music, 5.0)
+                            hide poof with Dissolve(1.0)
+
+                            hdy "I'm back baby!"
+                            hide hdy_inflatable
+                            jump hdy_has_been_seen
+
+                        "Nevermind, I'm fine with how you look right now.":
+                            $ show_chr("A-GABAA-AAAA")
+                            y "Alright, then."
+
             "Nevermind":
                 pass
     else:
@@ -639,7 +721,7 @@ label first_valentines_dress_on:
                         $ show_chr("A-AEBBA-ALAA")
                         y "But, I appreciate the gesture for a change of outfit."
                         $ show_chr("A-BABBA-ALAA")
-                        y "After all, you were limited to my school uniform and sweater, so something new to wear is always delightful."
+                        y "After all, you are limited to my school uniform, sweater, a black valentines dress and a romantic goth dress so something new to wear is always delightful."
                         $ show_chr("A-BAAAA-AAAA")
                         y "Anyway, what would you like to talk about today?"
                         return
@@ -2828,7 +2910,7 @@ label valentines_2021_date:
     with Dissolve(2.0)
 
     python:
-        if not persistent.costume in ["school", "sweater", "valentines"]:
+        if not persistent.costume in ["school", "sweater", "valentines", "gothic"]:
             temp_costume = "sweater"
         else:
             temp_costume = persistent.costume

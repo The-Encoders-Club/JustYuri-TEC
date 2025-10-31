@@ -1112,6 +1112,7 @@ init -2 python:
             "yuri_kotatsu_1": True,
             "yuri_kotatsu_2": True,
             "laboratory": False,
+            "graveyard": False,
             "nothing": False}
 
         def bg_list_dict(self):
@@ -1128,7 +1129,8 @@ init -2 python:
                     "yuri_desk": ["desk"],
                     "yuri_kotatsu_1": ["kotatsu_1"],
                     "yuri_kotatsu_2": ["kotatsu_2"],
-                    "laboratory": ["lab"]
+                    "laboratory": ["lab"],
+                    "graveyard": ["graveyard"]
                 }
             elif persistent.high_gpu == 1:
                 return {
@@ -1143,7 +1145,8 @@ init -2 python:
                     "yuri_desk": ["desk"],
                     "yuri_kotatsu_1": ["kotatsu_1"],
                     "yuri_kotatsu_2": ["kotatsu_2"],
-                    "laboratory": ["lab"]
+                    "laboratory": ["lab"],
+                    "graveyard": ["graveyard"]
                 }
 
             elif persistent.high_gpu == 2:
@@ -1159,7 +1162,8 @@ init -2 python:
                     "yuri_desk": ["desk"],
                     "yuri_kotatsu_1": ["kotatsu_1"],
                     "yuri_kotatsu_2": ["kotatsu_2"],
-                    "laboratory": ["lab"]
+                    "laboratory": ["lab"],
+                    "graveyard": ["graveyard"]
                 }
 
 
@@ -1185,7 +1189,7 @@ init -2 python:
         def time_to_timecycle(self, time, bg):
             if self.bg_timecycle[bg]:
                 return "_" + TimeCycle.time_id
-            elif persistent.bg == "laboratory":
+            elif persistent.bg == "laboratory" and persistent.bg == "graveyard":
                 return "_night"
 
             return "_space"
@@ -1579,7 +1583,7 @@ screen yuri_sleep():
 
 layeredimage yuri_sleep:
 
-    if persistent.costume == "sweater" or persistent.costume == "valentines":
+    if persistent.costume == "sweater" or persistent.costume == "valentines" or persistent.costume == "gothic":
         "yuri_resting_pyjama[current_timecycle_marker]"
 
     if persistent.costume == "school":

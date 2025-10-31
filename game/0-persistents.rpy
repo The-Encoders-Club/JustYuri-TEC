@@ -104,6 +104,7 @@ default persistent.head1 = "nothing"
 default persistent.head2 = "nothing"
 default persistent.hairstyle = "default"
 default persistent.game_session = None
+default persistent.goth_yuri = False
 #==================================================#
 # Setting Variables
 #==================================================#

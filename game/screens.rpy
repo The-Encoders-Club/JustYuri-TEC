@@ -2093,7 +2093,7 @@ default lowRList = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"]
 default botharmsList = ["A", "B", "C", "D"]
 
 default costumeList = [
-    "school", "sweater", "lab", "valentines"#, "pyjama", "pinkdress"
+    "school", "sweater", "lab", "valentines", "gothic"#, "pyjama", "pinkdress"
 ]
 default spriteList = ["yuri_sit", "yuri_stand"]
 #default sprite = ["Beta Yuri", "Alpha Yuri", "Standing Yuri"]
@@ -2150,12 +2150,16 @@ screen make_expression():
                 if type == "costume":
                     #This code determine valid values for coustumes based upon timecyle0List
                     valid_costumes = [
-                        "school", "sweater", "lab", "valentines"#, "pyjama"
+                        "school", "sweater", "lab", "valentines", "gothic"#, "pyjama"
                     ]
                     if current_timecycle_marker == ["_night"]:
                         if not "lab" in valid_costumes: valid_costumes.append("lab")
                     else:
                         if "lab" in valid_costumes : valid_costumes.remove("lab")
+                    if current_timecycle_marker == ["_space"]:
+                        if not "gothic" in valid_costumes: valid_costumes.append("gothic")
+                    else:
+                        if "gothic" in valid_costumes : valid_costumes.remove("gothic")
 
                     costumeList[:] = valid_costumes
 

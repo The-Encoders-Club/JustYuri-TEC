@@ -3230,13 +3230,8 @@ label Roomchange:
         "Space Classroom" if persistent.bg != "space":
             $tc_class.transition("space")
 
-
         "Timecycle Room" if persistent.bg != "timecycle":
             $tc_class.transition("timecycle")
-
-
-        "Laboratory" if persistent.bg != "laboratory":
-            $tc_class.transition("laboratory")
 
         "Your bedroom" if persistent.bg != "yuri_kotatsu_1":
             $tc_class.transition("yuri_kotatsu_1")

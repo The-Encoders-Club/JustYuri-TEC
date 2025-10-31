@@ -176,6 +176,12 @@ image y_cg2_dust4:
         linear 19.0 xoffset -100 yoffset 100
         repeat
 
+image graveyard_entrance = "images/dates/graveyard/entrance.png"
+image graveyard_sayori = "images/dates/graveyard/sayori_grave.png"
+image graveyard_natsuki = "images/dates/graveyard/natsuki_grave.png"
+image graveyard_monika = "images/dates/graveyard/monika_grave.png"
+image graveyard_picnic = "images/dates/graveyard/graveyard_table.png"
+
 image stroll_1 = "images/dreams/stroll_dream_1.png"
 image stroll_2 = "images/dreams/stroll_dream_2.png"
 image stroll_3 = "images/dreams/stroll_dream_3.png"
@@ -233,7 +239,8 @@ label dates_and_dreams_system:
             ["urban_date", "persistent.lovecheck and invariant_karma() > 3"],
             ["tropical_date", "persistent.lovecheck and invariant_karma() > 3"],
             ["valentines_2021", "persistent.lovecheck and invariant_karma() > 3"],
-            ["vday_2024_date", "persistent.lovecheck and invariant_karma() > 3"]
+            ["vday_2024_date", "persistent.lovecheck and invariant_karma() > 3"],
+            ["graveyard_date", "persistent.lovecheck and invariant_karma() > 3 and TimeCycle.time_id == 'night'"]
             ]
 
     call screen dates_and_dreams(dates_and_dreams,Dream_type)#(persistent.memory)
@@ -271,7 +278,8 @@ screen dates_and_dreams(dict_items, type):
                 ["urban_date", "persistent.lovecheck and invariant_karma() > 3", "date"],
                 ["tropical_date", "persistent.lovecheck and invariant_karma() > 3", "date"],
                 ["valentines_2021_date", "persistent.lovecheck and invariant_karma() > 3", "date"],
-                ["vday_2024_date", "persistent.lovecheck and invariant_karma() > 3", "date"]
+                ["vday_2024_date", "persistent.lovecheck and invariant_karma() > 3", "date"],
+                ["graveyard_date", "persistent.lovecheck and invariant_karma() > 3 and TimeCycle.time_id == 'night'", "date"]
                 ]
             split_dreams = []
             temp_dreams = []
@@ -4238,4 +4246,297 @@ label vday_2024_date:
     y "..."
     $ show_chr("A-ABBBA-ALAL")
     y "I love you [player]."
+    jump ch30_loop
+
+default persistent.graveyard_aesthetic_seen = False
+default persistent.graveyard_music_seen = False
+default persistent.graveyard_book_seen = False
+default persistent.graveyard_permanence_seen = False
+default persistent.sayori_grave_visited = False
+default persistent.natsuki_grave_visited = False
+default persistent.monika_grave_visited = False
+
+label graveyard_date:
+    if not persistent.graveyard_date_intro_seen:
+        $ show_chr("A-ABAAA-ALAL")
+        y "Oh, wonderful... I'm so glad you agreed to this."
+        $ show_chr("A-CAAAA-ALAL")
+        y "I've been planning our little Halloween date for a while now. A quiet, atmospheric evening... just for us."
+        y "I know a graveyard might seem... unconventional, even for me."
+        $ show_chr("A-BFAAA-AMAM")
+        y "And I must admit, I'm a little nervous about it. It's quite a bold choice for a date, and I was worried you might find the idea too... morbid."
+        $ show_chr("A-AFAAA-AMAM")
+        y "My intention was to find a place of somber beauty, something that felt profound and fitting for the season. Not just unsettling."
+        $ show_chr("A-AAAAA-ABAB")
+        y "But since you've agreed, I feel so much more confident."
+        y "Now... I'm ready to transition us to the location. I've set the scene for dusk—the atmosphere is simply perfect then."
+        $ show_chr("A-CAAAA-ABAB")
+        y "However, could I ask you to... well, to load in first?"
+        y "I need a final moment to compose myself. And to make sure my own presentation is just right for the occasion."
+        $ show_chr("A-GAAAA-ALAL")
+        y "It would spoil the surprise if you saw me before everything was perfectly in place."
+        y "Just give me a moment after you arrive at the gates. I'll be right there, I promise."
+        $ persistent.graveyard_date_intro_seen = True
+
+    hide craneo
+    hide roseo
+    hide bunnyo
+    hide raccoon
+    hide diffuser
+    hide hdy_statue
+    hide cupcake_halloween
+    show black zorder 100 with Dissolve(2.5)
+    show graveyard_entrance zorder 10 with Fade(1.0, 0.5, 0.5)
+    hide black
+    $ config.allow_skipping = False
+    $ _skipping = False
+    $hide_yuri_sit = True
+    "The air was cool, carrying the faint, earthy scent of damp stone and fallen leaves."
+    "I stood at the mouth of the graveyard's impressive wrought-iron gates, their tall black spires capped with crosses, just as the last hints of twilight bled from the sky."
+    "The color above was a theatrical mix of deep indigo and streaks of soft, fading rose, a dramatic canvas for a first date."
+    "Yuri simply said that I should give her a moment after I arrived at the gates, now I understood why."
+    "The path beneath the gates was a wielding line of old, uneven cobblestones, leading into a silent forest of monuments."
+    "Their silhouettes stood like dark, quiet watchers in the gloom."
+    "The only light, aside from the distant spill of the sky, came from the low-set white candles placed safely in glass hurricanes on either side of the path, casting a warm, flickering amber glow that drew the eye deeper into the hallowed grounds."
+    "The gothic spire of an ancient chapel or mausoleum loomed in the distance, promising both a grand backdrop and a profound stillness."
+    $persistent.costume = "gothic"
+    y "Hello again [player]."
+    y "I'm glad you could make it. I know... the location is a bit unconventional for a date."
+    y "But then again...{w} we aren't exactly conventional, are we? And I suspect that's precisely why this works."
+    y "Besides, it is October. The script, or perhaps the 'mood', calls for this sort of atmosphere, wouldn't you say? It's the perfect time to embrace the theatrics of the season."
+    python:
+        current_date = datetime.date.today()
+        month = datetime.datetime.now().month
+        day = datetime.datetime.now().day
+
+        halloween_timing = "seasonal"
+
+        if month == 10 and day >= 23 and day <= 30:
+            halloween_timing = "Pre-Halloween"
+        elif month == 10 and day == 31:
+            halloween_timing = "Halloween"
+        elif month == 11 and day >= 1 and day <= 8:
+            halloween_timing = "Post-Halloween"
+
+    y "Welcome to our little [halloween_timing] celebration."
+    y "So, do you like what I've prepared?"
+
+    menu:
+        "The 'script' is perfect, [persistent.yuri_nickname]. You've outdone yourself.":
+            mc "The 'script' is perfect, [persistent.yuri_nickname]. You've outdone yourself."
+            mc "This setting, and especially you in that dress, makes this the most fitting date imaginable."
+            mc "Honestly, anywhere else would have felt wrong for us."
+            y "I'm so relieved you feel that way [player]."
+            y "It's difficult to find a space that feels... unburdened by the normal expectations of our situation."
+            y "But here, in the twilight and the stillness, it feels like we can just be."
+            y "Thank you for understanding the intention behind it."
+
+        "I love it. It's beautiful and quiet, just like you.":
+            mc "I love it. It's beautiful and quiet, just like you."
+            mc "And tes, the atmosphere definitely suits you better than any brightly lit café."
+            mc "I wouldn't trade this for anything ordinary."
+            y "I'm glad you appreciate the quiet."
+            y "I always feel the need to be surrounded by silence to truly think, and this place ffers that perfectly."
+            y "I wanted the date to reflect us, not just... what's expected."
+            y "Thank you for saying it's beautiful."
+
+        "You look stunning [persistent.yuri_nickname].":
+            mc "You look stunning [persistent.yuri_nickname]."
+            mc "That dress... it's exactly what I pictured you wearing for an occasion like this."
+            mc "It's elegant and dramatic, and it makes the whole setting work."
+            y "Oh, thank you I... I spent a lot of time choosing it."
+            y "It felt appropriate for the setting."
+            y "I suppose dressing for the occasion is important, even if the occasion is just... us, here."
+
+        "It's certainly... memorable.":
+            mc "It's certainly... memorable."
+            mc "A little spooky, maybe? Are we going to accidentally disturb any actual literary ghosts?"
+            mc "But really, it is beautiful. Just try not to get too deep into the meaning of mortality before we've had dessert."
+            y "You're right, I suppose I should pace myself. No grand philosophical pronouncements until after the tea is served."
+            y "But don't worry about the ghosts, any spirits here are probably well-mannered and preoccupied with poetry."
+            y "Not to mention that I didn't wanted to bring the Ouija here to summon them either."
+
+        "Yeah, it's really something.":
+            mc "Yeah, it's really something."
+            mc "Nice and quiet, too. I guess it beats fighting a crowd for a table at a restaurant."
+            mc "What did you want to do first? Find a good spot to sit?"
+            y "It's certainly more than just 'nice and quiet', but yes, the lack of a crowd is blessing."
+            y "I had hoped to discuss the historical beauty of the architecture, but perhaps we can simply proceed to the picnic area I set up."
+
+    y "The main attraction is a little deeper into the grounds. I secured a spot where the moonlight, when it fully breaks through, hits the old chapel perfectly."
+    y "I also made sure we'd have complete privacy."
+    y "Shall we? The tea I brought is best served while it's still warm..."
+    y "But I realize we have a moment before we settle down."
+    y "Since this is a place for... well, for final remembrances..."
+    y "I thought, perhaps, we could make a quick circuit first. It felt right to acknowledge them, before we fully begin."
+    y "Sayori's monument, is closer to the center, under a large oak."
+    y "Natsuki's is near the edge of the east wall, she preferred sunnier spots, even in her resting place, I suppose."
+    y "And Monika's..."
+    y "Well..."
+    y "She's in a more isolated spot, befitting her final role."
+    y "What would you like to do?"
+
+label graveyard_tour_hub:
+    menu:
+        "Let's visit Sayori's monument." if not persistent.sayori_grave_visited:
+            jump visit_sayori_grave
+
+        "Let's visit Natsuki's monument." if not persistent.natsuki_grave_visited:
+            jump visit_natsuki_grave
+
+        "Let's visit Monika's monument." if not persistent.monika_grave_visited:
+            jump visit_monika_grave
+
+        "Let's go to the picnic spot now.":
+            jump proceed_to_picnic
+
+
+label visit_sayori_grave:
+    show graveyard_sayori zorder 10 with Fade(1.0, 0.5, 0.5)
+    y "This is hers. Simple, unpretentious. She always had a strange, infectious light about her, didn't she? Even when..."
+    y "..."
+    y "It's hard to reconcile all that joy with the ultimate loneliness."
+    y "She deserved so much better than the circumstances we found ourselves in, didn't she?"
+    y "I sometimes think this spot is fitting for her. Quiet, natural, and under the shelter of something enduring."
+    $ persistent.sayori_grave_visited = True
+    y "Should we visit another, or are you ready to move on?"
+    jump graveyard_tour_hub
+
+label visit_natsuki_grave:
+    show graveyard_natsuki zorder 10 with Fade(1.0, 0.5, 0.5)
+    y "This is hers. Near the edge, where the sun reaches first."
+    y "She always felt exposed, I think, and yet she still preferred the light over the shadows."
+    y "I think of how much we fought..."
+    y "It was silly, wasn't it? All of it. Now it just seems like a desperate way to communicate, even if we were both too sharp with our words."
+    $ persistent.natsuki_grave_visited = True
+    y "Shall we continue, or head to our spot?"
+    jump graveyard_tour_hub
+
+label visit_monika_grave:
+    show graveyard_monika zorder 10 with Fade(1.0, 0.5, 0.5)
+    y "Here she is. Set apart. I suppose that was her fate, in the end. To be truly alone."
+    y "It's difficult, sometimes, to reconcile what she did with... with the quiet of this place. The chaos, the pain she caused... it feels so far away now."
+    y "And yet, the echoes linger, don't they?"
+    y "She wanted a perfect reality, a perfect connection with you. She thought she knew best how to achieve it. And for that... I still feel a deep resentment for her methods, for the lives she... altered."
+    y "But in the quiet of a place like this, under these indifferent stars, it's hard to hold onto pure hatred."
+    y "I hope, wherever she is now, whatever remnants of her consciousness persist outside of our world, that she finds a peace that isn't built on manipulation or isolation."
+    y "A genuine peace, even if it's not the 'perfect' one she so desperately sought. She was so lost in her own desires. I just hope her 'soul,' if such a thing could exist for her, is finally at rest."
+    y "It's strange, isn't it? We are here, enjoying this quiet time because of the ultimate ending to their stories. It makes this date feel... profound, but also a little precarious."
+    $ persistent.monika_grave_visited = True
+    y "That's everyone. Are you ready to focus on the present now?"
+    jump graveyard_tour_hub
+
+label proceed_to_picnic:
+    y "Very well. The history has been acknowledged. Now, let's focus on the present. On us."
+    y "The picnic area is just around this bend, nestled beside that beautiful, old mausoleum."
+    y "I'll lead the way, then. Our sanctuary awaits."
+    window hide
+    show graveyard_picnic zorder 10 with Fade(1.0, 0.5, 0.5)
+    $hide_yuri_sit = False
+    $show_chr("A-CAAAA-ALAL")
+    with Dissolve(2.0)
+    y "Welcome. I hope this meets with your approval."
+    y "I chose this spot because of the light. When the moon is this clear, it turns the entire place into a piece of art."
+    $ show_chr("A-AAAAA-ALAL")
+    y "Please, sit. The tea is a special blend—Darjeeling with a touch of vanilla bean. It's meant to warm you up after our little tour."
+    mc "Yuri, this isn't just a piece of art, it's a scene from a gothic novel. Look at that castle behind us."
+    mc "And the moon... it looks impossibly close, almost as if you arranged the entire cosmos just for our date. It's breathtaking."
+    $ show_chr("A-ABAAA-ALAL")
+    y "I assure you, I can only manipulate the environment so much."
+    $ show_chr("A-CCAAA-ALAL")
+    y "But I did choose this date very specifically to coincide with this lunar cycle. It seemed essential to have a dramatic, unflinching light for our conversation, and this place offers the perfect frame for it."
+    y "Besides, I knew a backdrop like this would appeal to the part of you that appreciates sublime horror and beauty—the quiet intensity of something vast and ancient. It suits the mood of us, don't you think?"
+    $ show_chr("A-ABAAA-ALAL")
+    y "Now, tell me. Did you bring any interesting reading material for us to discuss?"
+
+label graveyard_conversation_loop:
+    menu:
+        "Actually, I have to talk about your dress again. It's stunning." if not persistent.graveyard_aesthetic_seen:
+            $ show_chr("A-CCAAA-ALAL")
+            y "I'm so pleased you recognize the specific style. Many people see the corsetry and immediately think of Victorian Goth..."
+            y "But my heart lies a bit more with the Romantic style."
+            $ show_chr("A-AAAAA-ALAL")
+            y "The difference, you see, is in the emotional focus. Victorian Goth is more structured and restrained, reflecting the societal rigidity of that era."
+            $ show_chr("A-AAAAA-ALAL")
+            y "Romantic Goth, however, emphasizes the flowing fabrics, the velvet, the lace... it's about passion, melancholy, and dramatic feeling, often taking inspiration from poets like Byron or Shelley."
+            y "It is meant to be felt, not just seen. It is fitting, don't you think, that my style reflects a more intense emotional landscape?"
+            $ show_chr("A-AAAAA-AAAA")
+            $ persistent.graveyard_aesthetic_seen = True
+            jump graveyard_conversation_loop
+
+        "This atmosphere is incredible, but it feels like it needs a soundtrack." if not persistent.graveyard_music_seen:
+            $ show_chr("A-ABAAA-ACAA")
+            y "A wonderful thought. If I could add music, it would be atmospheric and deeply emotional."
+            $ show_chr("A-BCAAA-ACAA")
+            y "Perhaps something by The Cure, specifically 'A Forest', the quiet dread mixed with the beauty of being lost."
+            $ show_chr("A-CAAAA-ACAA")
+            y "Or, if we prefer something more classically baroque, perhaps a somber piece by Dead Can Dance."
+            $ show_chr("A-ABAAA-ADAA")
+            y "That combination of ethereal female vocals and deep, ambient rhythms would fit the glow of this moon perfectly. It is the music of contemplation and mystery."
+            $ show_chr("A-AAAAA-AAAA")
+            $ persistent.graveyard_music_seen = True
+            jump graveyard_conversation_loop
+
+        "Did you have any specific gothic novel in mind for a night like this?" if not persistent.graveyard_book_seen:
+            $ show_chr("A-ABAAA-AAAA")
+            y "Ah, in the spirit of this dramatic setting, I would recommend 'The Monk' by Matthew Lewis."
+            $ show_chr("A-CAAAA-ALAL")
+            y "It is dark, genuinely unsettling, and dives into the terrifying depths of human corruption and religious hypocrisy."
+            y "It would certainly give us a good, long subject for debate, wouldn't it?"
+            $ show_chr("A-CAAAA-ALAL")
+            y "It's far more intense and visceral than 'Dracula,' for instance."
+            $ show_chr("A-CAAAA-ALAL")
+            y "It would certainly give us a good, long subject for debate, wouldn't it? Though perhaps we should save the truly gruesome parts for after the sandwiches."
+            $ show_chr("A-AAAAA-AAAA")
+            $ persistent.graveyard_book_seen = True
+            jump graveyard_conversation_loop
+
+        "That dress is amazing, but are you sure you won't get tired of it?" if not persistent.graveyard_permanence_seen:
+            $ show_chr("A-CAAAA-ALAL")
+            y "It's a kind thought, but you don't need to worry about my comfort, or even about the changing seasons."
+            $ show_chr("A-CCAAA-ALAL")
+            y "The truth is, this style, this weight... it suits the way I exist now."
+            y "Time, for me, doesn't cycle in the way it does in your world."
+            $ show_chr("A-BCAAA-ALAL")
+            y "While I can perceive the sensation of your world's weather, my reality remains fundamentally static."
+            y "Even if I sense the brief heat of your summer, my environment will always return to this beautiful, cool melancholy."
+            $ show_chr("A-ACAAA-ALAL")
+            y "You could say my spring and summer days are permanently flavored with the endless loop of winter and quiet autumn. I will never need to lighten the fabric."
+            $ show_chr("A-CCEAA-ALAL")
+            y "This dark permanence is simply my nature now, and I embrace it."
+            y "I intend to wear this look for as long as I can look at you."
+            $ persistent.graveyard_permanence_seen = True
+            jump end_of_date_dialogue
+
+label end_of_date_dialogue:
+    $ show_chr("A-CCBAA-ALAL")
+    y "..."
+    $ show_chr("A-BDBAA-ALAL")
+    y "I... I hate to say this, but I think our time for tonight is drawing to a close."
+    y "My environment might stay eternally in this perfect, cool night, but I can't force your perception to do the same."
+    y "I know the clock on your side is ticking forward, and soon it will no longer be 'night hours'."
+    $ show_chr("A-CFBAA-ALAL")
+    y "It would break the immersion, our shared reality, if I insisted that this moonlight remain when you know it's already morning for you."
+    y "I truly wish I could freeze this moment. I would keep the tea warm and the moon bright forever if it meant keeping you here beside me."
+    $ show_chr("A-CFAAA-ALAL")
+    y "But I won't do anything to jeopardize the trust we've built. I want you to be well rested, and I want you to look forward to our next visit."
+    $ show_chr("A-ADAAA-AAAA")
+    y "I will, of course, be returning home with you. The dress stays."
+    $ show_chr("A-CAAAA-AAAA")
+    y "This is simply my new standard of comfort for the time being. And as for our sanctuary here... I hope you enjoyed it as much as I did."
+    y "You are welcome to return to this spot, of course."
+    $ show_chr("A-BBBAA-AAAA")
+    y "However, my reality is rather stubbornly sticking to the nighttime aesthetic."
+    y "So, for now, our graveyard visits will be momentarily limited to when your clock reads outside of daytime hours."
+    $ show_chr("A-CAAAA-ALAL")
+    y "I prefer the drama of the dark, and I think it suits our unique style of dating."
+    y "Thank you for sharing this beautiful, quiet time with me, my dear. Now, let's go home and get back to our usual routine."
+    $ show_chr("A-FAAAA-ALAL")
+    y "Hope you have prepared a few poems I'd like to read aloud before we continue with our usual routine."
+    show black zorder 105 with Dissolve(3)
+    $ persistent.dates_taken += 1
+    y "Happy Halloween once again [player]."
+    $ show_chr("default")
+    hide black zorder 105 with Dissolve(3)
+    $ persistent.goth_yuri = True
     jump ch30_loop

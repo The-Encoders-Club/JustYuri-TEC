@@ -5,7 +5,8 @@ init -99 python:
         "School Uniform": "school",
         "Casual Sweater": "sweater",
         "Valentine's Outfit": "valentines",
-        "Bikini": "bikini"
+        "Bikini": "bikini",
+        "Romantic Goth Dress": "goth_dress"
         # Add any other hardcoded costumes here.
     }
 
