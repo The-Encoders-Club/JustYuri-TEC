@@ -313,9 +313,11 @@ label yuri_daily_weather_report:
         # Temperature Report
         if celsius_temp != 999:
             if persistent.temp_scale == "F":
-                $ temp_display = celsius_to_fahrenheit(celsius_temp); $ unit = "°F"
+                $ temp_display = celsius_to_fahrenheit(celsius_temp)
+                $ unit = "°F"
             else:
-                $ temp_display = int(celsius_temp); $ unit = "°C"
+                $ temp_display = int(celsius_temp)
+                $ unit = "°C"
             y "Right now, it looks like the temperature is around [temp_display][unit]."
 
         # Condition Report
@@ -332,9 +334,11 @@ label yuri_daily_weather_report:
 
         # Wind Report
         if persistent.wind_scale == "mph":
-            $ wind_speed = mps_to_mph(wind_mps); $ wind_unit = "mph"
+            $ wind_speed = mps_to_mph(wind_mps)
+            $ wind_unit = "mph"
         else:
-            $ wind_speed = mps_to_kph(wind_mps); $ wind_unit = "km/h"
+            $ wind_speed = mps_to_kph(wind_mps)
+            $ wind_unit = "km/h"
         
         if wind_speed > 30 or (wind_speed > 18 and persistent.wind_scale == "mph"):
             y "It also seems to be quite blustery, with winds around [wind_speed] [wind_unit]."
