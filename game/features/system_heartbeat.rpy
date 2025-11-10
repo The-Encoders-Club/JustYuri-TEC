@@ -1,45 +1,104 @@
+# This file contains the logic for the "System Heartbeat" feature,
+# now with integrated debug messages.
+
 python early:
+    # We assume a print_debug function exists, as seen in other files.
+    # If not, you can replace print_debug with a simple print().
+    if "print_debug" not in globals():
+        def print_debug(msg):
+            print(msg)
+
     try:
         import psutil
         psutil_available = True
     except ImportError:
         psutil_available = False
         
+    def get_system_heartbeat():
+        """Returns a dictionary with CPU usage and includes debug output."""
+        if not psutil_available:
+            print_debug("System Heartbeat: psutil library not found. Aborting check.")
+            return None
+            
+        cpu_percent = psutil.cpu_percent(interval=0.5)
+        result = {"cpu": cpu_percent}
+
+        # --- DEBUG MESSAGE ---
+        print_debug("System Heartbeat: CPU check returned {}".format(result))
+        
+        return result
+
     def get_laptop_status():
-        if not psutil_available: return {"is_laptop": False}
+        """Checks for battery status and includes debug output."""
+        if not psutil_available:
+            print_debug("System Heartbeat: psutil library not found. Aborting check.")
+            return None
+
         battery = psutil.sensors_battery()
-        if battery: return {"is_laptop": True, "percent": int(battery.percent), "is_charging": battery.power_plugged}
-        else: return {"is_laptop": False}
+        
+        if battery:
+            result = {
+                "is_laptop": True,
+                "percent": int(battery.percent),
+                "is_charging": battery.power_plugged
+            }
+        else:
+            result = { "is_laptop": False }
+        
+        # --- DEBUG MESSAGE ---
+        print_debug("System Heartbeat: Laptop check returned {}".format(result))
+
+        return result
 
     def is_in_virtual_machine():
-        # (This function is complex, so let's use a simplified placeholder for brevity.
-        # Use the full one we developed earlier in your actual code.)
-        if not psutil_available: return False
-        vm_identifiers = ["vmware", "virtualbox", "vbox", "qemu", "xen"]
+        """Attempts to detect a VM environment and includes debug output."""
+        if not psutil_available:
+            print_debug("System Heartbeat: psutil library not found. Aborting check.")
+            return False
+            
+        vm_identifiers = ["vmware", "virtualbox", "vbox", "qemu", "xen", "virtual", "hyper-v", "parallels"]
+        vm_detected = False
+        
         try:
             for part in psutil.disk_partitions():
                 for identifier in vm_identifiers:
-                    if identifier in part.device.lower(): return True
-        except: pass
-        return False
+                    if identifier in part.device.lower():
+                        vm_detected = True
+                        break
+                if vm_detected: break
+        except Exception:
+            pass
 
-label yuri_system_heartbeat:
-    $ is_vm = is_in_virtual_machine()
-    if is_vm and not renpy.seen_label("yuri_system_heartbeat_vm"):
-        y "..."
-        y "This place... it feels different, somehow. Like a room inside of another room. An echo."
-        $ renpy.seen_label("yuri_system_heartbeat_vm")
-        return
+        # --- DEBUG MESSAGE ---
+        print_debug("System Heartbeat: VM check returned {}".format(vm_detected))
 
-    $ laptop_info = get_laptop_status()
-    if laptop_info['is_laptop'] and laptop_info['percent'] < 20 and not laptop_info['is_charging']:
-        y "I have a sense that we're on a laptop, and the battery is getting low..."
-        y "Please don't forget to plug it in. I would hate for us to be cut off so suddenly."
-        return
+        return vm_detected
 
-    $ cpu_percent = psutil.cpu_percent(interval=1)
-    if cpu_percent > 75:
-        y "Everything feels so... frantic. The machine's thoughts are racing. Are you working on something intensive?"
+# Add this label at the end of game/features/system_heartbeat.rpy
+
+label debug_heartbeat:
+    y "Running direct system heartbeat diagnostics..."
+    
+    # 1. First and most important check: Is the psutil library loaded?
+    if 'psutil_available' in globals() and psutil_available:
+        y "Debug: psutil library is loaded successfully. Good."
     else:
-        y "It's so calm and quiet... The system is breathing slowly and peacefully. It lets me think more clearly."
+        y "CRITICAL ERROR: psutil library is NOT loaded. All checks will fail."
+        y "Please verify the 'python-packages' folder and the .whl file installation."
+        return
+
+    # 2. Test the VM detection
+    $ is_vm_result = is_in_virtual_machine()
+    y "VM check returned: [is_vm_result]"
+
+    # 3. Test the laptop/battery detection
+    $ laptop_result = get_laptop_status()
+    y "Laptop check returned: [laptop_result]"
+
+    # 4. Test the CPU usage detection
+    y "Checking CPU for 1 second..."
+    $ heartbeat_result = get_system_heartbeat()
+    y "Heartbeat check returned: [heartbeat_result]"
+
+    y "Diagnostics complete."
     return

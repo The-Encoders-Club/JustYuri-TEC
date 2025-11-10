@@ -1036,7 +1036,6 @@ init -3 python:
         sub_category = None))
 
     # --- NEW IDLE: DIGITAL BOOKSHELF INTRO ---
-    # This topic introduces the feature to the player for the first time.
     add_dialogue(Dialogue(
         label = 'yuri_bookshelf_intro',
         category = DialogueAPI.category_idle,
@@ -1558,12 +1557,13 @@ init -3 python:
         name = "I'm ready to revisit the chocolate moment.",
         sub_category = "Love"))
 
+    # --- NEW ACTIVE: READ FROM DIGITAL BOOKSHELF ---
     add_dialogue(Dialogue(
         label = "yuri_scan_for_books",
         category = DialogueAPI.category_talk,
         conditions = ["renpy.seen_label('yuri_bookshelf_intro')"], # Only appears after she introduces it.
         importance = 0,
-        name = "I put a book in the folder for us.",
+        name = "Can we read something from our folder?",
         sub_category = "Activities")) # Or any sub-category you prefer.
 
     #add_dialogue(Dialogue(
@@ -2027,6 +2027,17 @@ init -3 python:
         conditions = [],
         importance = 0,
         name = "Whatever happens, just remember that there is someone who loves you no matter what.",
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "yuri_daily_weather_report",
+        category = DialogueAPI.category_greetings,
+        # This condition checks:
+        # 1. If the feature's setup is complete.
+        # 2. If today's day number is different from the last time the report was given.
+        conditions = ["persistent.player_city and persistent.player_city != 'declined'", "persistent.last_weather_report_day != datetime.datetime.now().day"],
+        importance = 10, # Give it a high priority to run once per day.
+        name = "None",
         sub_category = None))
 
 #####

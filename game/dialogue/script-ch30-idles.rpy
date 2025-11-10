@@ -1996,7 +1996,7 @@ label idle_34: #Skynet, a Joke, and World Domination
             show black zorder 100 with Dissolve(2.5)
             $ tc_class.transition("space", speed="now")
             hide black zorder 100 with Dissolve(2.5)
-        elif persistent.costume == "gothic"
+        elif persistent.costume == "gothic":
             $ renpy.call("ch30_loop")
         else:
             pass

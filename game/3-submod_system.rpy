@@ -102,7 +102,7 @@ You can feel free to delete these documents if you would like to free up space f
             self.icon = Transform(os.path.join(config.gamedir, "images", "default_submod.png"), size=(100,100), fit="contain")
 
     print("Checking for submods...")
-    request_dev_access = False
+    request_dev_access = True
     dev_access = True
 
     #==================================================#

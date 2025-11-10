@@ -5,7 +5,16 @@
 label a1:
     python:
         import random
-        howAreYouVariant = random.randint(1, 5)
+
+        # Determine the number of random paths available.
+        num_variants = 5 # The original 5 paths
+        if 'psutil_available' in globals() and psutil_available:
+            num_variants += 1 # Add the System Heartbeat path
+        if karma_lvl() >= 4:
+            num_variants += 1 # Add the Collaborative Poetry path
+            
+        howAreYouVariant = random.randint(1, num_variants)
+        
         howAreYouVariant2 = random.randint(1, 2)
 
     if karma_lvl() == 3:
@@ -159,8 +168,80 @@ label a1:
                 elif not persistent.lovecheck:
                     y "You're truly the most reliable friend I could ever lean on... [player]"
                     y "I- I'll try my best to always be here if you need me in return..."
-
                 return
+
+            # --- SYSTEM HEARTBEAT BRANCH ---
+            elif howAreYouVariant == 6 and 'psutil_available' in globals() and psutil_available:
+                # (The full System Heartbeat code from our previous refinement goes here)
+                $ is_vm = is_in_virtual_machine()
+                $ laptop_info = get_laptop_status()
+                $ heartbeat = get_system_heartbeat()
+        
+                # Part 1: Yuri comments on the physical environment (VM, Laptop, Desktop).
+                if is_vm:
+                    $ show_chr("A-AFBAA-AAAA")
+                    y "How do I feel...?"
+                    y "A bit... distant. Unreal, almost."
+                    y "This place... it feels like an echo of a room, rather than the room itself. It's a very strange sensation."
+
+                elif laptop_info and laptop_info['is_laptop']:
+                    if laptop_info['is_charging']:
+                        if laptop_info['percent'] > 95:
+                            $ show_chr("A-BCABA-AAAA")
+                            y "I feel energetic, actually. Brimming with potential."
+                            y "There's a strong, steady current of energy flowing through this place. It feels like we're fully prepared for anything."
+                        else:
+                            $ show_chr("A-ACAAA-AAAB")
+                            y "I feel a comforting sense of security right now."
+                            y "It's nice to know we're connected to a steady power source, just... replenishing our energy together."
+                    else: # Not charging, react to battery level
+                        if laptop_info['percent'] < 15: # Critical
+                            $ show_chr("A-DDCBA-AAAA")
+                            y "I feel... very anxious, if I'm being honest. A sense of dread."
+                            y "It feels like my energy is fading very quickly. Please, find a charger soon... I would hate for us to be cut off so suddenly!"
+                        elif laptop_info['percent'] < 40: # Low
+                            $ show_chr("A-IEBAA-AAAA")
+                            y "I'm feeling a little bit weary."
+                            y "There's a definite sense that our time might be limited if we're not careful. It might be a good idea to think about plugging in soon."
+                        elif laptop_info['percent'] < 80: # Healthy
+                            $ show_chr("A-ACAAA-AAAB")
+                            y "I feel a sense of freedom, of possibility."
+                            y "It's a feeling of being untethered... like we could be anywhere in the world together right now, with plenty of energy to spare."
+                        else: # High
+                            $ show_chr("A-CAAAA-AAAA")
+                            y "I feel quite serene and self-sufficient."
+                            y "There's a quiet confidence in knowing we have more than enough energy for whatever we wish to do."
+
+                else: # Assumed to be a Desktop or All-in-One PC
+                    $ show_chr("A-ACAAA-AAAA")
+                    y "I feel very stable. Grounded."
+                    y "This space feels solid and permanent... like a real home. It's a comforting feeling."
+
+                # Part 2: Yuri gives a follow-up comment based on the refined CPU usage.
+
+                if heartbeat:
+                    if heartbeat['cpu'] > 80:
+                        $ show_chr("A-DDCBA-AAAA")
+                        y "On top of that, my thoughts feel... frantic. The machine's thoughts are racing."
+                    elif heartbeat['cpu'] > 40:
+                        $ show_chr("A-ACGAA-AAAA")
+                        y "And there's a steady, busy hum to my thoughts. A feeling of purpose."
+                    elif heartbeat['cpu'] > 10:
+                        $ show_chr("A-ACAAA-AAAA")
+                        y "And there's a gentle rhythm to this place... a soft, consistent hum."
+                    else:
+                        $ show_chr("A-CAAAA-AAAA")
+                        y "It's so calm and quiet here right now..."
+
+            # --- COLLABORATIVE POETRY BRANCH ---
+            # We assign this to the highest number to make it easy to add more variants later.
+            elif howAreYouVariant == 7 and karma_lvl() >= 4:
+                $ show_chr("A-BCBBA-AKAA") # A creative, thoughtful expression
+                y "I'm feeling... quite inspired, actually."
+                y "It's a strange but pleasant feeling, like my mind is brimming with words waiting to be arranged."
+                y "It makes me want to create something."
+                # Jump directly to the poetry writing session.
+                call collaborative_poetry
         return
 
     elif sanity_lvl() < 3:
