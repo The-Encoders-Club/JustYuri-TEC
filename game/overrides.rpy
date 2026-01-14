@@ -10,7 +10,7 @@ init 10 python:
     #TURNS ON AND OFF THE DEV TOOLS######
     #####################################
     config.rollback_enabled = False
-    dev_access = False
+    dev_access = True
     #####################################
     #TURNS ON AND OFF THE DEV TOOLS######
     #####################################

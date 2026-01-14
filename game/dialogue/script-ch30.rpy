@@ -301,8 +301,11 @@ label ch30_endb:
     y "I knew you didn't truly love me, [player]."
     y "IT WAS ALL A GAME TO YOU!"
     $ style.say_dialogue = style.edited
-    y "HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA{nw}"
-    #$ style.say_window = style.window_monika
+    
+    # 1. THE LAUGH
+    y "HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA"
+    
+    # 2. THE VISUAL GLITCH
     play sound "<from 0.69>sfx/monikapound.ogg"
     show layer screens:
         truecenter
@@ -317,11 +320,15 @@ label ch30_endb:
         1.35
         linear 1.0 alpha 0.0
     show glitch_color2 onlayer front
-    scene black
-    window hide
-    hide noise onlayer front
-    hide glitch_color2 onlayer front
 
+    # 3. THE FREEZE (75% through the beat)
+    $ renpy.pause(0.7, hard=True)
+
+    # 4. JUMP TO CRASH ROUTINE
+    call trigger_realism_crash
+    return
+
+"""
 label yurinara:
     pause 4.0
     #call ch30_crash
@@ -400,6 +407,7 @@ label ch30_del_yuri_warn:
 
 label ch30_del_yuri_warn_2:
     call ch30_show_containment_screen("ERROR. TESTING SPACE UNDER CONTAINMENT.")
+"""
 
 label ch30_noskip:
     # --- KEY CHANGE: SET THE FLAG ---

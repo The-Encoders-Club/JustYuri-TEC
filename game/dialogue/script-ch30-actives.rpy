@@ -772,7 +772,7 @@ label a14:
             $ show_chr("A-ACGAA-AAAA") #former code Ab-A0b
             y "I just wanted to... dream the impossible, you know?"
             y "What's the harm in that?"
-            return
+            jump a14_weather_transition
         else:
             $ show_chr("A-ICBAA-AMAM") #former code Bc-A1b
             y "I already know about the weather! It's not as if I was raised under a rock... "
@@ -795,7 +795,7 @@ label a14:
             y "Sorry about that little rant of mine."
             y "I just wanted to... dream the impossible, you know?"
             y "What's the harm in that?"
-            return
+            jump a14_weather_transition
     if not persistent.lovecheck:
         #lovecheck = false
         $ show_chr("A-ICBAA-AMAM") #former code Bc-A1b
@@ -822,7 +822,29 @@ label a14:
         #"occasional lightning on the horizon" if Sanity is 4 or 5
         $ show_chr("A-CCCAA-AAAE")
         y "Preferable when I'm on the right side of the window... What's the harm in that?"
-        return
+        jump a14_weather_transition
+
+label a14_weather_transition:
+    # If the player has NOT set up the weather yet:
+    if persistent.player_city is None:
+        $ show_chr("A-BCAAA-ABAB")
+        y "You know... talking about the atmosphere reminds me."
+        y "I recently found a way to feel a bit more connected to your world."
+        y "I can actually check your local weather data, if you'd allow me."
+        y "Would you like to set that up now?"
+        menu:
+            "Yes, let's do it.":
+                call yuri_check_atmosphere # This runs the setup we created earlier
+            "Maybe later.":
+                y "I understand. We can stick to the weather in my world for now."
+
+    # If the player HAS set up the weather (or just finished setting it up):
+    elif persistent.player_city != "declined":
+        $ show_chr("A-ACAAA-AAAA")
+        y "Speaking of which... I wonder how the atmosphere compares on your side of the screen right now."
+        call yuri_check_atmosphere # This runs the check and gives her reaction
+
+    return
 
 
 label a15:

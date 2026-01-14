@@ -1749,8 +1749,8 @@ init python:
     BOARD_HEIGHT = 22
     VISIBLE_BOARD_HEIGHT = 20
     PIXEL_SIZE = 20
-    LOCK_DELAY = 0.5
-    LOCK_DELAY_20G = 0.65
+    LOCK_DELAY = 1.0
+    LOCK_DELAY_20G = 0.8
 
     TETROMINOES = {
         'T': {'shape': [[1, 1, 1], [0, 1, 0]], 'color_id': 1},
@@ -1848,29 +1848,38 @@ init python:
             if self.game_over:
                 return
 
-            # --- Gravity Calculation ---
-            # Get the speed multiplier based on the game's difficulty setting
-            speed_multiplier = AI_GRAVITY_MULTIPLIERS.get(self.difficulty, 1.0)
-
-            # High-level 20G gravity remains the same for everyone
+            # --- MODIFIED 20G LOGIC ---
             if self.level >= 20:
-                self.move(0, 1, reset_lock=False)
+                # True 20G: The piece falls instantly to the stack/floor every frame.
+                # We use a loop to move it down until it collides.
+                # reset_lock=False ensures we don't accidentally reset the timer just by falling.
+                while self.move(0, 1, reset_lock=False):
+                    pass 
+                
+                # Once the loop finishes, the piece is resting on the stack.
+                # We treat it as landed immediately.
+                self.is_landed = True
+            # --------------------------
+            
+            # --- Standard Gravity (Levels 1-19) ---
             else:
                 self.time_since_fall += dt
                 speed_multiplier = AI_GRAVITY_MULTIPLIERS.get(self.difficulty, 1.0)
+                # We used 0.8 in the previous step for slower start speed
                 base_interval = max(0.05, 0.8 - ((self.level - 1) * 0.022))
                 gravity_interval = base_interval / speed_multiplier
+
                 if self.time_since_fall >= gravity_interval:
                     self.time_since_fall = 0
                     self.move(0, 1, reset_lock=False)
 
+            # --- Lock Delay Handling ---
             if self.is_landed:
                 self.lock_timer += dt
                 
-                # --- Select lock delay based on level ---
+                # Check against the appropriate lock delay constant
                 current_lock_delay = LOCK_DELAY_20G if self.level >= 20 else LOCK_DELAY
                 
-                # Use the selected value in the comparison
                 if self.lock_timer >= current_lock_delay:
                     self.lock_piece()
             
@@ -2758,30 +2767,48 @@ init python:
         def update(self, dt):
             if self.game_over: return
 
-            # --- Added a fall interval to control speed ---
-            # You can change 0.6 to any number. Higher = Slower.
-            fall_interval = max(0.05, 0.3 - ((self.level - 1) * 0.025))
-
+            fall_interval = max(0.05, 0.6 - ((self.level - 1) * 0.025))
             current_lock_delay = LOCK_DELAY_20G if self.level >= 20 else LOCK_DELAY
 
-            # --- Handle Player Gravity and Lock ---
+            # --- Handle Player Gravity ---
             if self.player_piece:
-                if self.player_is_landed:
-                    self.player_lock_timer += dt
-                    # Use the selected value here
-                    if self.player_lock_timer >= current_lock_delay:
-                        self.lock_piece(True)
-                else:
+                if self.level >= 20:
+                    # Instant drop for Player
+                    while self.move(0, 1, is_player=True, reset_lock=False):
+                        pass
+                    self.player_is_landed = True
+                
+                # Standard drop for Player
+                elif not self.player_is_landed:
                     self.player_time_since_fall += dt
                     if self.player_time_since_fall >= fall_interval:
                         self.player_time_since_fall = 0
                         self.move(0, 1, is_player=True, reset_lock=False)
+                
+                # Lock Logic
+                if self.player_is_landed:
+                    self.player_lock_timer += dt
+                    if self.player_lock_timer >= current_lock_delay:
+                        self.lock_piece(True)
 
-            # --- Handle AI Gravity and Lock ---
+            # --- Handle AI Gravity ---
             if self.ai_piece:
+                if self.level >= 20:
+                    # Instant drop for AI
+                    while self.move(0, 1, is_player=False, reset_lock=False):
+                        pass
+                    self.ai_is_landed = True
+                
+                # Standard drop for AI
+                elif not self.ai_is_landed:
+                    self.ai_time_since_fall += dt
+                    if self.ai_time_since_fall >= fall_interval:
+                        self.ai_time_since_fall = 0
+                        self.move(0, 1, is_player=False, reset_lock=False)
+
+                # Lock Logic
                 if self.ai_is_landed:
                     self.ai_lock_timer += dt
-                    # Use the selected value here too
                     if self.ai_lock_timer >= current_lock_delay:
                         self.lock_piece(False)
                 else:

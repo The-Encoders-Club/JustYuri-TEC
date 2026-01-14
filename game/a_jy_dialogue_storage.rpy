@@ -1030,7 +1030,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'yuri_check_atmosphere',
         category = DialogueAPI.category_idle,
-        conditions = ["not renpy.seen_label_in_session('yuri_check_atmosphere')", "karma_lvl() >= 3"],
+        conditions = ["not renpy.seen_label('yuri_check_atmosphere')", "karma_lvl() >= 3"],
         importance = 2, # Give it a slightly higher chance of appearing once per session.
         name = None,
         sub_category = None))
@@ -1048,8 +1048,213 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'yuri_system_heartbeat',
         category = DialogueAPI.category_idle,
-        conditions = ["psutil_available", "not renpy.seen_label_in_session('yuri_system_heartbeat')", "karma_lvl() >= 4", "renpy.seen_label('webcam')"],
+        conditions = ["psutil_available", "not renpy.seen_label('yuri_system_heartbeat')", "karma_lvl() >= 4", "renpy.seen_label('webcam')"],
         importance = 1, # A special, but not overly frequent, topic.
+        name = None,
+        sub_category = None))
+
+    # --- NEW DAILY WEATHER REPORT ---
+    add_dialogue(Dialogue(
+        label = "yuri_daily_weather_report",
+        category = DialogueAPI.category_idle,
+        conditions = [
+            # Check 1: Feature must be set up (not None and not "declined")
+            "persistent.player_city and persistent.player_city != 'declined'", 
+            # Check 2: Must not have run today (uses datetime.datetime.now().day)
+            "persistent.last_weather_report_day != datetime.datetime.now().day"
+        ],
+        # Importance 20 is very high for an idle. 
+        # This ensures she says it almost immediately after the greeting sequence ends.
+        importance = 20, 
+        name = None,
+        sub_category = None))
+
+####
+#SONGS
+####
+#Characterized by being chosen via the player waiting in the ch30_loop
+
+    add_dialogue(Dialogue(
+        label = "singing_yuri_intro",
+        category = DialogueAPI.category_idle,
+        conditions = ["not renpy.seen_label('singing_yuri_intro'), not persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "singing_yuri_prepare",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "him_heartkiller",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "green_day_1000_hours",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "green_day_onlyofyou",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), renpy.seen_label('green_day_1000_hours') persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_lastresort",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_naughtychristmas",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, renpy.seen_label('krampusnacht')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_ghostlovescore",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_nemo",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_poetpendulum",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_endoftime",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_intoxicated",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_fallingagain",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_falling_ep",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, renpy.seen_label('song_fallingagain')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_senzafine",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_senzafine_halflife",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, renpy.seen_label('song_senzafine')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_veneficium",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, persistent.costume == 'gothic'"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_ourtruth",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_swamped",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, persistent.costume == 'gothic'"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_swamped_xx",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, persistent.costume == 'gothic', renpy.seen_label('song_swamped')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_heavensalie",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_heavensalie_xx",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, renpy.seen_label('song_heavensalie')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_enjoythesilence",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
         name = None,
         sub_category = None))
 
@@ -1566,6 +1771,14 @@ init -3 python:
         name = "Can we read something from our folder?",
         sub_category = "Activities")) # Or any sub-category you prefer.
 
+    add_dialogue(Dialogue(
+        label = "yuri_daily_weather_report",
+        category = DialogueAPI.category_talk,
+        conditions = ["persistent.player_city and persistent.player_city != 'declined'"],
+        importance = 0,
+        name = "What is the weather like right now?",
+        sub_category = "Activities"))
+
     #add_dialogue(Dialogue(
     #    label = "krampuslore",
     #    category = DialogueAPI.category_talk,
@@ -1885,6 +2098,15 @@ init -3 python:
         importance = 8,
         name = "None",
         sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "yuri_detect_source_code",
+        category = DialogueAPI.category_greetings,
+        conditions = ["not persistent.checked_source_code", "is_source_code_exposed()"],
+        importance = 50,
+        name = "None",
+        sub_category = None))
+
 ####
 #FAREWELLS
 ####
@@ -2027,17 +2249,6 @@ init -3 python:
         conditions = [],
         importance = 0,
         name = "Whatever happens, just remember that there is someone who loves you no matter what.",
-        sub_category = None))
-
-    add_dialogue(Dialogue(
-        label = "yuri_daily_weather_report",
-        category = DialogueAPI.category_greetings,
-        # This condition checks:
-        # 1. If the feature's setup is complete.
-        # 2. If today's day number is different from the last time the report was given.
-        conditions = ["persistent.player_city and persistent.player_city != 'declined'", "persistent.last_weather_report_day != datetime.datetime.now().day"],
-        importance = 10, # Give it a high priority to run once per day.
-        name = "None",
         sub_category = None))
 
 #####

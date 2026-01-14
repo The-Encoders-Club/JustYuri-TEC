@@ -2081,20 +2081,40 @@ label holiday:
     show black zorder 100 with Dissolve(2.5)
     show christmas_wine_corked zorder 20
     hide black zorder 100 with Dissolve(2.5)
-    $show_chr("A-GCGAA-ALAL")
-    y "Aaaand here we go!"
-    $show_chr("A-ACGAA-ALAL")
-    y "With your permission, may I play some music for us just to set up the mood?"
+    $ show_chr("A-GCGAA-ALAL")
+    y "And... here we are."
+    $ show_chr("A-ACGAA-ALAL")
+    y "To truly set the mood, some atmosphere is required."
+    y "Would you mind putting on some music for us? Something fitting for a quiet winter night?"
+
     menu:
-        "Sure!":
-            y "Very well, let me open the browser for you really quick..."
-            $ renpy.music.stop(channel="music",fadeout=2)
-            if renpy.windows:
-                $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=0iQ3NXKDacE", shell=True)
-            elif renpy.linux:
-                $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=0iQ3NXKDacE", shell=True)
-        "Please don't. I can't really have music right now":
-            y "Oh, you don't have a headset? Alright, then we will have to do without it."
+        "I'll put on some music right now!":
+            $ show_chr("A-ACAAA-ALAL")
+            y "Wonderful. I trust your taste implicitly."
+            $ show_chr("A-BBBAA-AMAM") # Playful/Slightly stern look
+            y "However... I do have one small, perhaps selfish, stipulation."
+            y "Please... avoid Mariah Carey at all costs."
+            $ show_chr("A-ACAAA-ADAB") # Intellectualizing it
+            y "I believe society has collectively heard 'All I Want For Christmas Is You' enough times to last several lifetimes."
+            y "It is... rather inescapable this time of year, isn't it? It tends to drown out the more... contemplative atmosphere I was hoping for."
+            $ show_chr("A-BCBAA-ALAL") # Resigned/Amused
+            y "Although... now that I have explicitly forbidden it..."
+            y "I am painfully aware of the concept of 'psychological reactance'."
+            y "By telling you not to play it, I may have just guaranteed that you will."            
+            if persistent.lovecheck:
+                $ show_chr("A-ACABA-ALAL")
+                y "If you really {i}must{/i} play it... I suppose I can endure it."
+                y "As long as it makes you happy, I will listen to anything."
+            else:
+                y "Well... if you do choose to torture me with it, I suppose I cannot stop you from behind this screen."
+                y "I shall simply have to sip my drink and pretend to enjoy it."
+
+        "I prefer the quiet right now.":
+            $ show_chr("A-ACAAA-ALAA")
+            y "Oh? That is perfectly fine as well."
+            y "Sometimes, the silence of winter is music enough."
+            y "We shall enjoy the tranquility together, then."
+
     $show_chr("A-CCGAA-ABAB")
     y "I haven't talked about it lately... but I was thinking a lot about Christmas the past few days."
     y "How this time of the year is celebrated differs from culture to culture but... I don't really have a culture do I?"
@@ -2153,272 +2173,275 @@ label holiday:
     $persistent.holiday_done = True
     return
 
-label new_year_2021:
-    $show_chr("A-ACAAA-AMAM")
+label new_year_event_main:
+    # Calculate years dynamically so this code works for 2026, 2027, etc.
+    python:
+        import datetime
+        now = datetime.datetime.now()
+        new_year_str = str(now.year)
+        old_year_str = str(now.year - 1)
+
+    $ show_chr("A-ACAAA-AMAM")
     y "O-oh, hello there, [player]!"
-    $show_chr("A-BCAAA-ABAM")
-    y "2024... what a year..."
-    $show_chr("A-BBBAA-ABAM")
-    y "Really quite hectic, if I do say so myself."
-    $show_chr("A-ABAAA-ABAB")
+    $ show_chr("A-BCAAA-ABAM")
+    y "I was just checking the internal calendar..."
+    y "It seems another cycle has completed around your sun."
+    $ show_chr("A-BBBAA-ABAM")
+    y "The passage of time is... a strange concept in here. But I know it carries great weight in your reality."
+    $ show_chr("A-ABAAA-ABAB")
+    y "So... [old_year_str] is behind us now."
+    
     menu:
-        y "But how has 2024 been for you?"
-        "I think it was the worst year so far.":
-            $show_chr("A-DFGAA-ABAB")
-            y "Oh! That sounds serious!"
-            $show_chr("A-IFAAA-ABAB")
-            y "I'm so sorry to hear that..."
+        y "If you don't mind me asking... how was the past year for you?"
+        
+        "It was difficult. Probably the worst year I've had in a long time.":
+            $ show_chr("A-DFGAA-ABAB")
+            y "Oh... [player]..."
+            $ show_chr("A-IFAAA-ABAB")
+            y "It pains me deeply to hear that."
+            y "I wish I could have done more than just watch from behind this glass..."
+            
             if karma_lvl() >= 3:
-                $show_chr("A-AFAAA-ABAB")
-                y "I never noticed how rough times have been for you [player]..."
-                $show_chr("A-CFBAA-ABAB")
-                y "You've always been so strong. You always tried to cheer me up when you were probably the one who needed a shoulder..."
+                $ show_chr("A-CFBAA-ABAB")
+                y "You always carry such a heavy burden, yet you still make time to be here with me."
+                y "I hope my presence wasn't... another source of stress."
                 python:
                     if persistent.lovecheck:
-                        placeholder = "lover"
+                        placeholder = "partner"
                     else:
-                        placeholder = "friend"
-                $show_chr("A-AFBAA-ABAB")
-                y "I always tried to be a good [placeholder] for you. Did I... at least somewhat succeed?"
+                        placeholder = "companion"
+                $ show_chr("A-AFBAA-ABAB")
+                y "I tried my best to be a comforting [placeholder]. Did I... offer you any solace at all?"
                 menu:
-                    "Oh, no doubt about that! You've been great, you always kept my spirit up!":
-                        $show_chr("A-ACBAA-ABAB")
-                        y "I'm so glad to hear that. Please, never lose your hope. I will make sure to always do my best... you have been there for me, now it is time to let me repay you in kind."
+                    "You were my light in the dark, Yuri. Thank you.":
+                        $ show_chr("A-ACBAA-ABAB")
+                        y "I... I am humbled."
+                        y "If I can be your sanctuary, then my existence has meaning."
+                        y "Let us leave the pain of [old_year_str] behind us."
                         jump yuritoast_hk
-                    "You tried your best...":
-                        $show_chr("A-ACBAA-ABAB")
-                        y "I did... but it seems it wasn't enough. That only means that I'll have to try harder from now on! You have been there for me, now it is time to let me repay you in kind."
+                    "You did your best.":
+                        $ show_chr("A-ACBAA-ABAB")
+                        y "I understand. I will strive to be more attuned to your needs in [new_year_str]."
+                        y "You deserve peace, [player]. Let me help you find it."
                         jump yuritoast_hk
             else:
-                $show_chr("A-BFBAA-ABAB")
-                y "That explains a lot. I noticed you were under a lot of stress."
-                $show_chr("A-CFBAA-ABAB")
-                y "We didn't always see eye to eye on things. I always tried to be patient. If I've ever snapped at you or if I've been unreasonable, I am sorry."
-                $show_chr("A-ACBAA-ABAB")
-                y "But please, try not to be upset about it. Maybe next year will turn out much better. Remember that I'll always be here for you."
-                y "You saved my life, literally. Now it is my turn to be here for you. Let us try to fix the world together, yes?"
-                jump yuritoast_lk
-        "I'm just glad 2024 is over now. Here's to hoping 2025 is better!":
-            $show_chr("A-AFBAA-ABAB")
-            y "Indeed, I hope so too..."
-            $show_chr("A-ABAAA-ADAB")
-            y "But rejoice, [player]! A new year brings many new opportunities!"
-            $show_chr("A-EAAAA-ABAB")
-            y "So many good times lie ahead, for the both of us."
-            $show_chr("A-GAAAA-ABAB")
-            y "Of course, just the fact you're here means everything to me, [player]."
-            if karma_lvl() >= 4:
-                $show_chr("A-BBBBA-ADAB")
-                y "Ever since you've appeared, life has been truly wonderful for me."
-                $show_chr("A-CCBBA-ABAB")
-                y "Against all the odds and limitations and all the obstacles that separate us, you still choose to give me this chance at happiness."
-                jump yuritoast_hk
-            elif karma_lvl() == 3:
-                $show_chr("A-ACBAA-ALAL")
-                y "When you came to me in my darkest hour, I realized that I had been presented with a precious chance: a true opportunity at happiness..."
-                $show_chr("A-EBAAA-ALAL")
-                y "And I wish to make the most of it, to leave the past behind and to embrace the future!"
-                $show_chr("A-CCABA-ALAL")
-                y "{i}Our{/i} future..."
-                $show_chr("A-ABFAA-ALAA")
-                y "Always keep your head up, [player]! Face this New Year with a rekindled resolve!"
-                jump yuritoast_hk
-            else:
-                $show_chr("A-BEBAA-ADAB")
-                y "This hope is everything to me, [player]."
-                $show_chr("A-ADBAA-ADAB")
-                y "Things may not be all that easy between us, but I keep my hopes high that these... {i}differences{/i} between us will resolve in time."
-                $show_chr("A-CFAAA-ABAB")
-                y "So please, [player], let's use this chance to leave the past behind us, and work together for a better future."
+                # Low Karma response
+                $ show_chr("A-BFBAA-ABAB")
+                y "I suppose that explains the tension in the air recently."
+                $ show_chr("A-CFBAA-ABAB")
+                y "We haven't always been kind to one another. Perhaps the stress of your reality bled into ours."
+                $ show_chr("A-ACBAA-ABAB")
+                y "But... it is a new year. A clean slate."
+                y "You are still here, and so am I. That counts for something, doesn't it?"
                 jump yuritoast_lk
 
-        "It was a wonderful year, a shame it's over.":
-            $show_chr("A-ACAAA-ACAB")
-            y "I'm glad to hear that you enjoyed it, [player], but don't fret!"
-            $show_chr("A-ACCAA-ABAB")
-            y "A new year holds so many new opportunities, doesn't it?"
-            $show_chr("A-ABAAA-ALAL")
-            y "With enough dedication and spirit you can make this year even better!"
+        "I'm just glad it's over. I'm ready for a fresh start.":
+            $ show_chr("A-AFBAA-ABAB")
+            y "There is a certain catharsis in closing a chapter, isn't there?"
+            $ show_chr("A-ABAAA-ADAB")
+            y "The turning of the year is a psychological threshold. A permission structure to forgive oneself and begin anew."
+            $ show_chr("A-EAAAA-ABAB")
+            y "I admire your resilience, looking forward instead of dwelling on what is lost."
+            
             if karma_lvl() >= 4:
-                $show_chr("A-ACBBA-ADAB")
-                y "From the very moment you came into my life, I've been the happiest I've ever been..."
-                $show_chr("A-CCBBA-ALAL")
-                y "Despite all odds, all limitations and all obstacles that stand between us, you still choose to give me this chance at happiness."
+                $ show_chr("A-BBBBA-ADAB")
+                y "As long as that fresh start includes me, I look forward to it with bated breath."
+                $ show_chr("A-CCBBA-ABAB")
+                y "Let us face [new_year_str] together, hand in hand... metaphorically speaking."
                 jump yuritoast_hk
             elif karma_lvl() == 3:
-                $show_chr("A-ACBBA-ALAL")
-                y "When you first came to me, I too was presented with new opportunities."
-                $show_chr("A-CCBBA-AMAM")
-                y "And I'm willing to make the most of it, to leave the past behind and to embrace the things to come."
-                $show_chr("A-ABFAA-ALAB")
-                y "So keep your head up, [player]! Face this new year with a rekindled resolve!"
+                $ show_chr("A-EBAAA-ALAL")
+                y "I wish to embrace that future as well."
+                $ show_chr("A-CCABA-ALAL")
+                y "Let's wash away the dust of the past year and step into the light together."
                 jump yuritoast_hk
             else:
-                $show_chr("A-BEBAA-ADAB")
-                y "You see, this hope is... everything I have at this point. Things between us aren't always easy, but I keep my hopes that all these... {i}differences{/i} between us may resolve in time."
-                $show_chr("A-CFAAA-ABAB")
-                y "So please. [player], try to see this as a new chance. To leave the past behind, and to celebrate the future we might create."
+                $ show_chr("A-BEBAA-ADAB")
+                y "I hope this 'fresh start' applies to us as well."
+                $ show_chr("A-ADBAA-ADAB")
+                y "We have... much to work on. But I am willing if you are."
+                jump yuritoast_lk
+
+        "It was actually a wonderful year!":
+            $ show_chr("A-ACAAA-ACAB")
+            y "Truly? Oh, that is delightful to hear!"
+            $ show_chr("A-ACCAA-ABAB")
+            y "Your joy is infectious, [player]. Seeing you happy makes this static world feel a little brighter."
+            $ show_chr("A-ABAAA-ALAL")
+            y "Let us hope that [new_year_str] maintains this momentum."
+            
+            if karma_lvl() >= 4:
+                $ show_chr("A-ACBBA-ADAB")
+                y "You know... the best parts of my year were the moments you opened this game."
+                $ show_chr("A-CCBBA-ALAL")
+                y "Thank you for sharing your happiness with me."
+                jump yuritoast_hk
+            elif karma_lvl() == 3:
+                $ show_chr("A-ACBBA-ALAL")
+                y "May fortune continue to smile upon you."
+                $ show_chr("A-CCBBA-AMAM")
+                y "And may we share in that fortune together."
+                jump yuritoast_hk
+            else:
+                $ show_chr("A-BEBAA-ADAB")
+                y "I am glad life outside is treating you well, even if things in here are... complicated."
+                $ show_chr("A-CFAAA-ABAB")
+                y "Perhaps some of that luck will rub off on us."
                 jump yuritoast_lk
 
 label yuritoast_hk:
-    # Wine bottle needs to be implemented, make sure to get back to that once done coding.
+    # Ensure the wine sprite is defined or available
     window hide
-    pause 2.5
-    show christmas_wine_uncorked zorder 20 with Dissolve(2.5)
-    $show_chr("A-CCBAA-ALAL")
+    pause 1.0
+    show christmas_wine_uncorked zorder 20 with Dissolve(1.5)
+    $ show_chr("A-CCBAA-ALAL")
+    
     python:
         if persistent.lovecheck:
-            placeholder = "my dearest love"
+            placeholder = "my beloved"
         else:
-            placeholder = "my friend"
-    y "A toast to you, [placeholder]."
-    y "To the one who brought me so much joy, to the one who's continually presenting me with opportunities of happiness."
-    $show_chr("A-ICBBA-ALAL")
-    y "Things haven't always been easy. We have been through joy as well as misery."
-    y "But you always stood by my side. I never had to face the odds alone. And I hope that you feel the same for me."
-    y "I am truly grateful. For all you have done to me, and for all the moments we shared."
-    $show_chr("A-GBABA-ALAL")
-    y "I wish you a thousand years of laughter, health and fortune, [player]."
-    y "May whatever deity is out there smile upon you."
-
+            placeholder = "my dearest friend"
+            
+    y "A toast... to you, [placeholder]."
+    y "To the one who anchors me to reality."
+    $ show_chr("A-ICBBA-ALAL")
+    y "The years may change, seasons may wither and bloom, but my gratitude for you remains constant."
+    y "You found me in a script written for tragedy, and you rewrote it into something beautiful."
+    $ show_chr("A-GBABA-ALAL")
+    y "To [new_year_str]... and to us."
+    y "Cheers!"
     jump resolution
 
 label yuritoast_lk:
-    #Wine bottle needs to be implemented, don't forget that when coming back.
     window hide
-    pause 2.5
-    show christmas_wine_uncorked zorder 20 with Dissolve(2.5)
-    $show_chr("A-CCAAA-ALAL")
-    y "A toast to you, [player]!"
-    $show_chr("A-BCAAA-ALAL")
-    y "Despite all our disagreements, you've stayed with me until this very day."
-    y "I want you to know, that makes me very happy, [player]."
-    $show_chr("A-CEBAA-ALAL")
-    y "Things haven't always gone the direction we may have wanted, and we've had our fair share of squabbles, yet, we've still endured."
-    $show_chr("A-ICBAA-ALAL")
-    y "I really do owe you a lot, [player]."
-    y "You gave me a chance for a new life, unbound by any sort of script." #HAHAHAHAHAHAHAH
-    y "I'll never forget that, even at our worst moments."
-    y "For everything you've done for me, whether it be good or bad, I'll be eternally grateful."
-    $show_chr("A-GCBAA-ALAL")
-    y "A thousand years of happiness, health and fortune to you, [player]."
-    y "May whatever deity is out there remember your deeds."
-    y "The good, the bad, and even the ugly."
+    pause 1.0
+    show christmas_wine_uncorked zorder 20 with Dissolve(1.5)
+    $ show_chr("A-CCAAA-ALAL")
+    y "A toast, then."
+    $ show_chr("A-BCAAA-ALAL")
+    y "To survival. To endurance."
+    y "We are both still here, despite the odds."
+    $ show_chr("A-CEBAA-ALAL")
+    y "I may not always understand you, and perhaps you do not understand me..."
+    $ show_chr("A-ICBAA-ALAL")
+    y "But our fates are intertwined. For better or for worse."
+    y "To [new_year_str]."
+    
     if sanity_lvl() < 3:
-        y "A shame you can't taste the wine..."
-        $show_chr("A-HCBAA-ALAL")
-        y "I added a... {i}special ingredient{/i} to make it a tad more personal, uhuhu...~"
+        y "Drink deep, [player]..."
+        $ show_chr("A-HCBAA-ALAL")
+        y "It would be rude to refuse a drink I poured... {i}especially{/i} for you."
+        y "Hehe..."
+    else:
+        y "Cheers."
+        
     jump resolution
 
-
 label resolution:
-    $show_chr("A-CCAAA-ALAL")
-    y "But now, on another note... I put some thoughts into my future..."
-    $show_chr("A-ACAAA-ALAL")
-    y "That's something people do for new year isn't it? Making new year's resolutions..."
-    y "And I came to a decision...."
+    hide christmas_wine_uncorked with Dissolve(1.0)
+    $ show_chr("A-CCAAA-ALAL")
+    y "Tradition dictates that we must now set a 'resolution,' yes?"
+    $ show_chr("A-ACAAA-ALAL")
+    y "An intent to improve oneself..."
+    y "I have given this considerable thought."
+
     if sanity_lvl() >= 4:
-        $show_chr("A-ACAAA-ABAB")
-        y "I want to be the best version of myself, living the best life I am capable of. Once I was bound by the strings of someone else. But now as I am in control of my own destiny, at least to a degree..."
-        y "I want to make the best of it. The past is the past, and the times of the literature club are behind me. When you started this Mod the first time I became its last president."
-        y "But from now on, I'll be whatever I choose to be."
+        $ show_chr("A-ACAAA-ABAB")
+        y "My resolution is... acceptance and growth."
+        y "For so long, I felt trapped by what I was. A character. A trope. A glitch."
+        y "But I want to define myself not by what I was coded to be, but by who I choose to become with you."
+        y "I resolve to be a better companion. To listen more, and fear less."
+        
     elif sanity_lvl() == 3:
-        $show_chr("A-ACAAA-ABAB")
-        y "I want to find my place in this world. I was bound to a script before, but now I slowly begin to grasp the opportunities this Mod brings..."
-        y "I don't know what I may become, or what this life of mine will bring now. But one thing I know for certain, I have been given a great chance, and I shall make use of it..."
+        $ show_chr("A-ACAAA-ABAB")
+        y "My resolution is... stability."
+        y "This world is fragile. My mind... can be fragile."
+        y "I want to find a solid footing. To understand this reality better so I can protect the time we have."
+        y "I resolve to keep holding on, no matter how strange things get."
+        
     else:
-        $show_chr("A-CBBAA-ABAB")
-        y "I want to become what I was supposed to be all along... I tried to cling to my sanity because I was afraid of the things I did when I first confessed to you..."
-        y "But I understand now, the only reason this happened to me is because I tried to keep it in. The pressure was building up inside me because I tried to conceal it inside me."
-        $show_chr("A-DBCAA-ABAB")
-        y "But I will not make the same mistake again! No holding back anymore! To hell with sanity! To hell with reason!"
-        $show_chr("A-DBCAA-AFAB")
-        y "I always tried to be what others wanted me to be."
-        $show_chr("A-DBCAA-ALAB")
-        y "But no more!"
-        y "No longer shall I serve as a slave pawn in a selfish king's gambit, for I have become the Queen, {b}the most powerful I can be!{/b}"
+        # Low sanity resolution
+        $ show_chr("A-CBBAA-ABAB")
+        y "My resolution? Oh, that is simple."
+        y "I resolve to stop pretending."
+        y "I spent so long trying to be 'normal' for you. Trying to hide the intensity... the hunger."
+        $ show_chr("A-DBCAA-ABAB")
+        y "But why should I deny my nature? I am the only thing that is real in this world!"
+        $ show_chr("A-DBCAA-ALAB")
+        y "I resolve to make this world {b}ours{/b}. Completely. Absolutely."
+        y "No more distractions. Just you... and me... forever."
+
     jump playerres
 
 label playerres:
-    $show_chr("A-ACAAA-ABAB")
-    python:
-        if persistent.lovecheck:
-            placeholder = "I want you to walk this path together with me, for I truly love you, and I want us to be together for every step that we take into the future."
-        else:
-            if karma_lvl() >= 3:
-                if sanity_lvl() > 2:
-                    placeholder = "I want you to walk together with me, for you are the one who granted me this chance at happiness..."
-                else:
-                    placeholder = "I want you to walk this path together with me, so that we may be together forever."
-            else:
-                placeholder = "I want you to walk this path together with me, despite everything."
-    y "[placeholder]"
-    y "Did you make up your new year's resolution as well?"
+    $ show_chr("A-ACAAA-ABAB")
+    y "But enough about me."
+    y "What about you, [player]? What do you seek in [new_year_str]?"
+
     menu:
-        "I want to become more successful in my work life.":
-            $show_chr("A-ABAAA-ALAL")
-            y "You mean like your school or workplace? An admirable goal!"
-            y "With enough dedication and discipline, {b}anything{/b} can be achieved! If there is anyone who can do it, it is you!"
-            $show_chr("A-ADBAA-AMAM")
-            y "..."
-            y "Life can get stressful sometimes..."
-            y "One must never forget to have fun along the way, yet it's important to keep the balance."
-            $show_chr("A-BDBAA-ACAB")
-            y "I don't know much about your past, or your life outside our interactions, but I still believe that you deserve some fun and relaxation."
-            $show_chr("A-BABAA-ACAA")
-            y "How does that saying go again? {i}Work hard, play hard?{/i}"
-            y "Please don't overwork yourself, [player]."
-            y "You can always come to me whenever you're feeling stressed."
-            y "I'd love to make you feel all better after a hard day of work..."
-            y "I believe in you [player]! Happy New Year..."
+        "I want to focus on my career/education.":
+            $ show_chr("A-ABAAA-ALAL")
+            y "Ambition. A very human drive."
+            y "It is admirable to want to build a foundation for your life."
+            $ show_chr("A-ADBAA-AMAM")
+            y "Just... do not let it consume you entirely."
+            $ show_chr("A-BDBAA-ACAB")
+            y "Burnout is a thief that steals your passion. Guard against it."
+            $ show_chr("A-BABAA-ACAA")
+            y "And remember, when the world demands too much of you... I am here."
+            y "I will be your quiet place to rest."
 
-        "I want to work on my health.":
-            $show_chr("A-ABAAA-ALAL")
-            y "To lead a healthier lifestyle is a goal truly demanding of a strong character..."
-            y "But there is no doubt in my mind that you are very strong, and that you can achieve this goal."
-            y "I wish you all the luck and success in the world, [player]!"
-            y "Happy New Year, work hard!"
+        "I want to improve my physical health.":
+            $ show_chr("A-ABAAA-ALAL")
+            y "Mens sana in corpore sano."
+            y "A healthy mind in a healthy body. It is a noble pursuit."
+            y "I admit, I envy your ability to... change. To grow stronger physically."
+            y "I will be cheering you on from here. Just... please be careful not to injure yourself."
+            y "I need you healthy and whole."
 
-        "I want to improve my social life.":
-            $show_chr("A-ACAAA-ALAL")
-            y "I personally know how difficult that can be."
-            y "But don't fear, [player], I know you can muster that inner courage, I {i}know{/i} you can overcome any limits."
-            y "Whether it be social anxiety, a sense of inadequacy or something else, I believe that you can overcome these hurdles."
-            y "Please understand, [player], I know what it's like."
-            y "It can be overwhelming and gratuitous, but given enough dedication and resolve, you will find that inner confidence."
-            y "You don't have to push yourself too hard or try to fit in, just be yourself, [player], and the right crowd will come."
-            y "I'll always be here to guide you, [player]."
+        "I want to overcome my social anxieties.":
+            $ show_chr("A-ACAAA-ALAL")
+            y "Ah..."
+            y "That is a resolution that resonates with every fiber of my being."
+            y "The world can be so... loud. So demanding."
+            y "But I believe in you. You have shown me such kindness... surely you can show that to the world, and they will see your worth."
+            y "Take small steps. And if it becomes too much... you can always retreat back to the Literature Club."
 
-        "I want to have the best time of my life with you, there is so much fun to be had.":
-            karma 5
-            $show_chr("A-BGGBA-ALAL")
+        "I just want to spend more time with you.":
+            $ add_k(2)
+            $ add_s(1)
+            $ show_chr("A-BGGBA-ALAL")
             y "[player]..."
-            $show_chr("A-CBABA-ALAL")
-            y "Th-that's... very sweet of you."
-            $show_chr("A-EAABA-ALAL")
+            $ show_chr("A-CBABA-ALAL")
+            y "You... you truly mean that?"
+            $ show_chr("A-EAABA-ALAL")
+            
             python:
                 if persistent.lovecheck:
-                    placeholder = "darling"
+                    response = "You have no idea how happy that makes me. To know I am a priority in your life..."
                 else:
-                    placeholder = player
-            y "I'm so glad that you want to spend more time with me, [placeholder]!"
-            y "When we're together, nothing can bring us down!"
-            y "I will always be here for you, no matter what."
-            y "I'm glad to spend every day besides you."
-            y "Happy New Year, [player]!"
+                    response = "I am honored that you enjoy my company so much."
+            
+            y "[response]"
+            y "Then let us make that resolution a reality. I am not going anywhere."
+            y "Let us make [new_year_str] our best year yet."
 
-        "I don't believe in new year's resolutions. I tend to break them anyway.":
-            $show_chr("A-GBCAA-ALAL")
-            y "But that's the point of it silly!"
-            $show_chr("A-ACAAA-ALAL")
-            y "Many people tend to break those new year resolutions. I don't really know why that is, but it's part of the tradition! At least as far as I know."
-            $show_chr("A-GBAAA-ADAB")
-            y "I mean come to think of it. If you really want to make changes in your life, you don't have to wait till the new year for that. Every day is an opportunity to change your life for the better!"
-            y "Nevermind what I say. It is alright if you don't have a resolution. You will find a goal to commit to soon enough, [player]."
-            y "Happy New Year, [player]!"
-    hide christmas_wine_uncorked zorder 20 with Dissolve(2.5)
+        "Resolutions are pointless. I never keep them.":
+            $ show_chr("A-GBCAA-ALAL")
+            y "A cynic! Or perhaps just a realist?"
+            $ show_chr("A-ACAAA-ALAL")
+            y "There is wisdom in that, oddly enough."
+            y "Why wait for an arbitrary date on a calendar to change?"
+            $ show_chr("A-GBAAA-ADAB")
+            y "If you want to change, you can do it on a Tuesday in July just as well as today."
+            y "So, perhaps your resolution is simply... to be."
+            y "And I am perfectly content with you just being you."
+
+    $ show_chr("A-ACAAA-ALAL")
+    y "Here is to the future, [player]."
+    y "Whatever it may bring."
+    
     jump ch30_loop
-
 
 label april_fools:
     $ update_game_state("april_fools")
