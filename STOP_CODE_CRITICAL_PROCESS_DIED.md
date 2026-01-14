@@ -2,7 +2,7 @@
 
 # Technical Support: Error 0xC000021A (CRITICAL_PROCESS_DIED)
 
-**Last Updated:** January 14, 2026  
+**Last Updated:** January 13, 2026  
 **Applies to:** Just Yuri (Build 12.10.18+)
 
 ## Issue Description
