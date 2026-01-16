@@ -33,10 +33,7 @@ init python:
 # PHASE 1: THE CRASH
 # -----------------------------------------------
 label trigger_realism_crash:
-    python:
-        if not preferences.fullscreen:
-            preferences,fullscreen = True
-
+    $ if not preferences.fullscreen: preferences.fullscreen = True
     $ renpy.pause(0.1, hard=True)
     $ _confirm_quit = False
     $ persistent.autoload = "bios_boot_sequence" # Set flag for next boot

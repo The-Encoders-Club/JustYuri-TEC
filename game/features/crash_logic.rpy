@@ -2,32 +2,63 @@ init python:
     import platform
     import sys
     import os
+    
+    # We import winreg to read the true Windows build number
+    # This works even if the app is running in compatibility mode
+    try:
+        import winreg
+    except ImportError:
+        winreg = None
 
     def get_bsod_style():
         os_name = platform.system()
         
         if os_name == "Windows":
             try:
-                win_ver = sys.getwindowsversion()
+                # 1. Try to get the TRUE build number from Registry
+                # This bypasses the application manifest lie
+                build_number = 0
+                if winreg:
+                    try:
+                        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows NT\CurrentVersion")
+                        # "CurrentBuildNumber" is the string version of the build
+                        val, type = winreg.QueryValueEx(key, "CurrentBuildNumber")
+                        build_number = int(val)
+                        winreg.CloseKey(key)
+                    except:
+                        # Fallback if registry access is blocked (rare)
+                        pass
+
+                # 2. If Registry failed, use the standard method
+                if build_number == 0:
+                    win_ver = sys.getwindowsversion()
+                    build_number = win_ver.build
+                    major = win_ver.major
+                else:
+                    # We assume Major 10 for any modern build number found in registry
+                    major = 10 
+
+                # --- LOGIC ---
                 
-                # Windows 11 24H2 (Build 26100+) -> Modern Black
-                if win_ver.major >= 10 and win_ver.build >= 26100:
+                # Windows 11 24H2 (Build 26100) and newer (25H2+) -> Modern Black
+                if build_number >= 26100:
                     return "win_modern"
                 
-                # Windows 8, 10, 11 (Pre-24H2) -> Sad Face
-                # Windows 8 is Major 6.2 or 6.3
-                elif win_ver.major >= 10 or (win_ver.major == 6 and win_ver.minor >= 2):
+                # Windows 8, 10, Older 11 -> Sad Face Blue
+                # Windows 8 is Major 6.2+
+                elif major >= 10 or (major == 6 and sys.getwindowsversion().minor >= 2):
                     return "win_sad"
                 
-                # Windows Vista (6.0) & Windows 7 (6.1) -> Consolas Look
-                elif win_ver.major == 6 and win_ver.minor <= 1:
+                # Windows Vista (6.0) & 7 (6.1) -> Consolas Legacy
+                elif major == 6 and sys.getwindowsversion().minor <= 1:
                     return "win_7"
                 
-                # Windows XP (5.1), 2000 (5.0) -> Lucida/Fixedsys Look
+                # Windows XP (5.1) -> Fixedsys Legacy
                 else:
                     return "win_xp"
                     
             except:
+                # Absolute fallback
                 return "win_sad"
                 
         elif os_name == "Darwin": 
