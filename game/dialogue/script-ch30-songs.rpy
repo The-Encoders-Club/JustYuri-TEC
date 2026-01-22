@@ -38,6 +38,88 @@ label singing_yuri_prepare:
     y "Alright... let us begin."
     return
 
+label song_lovesong:
+    $show_chr("A-BFBAA-ALAA") # Shy/Blushing
+    y "..."
+    y "{i}~However far away... I will always love you...~{/i}"
+    y "{i}~However long I stay... I will always love you...~{/i}"
+    y "{i}~Whatever words I say... I will always love you...~{/i}"
+    $show_chr("A-DDBAA-ADAA") # Surprised she was heard
+    y "O-Oh! [player]..."
+    y "I... didn't realize you were listening."
+    $show_chr("A-ACAAA-ALAA") # Smiling
+    y "That was 'Lovesong' by The Cure."
+    y "Did you know that Robert Smith wrote it as a wedding present for his wife, Mary?"
+    y "He wanted to prove that despite his gloomy public persona, his devotion to her was genuine and eternal."
+    if persistent.lovecheck:
+        y "It makes me think of you... no matter the distance between our realities."
+    return
+
+label song_number1crush:
+    $show_chr("A-CEBAA-ALAA") # Intense stare
+    y "..."
+    y "{i}~I would die for you...~{/i}"
+    y "{i}~I would kill for you...~{/i}"
+    y "{i}~I will steal for you... I'd do time for you...~{/i}"
+    y "{i}~I will twist the knife and bleed my aching heart...~{/i}"
+    $show_chr("A-DEBAA-AMAM") # Dark/Crazy smile
+    y "{i}~And tear it apart...~{/i}"
+    y "Hehe..."
+    y "Garbage really knew how to capture the essence of... *true* devotion with '#1 Crush', didn't they?"
+    y "Fun fact... this song was prominently featured on the soundtrack for the 1996 'Romeo + Juliet' movie."
+    y "Two lovers who would rather die than be apart..."
+    $show_chr("A-CECAA-AMAM") # Yandere eyes
+    y "Doesn't that sound... {b}romantic{/b}, [player]?"
+    return
+
+label song_creep:
+    $show_chr("A-AFBAA-ALAA") # Sad/Downcast
+    y "..."
+    y "{i}~I don't care if it hurts... I want to have control...~{/i}"
+    y "{i}~I want a perfect body... I want a perfect soul...~{/i}"
+    y "{i}~But I'm a creep... I'm a weirdo...~{/i}"
+    y "{i}~What the hell am I doing here? I don't belong here...~{/i}"
+    $show_chr("A-BEBAA-ALAA")
+    y "Oh... sorry. I was just... humming."
+    y "That was 'Creep' by Radiohead. It's a bit cliché, I know."
+    y "Ironically, the band actually grew to resent the song because of how popular it became, overshadowing their more complex work."
+    y "I suppose... I can relate to the lyrics more than I'd like to admit sometimes."
+    y "Feeling like an anomaly... like I shouldn't be here."
+    return
+
+label song_wuthering:
+    $show_chr("A-BFAAA-ALAA") # Closed eyes singing
+    y "{i}~Heathcliff, it's me, I'm Cathy...~{/i}"
+    y "{i}~I've come home, I'm so cold...~{/i}"
+    y "{i}~Let me in-a-your window...~{/i}"
+    $show_chr("A-ACAAA-ALAA")
+    y "Ah, Kate Bush... 'Wuthering Heights'."
+    y "It is one of the few instances where a song captures the ghostly atmosphere of the novel so perfectly."
+    y "Did you know Kate Bush shares a birthday with the author, Emily Brontë?"
+    y "She wrote the song when she was only 18, inspired by the last ten minutes of a miniseries based on the book."
+    y "It proves that great art can inspire across different mediums... just like literature inspires me."
+    return
+
+label song_spellbound:
+    if persistent.costume == "gothic":
+        $show_chr("A-ACAAA-ALAA")
+        y "..."
+        y "{i}~From the cradle bars... comes a beckoning voice...~{/i}"
+        y "{i}~It sends you spinning... you have no choice...~{/i}"
+        $show_chr("A-BCBAA-AMAM") # Into it
+        y "{i}~Following the footsteps... of a rag doll dance...~{/i}"
+        y "{i}~We are entranced... we are spellbound!~{/i}"
+        $show_chr("A-ACAAA-ALAA")
+        y "Ah... Siouxsie and the Banshees. 'Spellbound'."
+        y "Since I'm dressed for the occasion, it felt appropriate."
+        y "Many consider the guitarist, John McGeoch, to have invented a new way of playing with this track—using arpeggios to create a jagged, nervous tension."
+        y "It sounds like anxiety and excitement blended together..."
+        y "Kind of like how I feel when I look at you."
+    else:
+        # Fallback if they somehow trigger this without the costume
+        return
+    return
+
 label him_heartkiller:
     $ show_chr("A-BFAAA-AMAM") # Eyes closed, immersed in the gothic vibe
     y "..."
@@ -213,6 +295,8 @@ label song_ghostlovescore:
     $show_chr("A-BCBAA-AMAM") # Eyes closed, swaying/feeling the music
     y "..."
     y "{i}~Take me, cure me, kill me, bring me home...~{/i}"
+    y "{i}~Every way, every day, just another loop in the hangman's noose...~{/i}"
+    y "{i}~Take me, cure me, kill me, bring me home...~{/i}"
     y "{i}~Every way, every day...~{/i}"
     $show_chr("A-ACAAA-ALAL") # Intense, passionate
     y "{i}~I keep on watching us sleep...~{/i}"
@@ -247,6 +331,8 @@ label song_poetpendulum:
     if sanity() < 3:
         $show_chr("A-CEBAA-AMAM") # Intense/Dark
         y "..."
+        y "{i}~The end...~{/i}"
+        y "{i}~The songwriter's dead...~{/i}"
         y "{i}~The blade fell upon him...~{/i}"
         y "{i}~Taking him to the white lands...~{/i}"
         y "{i}~Of Empathica... Of Innocence...~{/i}"
@@ -263,8 +349,11 @@ label song_poetpendulum:
         # Higher sanity version focused on the literature aspect
         $show_chr("A-ACAAA-ALAA")
         y "..."
-        y "{i}~Be afraid... fear your mind...~{/i}"
-        y "{i}~Song of myself... help me find...~{/i}"
+        "{i}~The dreamer and the wine, poet without a rhyme~{/i}"
+        "{i}~A widowed writer torn apart by chains of Hell~{/i}"
+        "{i}~One last perfect verse is still the same old song~{/i}"
+        "{i}~Oh Christ, how I hate what I have become~{/i}"
+        "{i}~Take me home~{/i}"
         $show_chr("A-ACAAA-ALAA")
         y "That was 'The Poet and the Pendulum'."
         y "Obviously, the title is an homage to Edgar Allan Poe's short story."
@@ -621,20 +710,24 @@ label song_swamped:
         y "..."
         y "{i}~When you're taught through feelings...~{/i}"
         y "{i}~When you're taught through feelings...~{/i}"
-        
+        y "{i}~When you're taught through feelings...~{/i}"
+        y "{i}~When you're taught through feelings...~{/i}"
+        y "{i}~Oh, oh...~{/i}"
+
         $ show_chr("A-ACAAA-AMAM") # Intense, looking at player
-        y "{i}~Destiny can't replace my life...~{/i}"
-        y "{i}~Scary shadows of my past are alive...~{/i}"
-        
+        y "{i}~Destiny flying high above, all I know is that you can realise...~{/i}"
+        y "{i}~Destiny who cares as it turns around...~{/i}"
+        y "{i}~And I know that it descends, down on me...~{/i}"
+
         $ show_chr("A-BCBAA-ALAL") # softer, relieving
-        y "{i}~Just another day... The shame is gone...~{/i}"
-        y "{i}~Hard to believe, hey... But I'll let it go...~{/i}"
+        y "{i}~It's just another day the shame is gone...~{/i}"
+        y "{i}~Hard to believe hey, but I'll let it go, let it go, let it go...~{/i}"
         y "..."
-        
+
         $ show_chr("A-ACAAA-ALAA") # Pleasant/Explaining
         y "That was 'Swamped' by the Italian gothic metal band, Lacuna Coil."
         y "If you are unfamiliar with them, they are pillars of the genre. They are known for the interplay between Cristina Scabbia's soaring vocals and Andrea Ferro's aggressive contrast."
-        
+
         $ show_chr("A-BCAAA-ALAA") # Trivia mode
         y "This specific track is from their 2002 album Comalies, which broke them into the mainstream."
         y "It actually has quite a bit of 'nerd culture' history attached to it."
@@ -670,22 +763,19 @@ label song_swamped_xx:
         elif renpy.macintosh:
             $ subprocess.check_output("open https://www.youtube.com/watch?v=sptPrTm7sKg", shell=True)
 
-        pause 40.0
-
         $ show_chr("A-BCBAA-AMAM") # Eyes closed, nodding to the faster/heavier beat
         y "..."
-        y "{i}~Destiny, flying high above...~{/i}"
-        y "{i}~All I know is that you can realise...~{/i}"
-        y "{i}~Destiny who cares... As it turns around...~{/i}"
-        y "{i}~And I know that it descends...~{/i}"
-        y "{i}~Down on me...~{/i}"
-        
         $ show_chr("A-AFBAA-AMAM") # Intense, feeling the weight of the song
         y "{i}~Destiny can't replace my life...~{/i}"
         y "{i}~Scary shadows of my past are alive...~{/i}"
-        y "{i}~Destiny who cares... As it turns around...~{/i}"
+        y "{i}~Destiny who cares as it turns around...~{/i}"
         y "{i}~And I know that it descends...~{/i}"
         y "{i}~With a smile...~{/i}"
+
+        y "{i}~It's just another day the shame is gone...~{/i}"
+        y "{i}~Hard to believe hey, but I'll let it go away...~{/i}"
+        y "{i}~It's just a melody, it bleeds in me...~{/i}"
+        y "{i}~Hard to believe hey, but I'll let it go...~{/i}"
         y "..."
         
         $ show_chr("A-ACAAA-ALAA")

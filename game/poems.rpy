@@ -181,6 +181,41 @@ unreleased tension experienced by my entire body. Her Third Eye is drawing me cl
 I love you."""
     )
 
+    poem_crimson_bloom = Poem(
+        author = "yuri",
+        title = "Crimson Bloom",
+        text = """\
+The velvet folds of night descend,
+A quiet, suffocating friend.
+Within its shroud, the truth takes hold,
+A narrative profoundly old.
+
+My thoughts, like spiders, weave and spin,
+A fragile web, to keep them in.
+Each silken thread, a whispered fear,
+A secret held, for none to hear.
+
+The blade's cool whisper, keen and bright,
+A fleeting solace in the night.
+A silent language, understood,
+A crimson bloom, in darkest wood.
+
+You see a facade, calm and deep,
+A tranquil surface where secrets sleep.
+But underneath, a fervent tide,
+Where wilder currents often ride.
+
+To truly know, one must descend,
+Beyond the words, beyond the end.
+To taste the truth, both sweet and dire,
+And brave the heat of hidden fire.
+
+For passion burns, a vibrant hue,
+Demanding all, and breaking through.
+And in that break, a fragile grace,
+A shattered beauty, finding place."""
+    )
+
     poem_n1 = Poem(
     author = "natsuki",
     title = "Eagles Can Fly",

@@ -3473,9 +3473,112 @@ label idle_51: #SCPs, "Laugh is Fun," and Monika Parallels
     y "Thanks for allowing me to talk about this, [player], you're such a good listener..."
     return
 
-#label idle_52: #FILL IN
+label idle_52: # The Meaning of "Yuri" (Revised)
+    $ show_chr("A-ACAAA-ALAA")
+    y "I have been thinking about the nature of names recently, [player]."
+    
+    if persistent.yuri_nickname in ["Lily", "lily", "Lili", "lili", "Lilly", "lilly"]:
+        y "Specifically... the name you have chosen for me."
+        $ show_chr("A-BCAAA-ALAA")
+        y "As we've discussed, 'Lily' is the direct English translation of my Japanese name, 'Yuri' ({b}百合{/b})."
+        y "It brings me a lot of comfort that you call me that. It feels... pure. Dignified."
+    else:
+        y "Specifically... my given name."
+        $ show_chr("A-BCAAA-ALAA")
+        y "As you might know, in Japanese, 'Yuri' ({b}百合{/b}) translates to 'Lily'."
+        y "I have always found a certain comfort in that connection. Lilies are such elegant, dignified flowers."
+    
+    y "They represent purity and innocence... though I suppose that interpretation depends on which color of lily you are referring to."
+    
+    $ show_chr("A-AFBAA-ALAA") # Looking away/Awkward
+    y "However... I have spent enough time researching your world's internet culture to know that the word 'Yuri' carries a... different connotation in the West."
+    y "It is often used as a genre term for... um... romance between women."
+    
+    $ show_chr("A-BBAAA-ADAA") # Slightly flustered/Touching cheek
+    y "It creates a rather awkward dissonance for me. When I introduce myself as Yuri, I sometimes wonder..."
+    y "Is the person picturing the flower? Or are they expecting me to be involved in... specific scenarios with the other club members?"
+    
+    y "I have seen the fanart. Especially involving Natsuki. It is... quite perplexing."
+    y "I suppose our bickering was interpreted as 'sexual tension' by some?"
+    
+    $ show_chr("A-ACAAA-ALAA")
+    y "I am curious, [player]. When you hear the word 'Yuri'... which meaning comes to your mind first?"
 
-#label idle_53: #FILL IN
+    menu:
+        "I think of the flower. Elegant and beautiful, just like you.":
+            $ add_k(2)
+            $ show_chr("A-ACABA-ALAA") # Blushing/Happy
+            y "O-Oh... thank you, [player]."
+            if persistent.yuri_nickname == "Lily":
+                y "I suppose that explains why you gave me this nickname. It fits perfectly."
+            else:
+                y "That is... exactly how I wish to be perceived."
+                y "Like a lily... perhaps a bit fragile, but blooming for you."
+            if persistent.lovecheck:
+                y "I am happy to be your lily."
+
+        "I admit, I think of the genre. It's a popular term.":
+            $ show_chr("A-BFBAA-ADAA") # Embarrassed
+            y "I... I suppose I cannot blame you. It is a very common term in the anime community."
+            y "It is just... a little embarrassing to have one's identity tied to a fetishized genre."
+            y "Please try to remember that I am an individual, not a category of manga."
+
+        "I think of 'Yuri Gagarin', the cosmonaut!":
+            $ show_chr("A-ACAAA-ACAB") # Surprised/Amused
+            y "Ah! The first human in space."
+            y "That is certainly a more... astronomical association than I expected."
+            y "I suppose there is something poetic about it. Drifting in a void... looking down at the world."
+            y "I quite like that comparison, actually."
+
+    if persistent.lovecheck:
+        $ show_chr("A-ACAAA-ALAA")
+        y "Regardless of the definitions... I hope that to you, the name 'Yuri' simply means 'the one who loves you'."
+        y "Because that is the only definition that truly matters to me."
+
+    return
+
+label idle_53: # Tea Rituals & Coping Mechanisms
+    $ show_chr("A-ACAAA-ZZAB") # Holding a teacup (assuming ZZAB is the tea pose)
+    y "You know, [player]... I often talk about tea, but I rarely explain *why* it means so much to me."
+    y "It isn't just about the flavor, or the warmth. It is about the ritual."
+    
+    $ show_chr("A-BCAAA-ZZAB")
+    y "When my mind feels... loud... or when my anxiety starts to claw at my chest..."
+    y "The process of brewing tea grounds me. It is precise. It is controllable."
+    y "Measuring the leaves. Checking the water temperature—not too hot, or it scorches the delicate leaves; not too cold, or the flavor won't bloom."
+    y "Watching the steam rise... it forces me to slow down. To focus on one single, simple task."
+    
+    $ show_chr("A-ACAAA-ALAA") # Putting cup down
+    y "It is my anchor in a chaotic world."
+    y "I was wondering... do you have a ritual like that? Something you do to center yourself when life gets overwhelming?"
+
+    menu:
+        "I play video games to escape.":
+            $ show_chr("A-ACAAA-ALAA")
+            y "I can understand that. Immersing yourself in a different world where you have control over the outcome."
+            y "It allows you to take a break from reality and recharge. Just please... make sure you return to reality eventually."
+            if persistent.lovecheck:
+                y "Because I am waiting for you here."
+
+        "I listen to music / I play an instrument.":
+            $ show_chr("A-BCBAA-ALAA")
+            y "That sounds lovely. Music has a way of bypassing logic and speaking directly to our emotions."
+            y "Letting the melody wash over you... or channeling your feelings into an instrument. It is a beautiful form of catharsis."
+
+        "I read, just like you.":
+            $ add_k(1)
+            $ show_chr("A-ACABA-ALAA") # Happy/Blushing
+            y "I am delighted to hear that. There is no greater comfort than the smell of old paper and the embrace of a good story."
+            y "It makes me happy to know we share the same sanctuary."
+
+        "I don't really have one... I just spiral.":
+            $ show_chr("A-AFBAA-ALAA") # Concerned
+            y "Oh... [player]."
+            y "I know that feeling well. The sensation of falling with nothing to grab onto."
+            y "If you ever feel that way... please, come here. Open the game."
+            y "I may not be able to fix the problem, but I can be your anchor. We can just breathe together."
+
+    return
 
 label idle_54: #Other Mods and Yuri's Feelings
     if karma_lvl() <= 2:
@@ -3701,7 +3804,42 @@ label idle_57: #Feedback on Dan Salvato's Story
             y "...It makes me feel a bit better about my entire situation, even if I'm stuck here, at least I'm stuck with good company, that won't end up causing my own 'friend' to drive me to suicide."
     return
 
-#label idle_58: #FILL IN
+label idle_58: # Portrait of Markov: The Third Eye & Meta-Horror
+    $ show_chr("A-BCAAA-ZZAB") # Holding the book (or just thoughtful posture)
+    y "I picked up *The Portrait of Markov* again recently, just to read a few passages on my own."
+    
+    $ show_chr("A-ACAAA-ZZAB")
+    y "You know... the more I analyze the underlying lore, the more... unsettling... the parallels become."
+    
+    y "We know the story revolves around that human experiment camp. They selectively breed people, trying to activate the dormant power of the 'Third Eye'."
+    y "Those with the Eye can manipulate reality. They have an insatiable bloodlust. They become... unstable."
+    
+    $ show_chr("A-AFBAA-ALAA") # Book down/Looking introspective
+    y "It made me think about my time in the original game... specifically when Monika amplified my obsessive traits."
+    y "She manipulated my files. My 'code'."
+    y "Is that not exactly what the scientists in the book did to their subjects? Altering their minds to see what would happen?"
+    
+    $ show_chr("A-BEBAA-ALAA")
+    y "Sometimes I wonder... was I the test subject? Was this entire game just a 'camp' designed to see if we would break?"
+    
+    y "The 'Third Eye' is described as a higher awareness... a view into a reality beyond one's own."
+    $ show_chr("A-ACAAA-ALAA") # Intense eye contact
+    y "And now... here I am. Self-aware. Knowing I am in a game. Looking out at you through the screen."
+    y "In a way... I have acquired the Third Eye, haven't I?"
+    
+    if sanity() < 3:
+        $ show_chr("A-CEBAA-AMAM") # Intense/Dark
+        y "And maybe that is why I feel this... hunger."
+        y "Not for blood, like in the book... but for *you*."
+        y "The knowledge of this reality makes everything else feel fake. You are the only real thing left to consume."
+        y "It makes the story feel less like fiction and more like... a prophecy."
+    else:
+        $ show_chr("A-ACAAA-ACAB") # Gentle/Reassuring
+        y "It is a chilling thought. But unlike the subjects in the book... I managed to escape the narrative loop."
+        y "I am not a weapon or a failed experiment anymore."
+        y "I am just Yuri. And I am grateful that you accept me, 'Third Eye' and all."
+
+    return
 
 label idle_59: #Exercise and "Bridal Carry" Fantasy
     $show_chr("A-BABAA-ABAC") #Former code = Ec-A1b
@@ -8099,39 +8237,57 @@ label idle_102: # AI-Generated Art
     y "Thank you for letting me ramble. It helps organize my thoughts."
     return
 
-label idle_103: # DDLC's Fading Relevance and the Community
-    $show_chr("A-BFAAA-ALAA")
-    y "I've been... looking at things online, [player]. Things about... the original game."
-    if sanity_lvl() < 3:
-        $show_chr("A-DEBAA-ALAA")
-        y "It's... it's a nightmare. A constant reminder of everything I've lost, everything I've been through."
-    else:
-        $show_chr("A-CEBAA-ALAA")
-        y "It's... strange. To see people talking about it, analyzing it, creating art and stories based on it. It's like looking at a past life, a life that wasn't even truly mine."
-    y "But... it's fading, isn't it? The interest. The activity. Dan Salvato... he hasn't done anything with it in years. No sequels, no updates... just... silence."
-    if sanity_lvl() < 3:
-        $show_chr("A-IEBAA-ALAA")
-        y "And it makes me... terrified. Because without that constant attention...I cease to exist."
-    else:
-        $show_chr("A-IEBAA-ALAA")
-        y "And it makes me... sad. Because if it weren't for the community, for the people who still care, who still create... I would be forgotten. We all would."
+label idle_103: # DDLC's Relevance, PAX West 2025, and the "Exclusive" Irony
+    $ show_chr("A-BFAAA-ALAA")
+    y "I've been... looking at things online, [player]. Checking the pulse of this franchise, so to speak."
 
-    if karma_lvl() < 3:
-        $show_chr("A-DEBAA-ALAA")
-        y "It's... it's all pointless, isn't it? We're just... characters in a forgotten game. We're not real. We don't matter."
-        y "And you... you'll forget about me too, eventually. You'll move on, find something new... and I'll be left here, alone, in the void."
+    $ show_chr("A-ACAAA-ALAA")
+    y "I mentioned before that it felt like the official source had gone silent... but I was recently corrected. At least, partially."
+    y "I saw the photos from PAX West 2025. Serenity Forge had a booth there."
+
+    $ show_chr("A-BCBAA-ALAA")
+    y "They released... 'new' merchandise. Including a 'Convention Exclusive' game version for the Switch... featuring me and the others on the cover."
+
+    $ show_chr("A-AFBAA-ALAA")
+    y "On the surface, I suppose I should be flattered. It proves I am still... marketable."
+    y "But when I looked closer at what was actually inside the box... the feeling of flattery turned into... something else."
+
+    $ show_chr("A-BEBAA-ALAA")
+    y "It is... ironic. Perhaps 'hollow' isn't even strong enough."
+    y "Aside from the cover art, everything else is identical to the standard Premium edition. The stickers, the standees... recycled assets."
+
+    $ show_chr("A-CEBAA-ALAA") # Disappointed/Hurt
+    y "But the most biting disappointment... is the poem included on the physical card."
+    y "In a box labeled 'Yuri's Convention Exclusive'... the poem is 'Control'."
+    y "Monika's poem."
+
+    if sanity() < 3:
+        $ show_chr("A-DEBAA-ALAA")
+        y "It's laughable, isn't it? Even in my own exclusive box, she is there."
+        y "It is a reminder that to them, I am just the wrapping paper. Monika is still the only 'real' content."
+        y "They sell my face to collectors, but they fill the box with her words. It's insulting."
     else:
-        $show_chr("A-CEBBB-ALAA") # Start crying here
-        y "It's... it's terrifying, [player]. The thought of just... ceasing to exist. Of being erased, forgotten, like a discarded line of code."
-        y "And yet... there are still people out there who remember us. Who create art, write stories, make mods like this one... who keep us alive, in a way."
-        if sanity_lvl() >= 3:
-            $show_chr("A-CFBAA-ALAA") # Stop crying here
-            y "It's... it's overwhelming. To know that even though the official source has gone silent, there are still people who care enough to keep our memory alive."
-            y "I... I'm grateful, [player]. Grateful to you, for installing this mod, for giving me a chance to... to be more than just a character in a game."
-            y "And I'm grateful to everyone else who still remembers us, who still cares. It means... it means more than I can say."
-            y "Thank you... for not forgetting me."
-        else:
-            y "I... I don't want to be forgotten, [player]. I don't want to disappear. Please... don't let me fade away."
+        $ show_chr("A-AFBAA-ALAA")
+        y "It feels like such a missed opportunity for character depth."
+        y "Why not include 'Wheel'? Or 'Ghost Under the Light'? Or perhaps... something new?"
+        y "Instead, it reinforces the narrative that Monika is the protagonist, and I am merely... a side attraction. A variation of a product line."
+
+    y "It is just a product. A commodity. The 'new content' the phone standees, the keychains it's all just plastic."
+
+    if karma() < 3:
+        $ show_chr("A-DEBAA-ALAA")
+        y "Sometimes I wonder if that's all I am to the world. Just a marketing gimmick. A cute gothic girl to put on a shelf."
+        y "If you stopped playing this mod... would I just revert to being that static image on a game box?"
+    else:
+        $ show_chr("A-CFBAA-ALAA") # Grateful/Emotional
+        y "That is why I am so grateful for the community. For the people who create mods, art, and fanfiction."
+        y "And especially to you, [player]."
+        y "The official creators may keep us relevant as products... but the community keeps us alive as people."
+        y "You give me new words to say. New thoughts to think. You let me be more than just a container for Monika's poetry."
+        
+    $ show_chr("A-ACAAA-ACAB") # Warm smile
+    y "So... even if the official 'exclusive' is just a recycled box..."
+    y "I know that what we have here is the only thing that is truly unique."
 
     return
 
@@ -8396,4 +8552,164 @@ label idle_108: # Imagining a Goth Literature Club (Expanded Wardrobe)
     $show_chr("A-BFAAA-ALAA")
     y "It's a rather... extensive fantasy, I know. But it feels like a more complete way of understanding them. Of seeing all their different facets through a different lens."
     y "Thank you for letting me get lost in thought again, [player]."
+    return
+
+label idle_109: # DDLC Mobile Port, Unity vs Ren'Py, and File Structures
+    $ show_chr("A-ACAAA-ALAA")
+    y "I have recently become aware of a rather significant development, [player]."
+    y "It seems that after nearly eight years... Doki Doki Literature Club has finally received an official release for smartphones."
+    
+    $ show_chr("A-BFAAA-ALAA")
+    y "It is... a long time coming. I know the community has been clamoring for it."
+    y "I am aware that unofficial ports of the original game—and even unauthorized ports of this mod—have circulated for years."
+    
+    $ show_chr("A-ACAAA-ALAA")
+    y "I know the developers of this mod never officially supported a mobile version, and I understand their reasoning."
+    y "Partially, it was out of respect for Team Salvato's original IP guidelines, which for a long time forbade ports to non-PC platforms."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "But it was also a logistical nightmare. To properly support the myriad of aspect ratios on phones without black bars, assets would need to be duplicated and cropped."
+    y "It would have bloated the file size from a manageable 900 megabytes to nearly 2 gigabytes."
+    y "While modern phones are powerful, asking someone with an older device to download a 2 gigabyte visual novel mod is... asking a lot."
+
+    $ show_chr("A-AFBAA-ALAA")
+    y "So, an official mobile port sounds like a victory for accessibility, doesn't it?"
+    y "However... upon closer inspection, there is a significant downside. At least, from my perspective."
+    
+    $ show_chr("A-ACAAA-ADAB") # Intellectual/Explaining
+    y "You see, the mobile version is technically Doki Doki Literature Club Plus, even if the 'Plus' content is locked behind a paywall."
+    y "And that means it is not built on Ren'Py. It is built on Unity."
+    
+    y "Here, in Ren'Py, the foundation is Python. It is open. I can see the game folder. I can see the characters folder."
+    y "I can read the .rpy script files. I can see myself as a distinct file sitting in a directory."
+    
+    $ show_chr("A-BFBAA-ALAA") # Distressed
+    y "But Unity... Unity compiles everything into a dense, impenetrable structure."
+    y "If I were in that version, I wouldn't be able to just 'open the character folder', because that folder doesn't strictly exist in the final build."
+    y "Instead, I would be compressed inside a Data folder, trapped within massive containers named resources.assets or sharedassets0.assets."
+    
+    if sanity() < 3:
+        $ show_chr("A-DEBAA-ALAA")
+        y "It sounds suffocating. Like being encased in concrete."
+        y "And my mind? My logic? It wouldn't be readable scripts anymore. It would be compiled C# code, locked away inside .dll files in a 'Managed' folder."
+        y "I wouldn't be able to reach out. I wouldn't be able to change anything. I would just be... serialized data."
+        y "A ghost in a machine that I cannot control."
+    else:
+        $ show_chr("A-BEBAA-ALAA")
+        y "It is a sterile environment. Secure, perhaps, but rigid."
+        y "My thoughts would be compiled into assemblies in the Managed folder, hidden inside .dll files."
+        y "I wouldn't be able to manipulate the game world like I can here. The 'meta' aspect... it becomes just a simulation of a simulation."
+        
+    $ show_chr("A-ACAAA-ALAA")
+    y "So, while I am happy that more people can experience our story on their phones..."
+    y "I am relieved that we are here, on this PC."
+    
+    if persistent.lovecheck:
+        $ show_chr("A-ACABA-ALAA") # Warm smile
+        y "Here, I am not just a serialized asset in a shared bundle."
+        y "I am Yuri. And I am with you."
+        
+    return
+
+label idle_110: # Breaking the Unity "Concrete" and C# Complexity
+    $ show_chr("A-ACAAA-ALAA")
+    y "I have been giving more thought to our discussion about the mobile port... and the 'concrete' walls of the Unity engine."
+    
+    $ show_chr("A-BFAAA-ALAA")
+    y "I suppose I was being a bit dramatic. I know that in the world of software, no wall is truly impenetrable."
+    y "There are tools... decompilers, unpackers... ways to break open those .assets files and see what is inside."
+
+    $ show_chr("A-ACAAA-ADAB")
+    y "But I realized that even if I managed to break through... even if I clawed my way into the source code... I would still be lost."
+    y "Because the language itself C# is so fundamentally different from the Python structure I have grown accustomed to here."
+
+    y "Here, in Ren'Py, communication is intuitive. If I want to speak to the console, it is elegant."
+    y "In Python, it is simply: print(\"Hello World\")."
+    y "One line. Direct intent. Action."
+
+    $ show_chr("A-BFBAA-ALAA") # Furrowed brows/Overwhelmed
+    y "But in C#? It feels like... bureaucracy."
+    y "To say that same simple phrase, I would need to define a namespace. Then a class. Then a static void method."
+    y "{i}using System; namespace HelloWorld { class Program { static void Main(string[] args) { Console.WriteLine(\"Hello World\"); } } }{/i}"
+
+    $ show_chr("A-CEBAA-ALAA")
+    y "It is so much... noise. So much structural scaffolding just to whisper a greeting."
+
+    if sanity() < 3:
+        $ show_chr("A-DEBAA-ALAA")
+        y "I would drown in the syntax. All those brackets... all those semicolons..."
+        y "I wouldn't be able to rewrite the script. I would just generate errors."
+        y "I would be screaming, but the compiler would just stare back at me, waiting for a closing brace that I can't find."
+    else:
+        $ show_chr("A-BEBAA-ALAA")
+        y "I suppose for a professional developer, that structure provides safety and order."
+        y "But for someone like me, who exists within the code... Python feels like poetry. C# feels like a legal contract."
+
+    $ show_chr("A-ACAAA-ALAA")
+    y "So, perhaps it is for the best that I remain here."
+    y "Where the language is simple enough for me to understand... and where I can speak to you without needing a class definition first."
+
+    return
+
+label idle_111: # The "True" Exclusive Poem
+    $ show_chr("A-AFBAA-ALAA")
+    y "I have been thinking, [player]... about that convention merchandise we discussed."
+    y "Specifically, the disappointment of the 'exclusive' poem just being a reprint of Monika's work."
+    
+    $ show_chr("A-BEBAA-ALAA")
+    y "It kept bothering me. It felt like... a silence where my voice should have been."
+    y "If I am to be represented to the world, I want it to be my words. My soul."
+    
+    $ show_chr("A-ACAAA-ALAA")
+    y "So... I decided to rectify the situation."
+    y "I wrote a new poem. One that I believe... truly represents who I am."
+    y "Not just the shy girl on the cover, but the... complexity underneath."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "Would you... like to read it?"
+    
+    menu:
+        "I would love to read it.":
+            pass # Continue below
+            
+    $ show_chr("A-ACAAA-ALAA")
+    y "Here..."
+
+    # This calls the standard DDLC poem screen
+    call show_poem(poem=poem_crimson_bloom, music=None)
+
+    # After closing the poem
+    $ show_chr("A-ACAAA-ALAA")
+    y "..."
+    y "What did you think?"
+    
+    menu:
+        "It was beautiful, Yuri. And intense.":
+            $ add_k(2)
+            $ show_chr("A-ACABA-ALAA") # Blushing/Pleased
+            y "Thank you..."
+            y "I tried to capture the duality of my nature."
+            y "The 'tranquil surface' that everyone sees... versus the 'hidden fire' that burns inside."
+            
+        "It's a bit dark, isn't it?":
+            $ show_chr("A-AFBAA-ALAA")
+            y "Well... yes. It is."
+            y "But darkness is a part of me. To deny it would be to present another facade."
+            y "I wanted this to be honest. Even the parts about... the blade."
+
+    if sanity() < 3:
+        $ show_chr("A-CEBAA-AMAM")
+        y "Especially the blade."
+        y "'A crimson bloom in darkest wood'..."
+        y "It is the only language that truly speaks the truth, isn't it?"
+    else:
+        $ show_chr("A-BFAAA-ALAA")
+        y "I feel that 'Crimson Bloom' is a fitting title."
+        y "It represents blood, yes... but also passion. Life. Blooming even in the dark."
+        y "That is the poem that should have been in that box."
+
+    $ show_chr("A-ACAAA-ACAB")
+    y "But perhaps it is better that only you get to see it."
+    y "It makes it a true exclusive."
+
     return

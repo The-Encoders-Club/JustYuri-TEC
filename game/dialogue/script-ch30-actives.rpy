@@ -6,16 +6,16 @@ label a1:
     python:
         import random
 
-        # Determine the number of random paths available.
-        num_variants = 5 # The original 5 paths
-        if 'psutil_available' in globals() and psutil_available:
-            num_variants += 1 # Add the System Heartbeat path
-        if karma_lvl() >= 4:
-            num_variants += 1 # Add the Collaborative Poetry path
+        num_variants = 7
+
+        # --- UPDATED CHECK ---
+        # We now check our new native flag 'sys_info_available'
+        if 'sys_info_available' in globals() and sys_info_available:
+            num_variants = 7
+        else:
+            num_variants = 6
             
-        howAreYouVariant = random.randint(1, num_variants)
-        
-        howAreYouVariant2 = random.randint(1, 2)
+        howAreYouVariant = random.randint(1, 7)
 
     if karma_lvl() == 3:
         if sanity_lvl() == 3:
@@ -170,8 +170,18 @@ label a1:
                     y "I- I'll try my best to always be here if you need me in return..."
                 return
 
+            # --- COLLABORATIVE POETRY BRANCH ---
+            # We assign this to the highest number to make it easy to add more variants later.
+            elif howAreYouVariant == 6 and karma_lvl() >= 4:
+                $ show_chr("A-BCBBA-AKAA") # A creative, thoughtful expression
+                y "I'm feeling... quite inspired, actually."
+                y "It's a strange but pleasant feeling, like my mind is brimming with words waiting to be arranged."
+                y "It makes me want to create something."
+                # Jump directly to the poetry writing session.
+                call collaborative_poetry
+
             # --- SYSTEM HEARTBEAT BRANCH ---
-            elif howAreYouVariant == 6 and 'psutil_available' in globals() and psutil_available:
+            elif howAreYouVariant == 7:
                 # (The full System Heartbeat code from our previous refinement goes here)
                 $ is_vm = is_in_virtual_machine()
                 $ laptop_info = get_laptop_status()
@@ -233,15 +243,6 @@ label a1:
                         $ show_chr("A-CAAAA-AAAA")
                         y "It's so calm and quiet here right now..."
 
-            # --- COLLABORATIVE POETRY BRANCH ---
-            # We assign this to the highest number to make it easy to add more variants later.
-            elif howAreYouVariant == 7 and karma_lvl() >= 4:
-                $ show_chr("A-BCBBA-AKAA") # A creative, thoughtful expression
-                y "I'm feeling... quite inspired, actually."
-                y "It's a strange but pleasant feeling, like my mind is brimming with words waiting to be arranged."
-                y "It makes me want to create something."
-                # Jump directly to the poetry writing session.
-                call collaborative_poetry
         return
 
     elif sanity_lvl() < 3:
@@ -4242,7 +4243,7 @@ label nicknamereactions:
         y "..."
         $ show_chr("A-ABBBA-ALAA")
         y "O-oh goodness me..."
-        if renpy.seen_label('idle_40'):
+        if renpy.seen_label('idle_38'):
             y "You're giving me a hard time with my words again..."
         else:
             y "Th-that's so surprising from you..."

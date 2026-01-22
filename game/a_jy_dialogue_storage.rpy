@@ -447,21 +447,21 @@ init -3 python:
         name = None,
         sub_category = None))
 
-    #add_dialogue(Dialogue(
-    #    label = 'idle_52',
-    #    category = DialogueAPI.category_idle,
-    #    conditions = [],
-    #    importance = 0,
-    #    name = None,
-    #    sub_category = None))
+    add_dialogue(Dialogue(
+        label = 'idle_52',
+        category = DialogueAPI.category_idle,
+        conditions = [],
+        importance = 0,
+        name = None,
+        sub_category = None))
 
-    #add_dialogue(Dialogue(
-        #label = 'idle_53',
-        #category = DialogueAPI.category_idle,
-        #conditions = [],
-        #importance = 0,
-        #name = None,
-        #sub_category = None))
+    add_dialogue(Dialogue(
+        label = 'idle_53',
+        category = DialogueAPI.category_idle,
+        conditions = [],
+        importance = 0,
+        name = None,
+        sub_category = None))
 
     add_dialogue(Dialogue(
         label = 'idle_54',
@@ -495,13 +495,13 @@ init -3 python:
         name = None,
         sub_category = None))
 
-    #add_dialogue(Dialogue(
-    #    label = 'idle_58',
-    #    category = DialogueAPI.category_idle,
-    #    conditions = [],
-    #    importance = 0,
-    #    name = None,
-    #    sub_category = None))
+    add_dialogue(Dialogue(
+        label = 'idle_58',
+        category = DialogueAPI.category_idle,
+        conditions = [],
+        importance = 0,
+        name = None,
+        sub_category = None))
 
     add_dialogue(Dialogue(
         label = 'idle_59',
@@ -905,6 +905,30 @@ init -3 python:
         sub_category = None))
 
     add_dialogue(Dialogue(
+        label = 'idle_109',
+        category = DialogueAPI.category_idle,
+        conditions = [],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = 'idle_110',
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label(idle_109)"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = 'idle_111',
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label(idle_103)"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
         label = 'gaming_2',
         category = DialogueAPI.category_idle,
         conditions = ["renpy.seen_label('gaming')"],
@@ -1086,6 +1110,46 @@ init -3 python:
         label = "singing_yuri_prepare",
         category = DialogueAPI.category_idle,
         conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_lovesong",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_number1crush",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_creep",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_wuthering",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "song_spellbound",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing, persistent.costume == 'gothic'"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -1442,7 +1506,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = "a23",
         category = DialogueAPI.category_talk,
-        conditions = ["renpy.seen_label('idle_44')"],
+        conditions = ["renpy.seen_label('idle_42')"],
         importance = 0,
         name = "Do you think we would make a good family, [persistent.yuri_nickname]?",
         sub_category = "Love"))
@@ -1458,7 +1522,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = "a25",
         category = DialogueAPI.category_talk,
-        conditions = ["renpy.seen_label('idle_45')"],
+        conditions = ["renpy.seen_label('idle_43')"],
         importance = 0,
         name = "So... about those lewd images...",
         sub_category = "Awkward Topics"))
@@ -1474,7 +1538,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = "a27",
         category = DialogueAPI.category_talk,
-        conditions = ["renpy.seen_label('idle_76')"],
+        conditions = ["renpy.seen_label('idle_74')"],
         importance = 0,
         name = "Is it okay if I give you a nickname?",
         sub_category = "Requests"))
@@ -1562,7 +1626,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = "a38",
         category = DialogueAPI.category_talk,
-        conditions = ["renpy.seen_label('idle_53')"],
+        conditions = ["renpy.seen_label('idle_51')"],
         importance = 0,
         name = "You spoke about SCPs before. Which is your favourite?",
         sub_category = "Requests"))
@@ -1902,7 +1966,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = "purpleroomintro",
         category = DialogueAPI.category_greetings,
-        conditions = ["time_tracker_start() == False", "persistent.purpleroom", "renpy.seen_label('idle_30')", "karma_lvl()=5", "persistent.lovecheck", "persistent.game_session >= 20"],
+        conditions = ["time_tracker_start() == False", "persistent.purpleroom", "renpy.seen_label('idle_32')", "karma_lvl()=5", "persistent.lovecheck", "persistent.game_session >= 20"],
         importance = 0,
         name = "None",
         sub_category = None))

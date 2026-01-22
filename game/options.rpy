@@ -14,7 +14,7 @@
 define config.name = "Just Yuri (Beta)"
 
 ## The version of the game.
-define config.version = "Beta-1.11.0 (Preview)"
+define config.version = "Beta-1.11.0-(Preview)"
 
 ## Whether debug mode is enabled. Mainly used to change what persistent file is read
 define config.developer = dev_access
