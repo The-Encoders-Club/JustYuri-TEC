@@ -153,7 +153,7 @@ image m_rectstatic3:
 init python:
     class ParticleBurst(object):
         def __init__(self, theDisplayable, explodeTime=0, numParticles=20, particleTime = 0.500, particleXSpeed = 3, particleYSpeed = 5):
-            self.sm = renpy.SpriteManager(update=self.update)
+            self.sm = SpriteManager(update=self.update)
 
             self.stars = [ ]
             self.displayable = theDisplayable
@@ -180,15 +180,26 @@ init python:
             self.stars.append((s, ySpeed, xSpeed, pTime))
 
         def update(self, st):
-            sindex=0
-            for s, ySpeed, xSpeed, particleTime in self.stars[:]:
-                if (st < particleTime):
-                    s.x = xSpeed * 120 * (st + .20)
-                    s.y = (ySpeed * 120 * (st + .20) + (self.gravity * st * st))
-                else:
-                    s.destroy()
-                    self.stars.pop(sindex)
-                sindex += 1
+            # Iterate backwards so popping items doesn't break the index
+            for sindex in range(len(self.stars) - 1, -1, -1):
+                
+                # UNPACK THE TUPLE
+                # In add(), you stored: (s, ySpeed, xSpeed, pTime)
+                s, vy, vx, pTime = self.stars[sindex]
+                
+                # Apply velocity to the sprite's position
+                s.x += vx
+                s.y += vy
+
+                # If the star goes off screen, remove it
+                if s.x < 0 or s.x > config.screen_width or s.y < 0 or s.y > config.screen_height:
+                    self.stars.pop(sindex) 
+                    s.destroy() # It is good practice to destroy the sprite from the manager
+            
+            if len(self.stars) == 0:
+                self.sm.destroy()
+                return None
+            
             return 0
 
     class Blood(object):

@@ -1,9 +1,12 @@
-default persistent.mod_count = 0
 default persistent.detected_mods_list = []
+default persistent.mod_count = 0
+default persistent.last_closed = 0 
 
 init python:
     import os
+    import time
 
+    # --- FUNCTION 1: Get a list of all currently installed mods ---
     def get_current_mods():
         """
         Scans for all known mod persistent files and returns a list of their paths.
@@ -25,21 +28,34 @@ init python:
                 found_mods.append(mod_path)
         return found_mods
 
+    # --- FUNCTION 2: Check if ANY mod exists (Used in Intro) ---
+    def check_for_any_mod_persistent():
+        """
+        Checks if any mod persistent file exists. 
+        Returns True if at least one is found.
+        """
+        # We can simply reuse the logic from function 1
+        mods = get_current_mods()
+        if len(mods) > 0:
+            return True
+        return False
+
+    # --- FUNCTION 3: Check for NEW mods (Used in Greetings) ---
     def has_new_mods():
         """
         Compares current mods with the list of already-detected mods.
         Returns True if a new, un-commented-on mod is found.
         """
         current_mods = get_current_mods()
-        # Use a set for efficient checking. Is there any mod in current_mods that is not in our persistent list?
+        # Is there any mod in current_mods that is not in our persistent list?
         if any(mod for mod in current_mods if mod not in persistent.detected_mods_list):
             return True
         return False
 
+    # --- FUNCTION 4: Update the persistent list ---
     def update_detected_mods_list():
         """
         Updates the persistent list to match the current state of installed mods.
-        This should be called at the end of the startup_mods label.
         """
         persistent.detected_mods_list = get_current_mods()
 

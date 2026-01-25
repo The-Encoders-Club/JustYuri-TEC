@@ -1054,7 +1054,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'yuri_check_atmosphere',
         category = DialogueAPI.category_idle,
-        conditions = ["not renpy.seen_label('yuri_check_atmosphere')", "karma_lvl() >= 3"],
+        conditions = ["renpy.seen_label('a14')"],
         importance = 2, # Give it a slightly higher chance of appearing once per session.
         name = None,
         sub_category = None))
@@ -1068,12 +1068,15 @@ init -3 python:
         name = None,
         sub_category = None))
         
-    # --- NEW IDLE: SYSTEM HEARTBEAT ---
     add_dialogue(Dialogue(
-        label = 'yuri_system_heartbeat',
+        label = "yuri_system_heartbeat",
         category = DialogueAPI.category_idle,
-        conditions = ["psutil_available", "not renpy.seen_label('yuri_system_heartbeat')", "karma_lvl() >= 4", "renpy.seen_label('webcam')"],
-        importance = 1, # A special, but not overly frequent, topic.
+        # Trigger if:
+        # 1. The system info check works on this PC
+        # 2. We haven't seen the intro yet
+        # 3. We have decent karma (she feels comfortable sharing weird feelings)
+        conditions = ["sys_info_available", "not persistent.seen_heartbeat_intro", "karma_lvl() >= 3"],
+        importance = 15, # High priority to ensure it happens soon
         name = None,
         sub_category = None))
 
