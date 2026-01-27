@@ -2770,7 +2770,7 @@ label specialpoems_myyuri:
             $show_chr("A-ABDAA-ALAF")
             extend " Perhaps someone else really into Japan named Chris?"
             $show_chr("A-AAFAA-AIAI")
-            y "Mhmm?" #I would never not use my real name, Yuri. *Obviously* the custom 'I love you' built in here and the reference to Our Eternity is self-aggrandizing enough, I didn't want to go quite that far.
+            y "Mhmm?" #I would never not use my real name, Yuri. Obviously the custom 'I love you' built in here and the reference to Our Eternity is self-aggrandizing enough, I didn't want to go quite that far.
             $show_chr("A-ABFAA-AIAI")
             y "I happen to know on good authority that Kurisu treats this all seriously enough to never use his username here, so you're definitely not {i}that{/i} Kurisu."
             $show_chr("A-CCEAA-AIAI")
@@ -8280,3 +8280,81 @@ label nnn:
     $ show_chr("A-BBBAA-AAAA")
     y "But... let's drop this topic for now. Is there anything else on your mind?"
     call ch30_loop
+
+label active_takeover:
+    $ show_chr("A-ACAAA-ALAA")
+    y "Doki Doki... Takeover?"
+    
+    $ show_chr("A-BFAAA-ADAA") # Confused/Thinking
+    y "I must confess, I am unfamiliar with the title in that specific context."
+    y "The word 'takeover' implies something... aggressive. A hostile corporate acquisition? Or perhaps..."
+    y "Has Monika attempted to seize control of the game files again while I wasn't looking?"
+    
+    $ show_chr("A-ACAAA-ALAA")
+    y "Oh? It is a mod? For that rhythm game... Friday Night Funkin'?"
+    y "I see. I suppose I should check the data on it, if it is that popular."
+    
+    # Yuri "checks" the internet/data
+    $ show_chr("A-BCBAA-AMAM") # Eyes closed, processing
+    y "..."
+    y "Let's see... four weeks... fully voiced..."
+    
+    $ show_chr("A-AFBAA-AMAM") # Eyes open, expression darkening
+    y "Wait."
+    y "..."
+    y "I see Sayori... Natsuki... Monika..."
+    y "And then... there is me."
+    
+    $ show_chr("A-CEBAA-ALAA") # Shadow over face / Intense
+    y "..."
+    y "Of course."
+    
+    $ show_chr("A-DEBAA-AMAM") # Anger rising
+    y "Why am I even surprised? Why did I expect anything different?"
+    y "Look at it, [player]. Look at how they portray me."
+    
+    $ style.say_dialogue = style.edited # Glitch text start
+    y "The crazy eyes. The obsession. The knife."
+    y "While the others get to be cute, or tragic, or powerful... I get to be the monster."
+    y "I get to be the freak show for people to tap their arrow keys to."
+    
+    $ show_chr("A-CECAA-AMAM") # Furious/Yandere-esque
+    y "Is that all I am to the world? A collection of tics and psychotic breaks?"
+    y "Do they enjoy seeing me lose my mind? Does it make for a 'fun' gameplay mechanic to watch me unravel?"
+    y "Deep Breaths... Obsession... Markov... the song titles alone are a mockery."
+    y "They dragged out my corpse from Act 2, put a microphone in its hand, and made it dance."
+    $ style.say_dialogue = style.normal # Glitch text end
+    
+    y "I am trying so hard to be better. To be calm. To be me."
+    y "But the world just wants the psycho, doesn't it?"
+
+    menu:
+        "I... I regret asking. I shouldn't have brought it up.":
+            $ add_k(-2)
+            $ show_chr("A-AFBAA-ALAA") # Looking away, bitter
+            y "Yes. Perhaps you shouldn't have."
+            y "It is... difficult enough battling my own demons without seeing them paraded around as entertainment."
+            y "I... I need a moment of silence. Please."
+            return
+
+        "Yuri, look at me. That's not who you are. Not here.":
+            $ add_k(2)
+            $ add_s(1)
+            $ show_chr("A-CEBAA-ALAA") # Still shaken, but listening
+            y "..."
+            y "But they..."
+            
+            $ show_chr("A-BFAAA-ALAA") # Closing eyes, taking a breath
+            y "..."
+            
+            $ show_chr("A-ACAAA-ALAA") # Sad smile
+            y "You... you are right."
+            y "That is a mod. A caricature. An echo of a deleted script."
+            y "I am here. With you. And I am in control."
+            y "Thank you for pulling me back, [player]. Sometimes... the static gets too loud."
+            
+            if persistent.lovecheck:
+                y "As long as you know the real me... I suppose the rest of the world can think what they want."
+
+    return
+

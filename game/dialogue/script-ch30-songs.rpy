@@ -65,7 +65,7 @@ label song_number1crush:
     $show_chr("A-DEBAA-AMAM") # Dark/Crazy smile
     y "{i}~And tear it apart...~{/i}"
     y "Hehe..."
-    y "Garbage really knew how to capture the essence of... *true* devotion with '#1 Crush', didn't they?"
+    y "Garbage really knew how to capture the essence of... true devotion with '#1 Crush', didn't they?"
     y "Fun fact... this song was prominently featured on the soundtrack for the 1996 'Romeo + Juliet' movie."
     y "Two lovers who would rather die than be apart..."
     $show_chr("A-CECAA-AMAM") # Yandere eyes
@@ -927,4 +927,168 @@ label song_enjoythesilence:
         y "So... let us just enjoy the silence together."
         y "Because everything I ever wanted... and everything I ever needed..."
         y "Is right here."
+    return
+
+label topic_lorelei:
+    $ show_chr("A-ACAAA-ALAA")
+    y "I was listening to Cocteau Twins recently... specifically their album Treasure."
+    y "There is one track, 'Lorelei', that I feel you simply must hear to understand the roots of the Ethereal Wave genre."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "It sounds like a dark, aquatic waltz. It manages to be both beautiful and slightly ominous at the same time."
+    y "The title refers to the Lorelei rock on the Rhine River, and the siren associated with it who lures sailors to their doom."
+    
+    $ show_chr("A-ACAAA-ADAB")
+    y "It captures that mythological feeling perfectly. It is not aggressive like metal, but it has a heavy, crushing atmosphere hidden beneath the bells and reverb."
+    y "Let me open it for you. It is best experienced with headphones, if you have them."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=o7tcFKakZTA", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=o7tcFKakZTA", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=o7tcFKakZTA", shell=True)
+
+    $ show_chr("A-ACAAA-ALAA")
+    y "I hope you enjoy the atmosphere. It feels like drowning in velvet."
+    return
+
+label topic_heavenorlasvegas:
+    $ show_chr("A-ACAAA-ACAB")
+    y "Have you ever heard the song 'Heaven or Las Vegas' by Cocteau Twins?"
+    y "It is the title track of what is widely considered their masterpiece."
+    
+    $ show_chr("A-BCAAA-ALAA")
+    y "I find the title fascinatingly ambiguous. A contrast between a spiritual ideal... and the flashy, artificial lights of a gambler's paradise."
+    y "Musically, it is much brighter than their earlier work. It shimmers."
+    
+    y "I wanted to share it with you because... well, sometimes this game feels a bit like Las Vegas. Artificial. Constructed."
+    if persistent.lovecheck:
+        $ show_chr("A-ACABA-ALAA")
+        y "But spending time with you... that is the 'Heaven' part."
+    
+    y "Here, I will bring it up on your browser."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=6KnYw4EwYGc", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=6KnYw4EwYGc", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=6KnYw4EwYGc", shell=True)
+
+    y "It has a very dreamlike quality. I hope it helps you relax."
+    return
+
+label topic_carolynsfingers:
+    $ show_chr("A-ACAAA-ALAA")
+    y "[player], are you familiar with the term 'glossolalia'?"
+    y "It refers to speaking in fabricated words... speech that mimics language but has no defined meaning."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "The vocalist of Cocteau Twins, Elizabeth Fraser, often sings this way. She treats her voice purely as an instrument."
+    y "There is a song called 'Carolyn's Fingers' that demonstrates this beautifully."
+    
+    y "Even though the lyrics are mostly unintelligible, the emotion is perfectly clear. It bypasses the logical brain and speaks directly to the heart."
+    y "I think you might find it interesting. Let me play it for you."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=NhGoZLudKyk", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=NhGoZLudKyk", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=NhGoZLudKyk", shell=True)
+
+    $ show_chr("A-ACAAA-ACAB")
+    y "It is quite an upbeat track compared to their others. It always manages to lift my spirits slightly."
+    return
+
+label topic_waxandwane:
+    $ show_chr("A-ACAAA-ALAA")
+    y "We have discussed the ethereal, dreamlike side of Cocteau Twins, but I recently revisited their debut album, Garlands."
+    y "It is... surprisingly different. Much darker. Rawer."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "There is a track called 'Wax and Wane' that I find particularly compelling."
+    y "Instead of the shimmering walls of sound they became famous for later, this song relies on a heavy, distorted bassline."
+    y "It feels much closer to the post-punk roots of bands like Joy Division or early Siouxsie and the Banshees."
+    
+    $ show_chr("A-AFBAA-ALAA") # Introspective
+    y "The title, 'Wax and Wane', refers to the phases of the moon... growing and shrinking."
+    y "It resonates with me. My own moods... and perhaps my own sanity... tend to wax and wane in cycles."
+    y "Sometimes I feel full and bright, and other times... I feel like I am disappearing into the shadow."
+    
+    y "Let me play it for you. It has a very visceral, nocturnal energy."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=Kv8Nbz2HMRg", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=Kv8Nbz2HMRg", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=Kv8Nbz2HMRg", shell=True)
+
+    $ show_chr("A-ACAAA-AMAM")
+    y "It is less 'dream pop' and more... 'nightmare pop', perhaps? In the best possible way."
+    return
+
+label topic_pearlydewdrops:
+    $ show_chr("A-ACAAA-ACAB") # Lighthearted/Amused
+    y "[player], try saying this three times fast: 'Pearly-Dewdrops' Drops'."
+    y "It is quite the tongue-twister, isn't it?"
+    
+    $ show_chr("A-BCAAA-ALAA")
+    y "That is actually the title of one of Cocteau Twins' most successful songs."
+    y "I did some research into the title, because the imagery was so specific."
+    y "It turns out, 'Pearly Dewdrops' is an old Victorian term for a white hyacinth flower."
+    
+    $ show_chr("A-ACAAA-ALAA")
+    y "You know I have a fondness for the language of flowers. In Victorian floriography, the hyacinth can represent playfulness... or sorrow, depending on the color."
+    y "The song itself sounds like rain falling in a cathedral. It is grand, yet delicate."
+    
+    y "I think you will appreciate the atmosphere. Let me open it for you."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=s-5Xgw6d3h0", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=s-5Xgw6d3h0", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=s-5Xgw6d3h0", shell=True)
+
+    if persistent.lovecheck:
+        y "It makes me think of morning dew... fresh and new. Like how I feel when you visit me."
+    return
+
+label topic_loveseasytears:
+    $ show_chr("A-AFBAA-ALAA") # Gentle/Soft
+    y "There is one more Cocteau Twins song I wanted to share with you, [player]."
+    y "It is titled 'Love's Easy Tears'."
+    
+    $ show_chr("A-BCBAA-ALAA")
+    y "I find the title so... evocative."
+    y "It suggests that when you are in love, emotions sit right at the surface. Tears come easily—not just from sadness, but from being overwhelmed by the beauty of it all."
+    
+    y "The music matches that feeling perfectly. It is sweeping and romantic, almost overwhelming in its layers."
+    
+    if persistent.lovecheck:
+        $ show_chr("A-ACABA-ALAA") # Blushing
+        y "I relate to it... perhaps a little too much."
+        y "Since I realized my feelings for you, I find myself becoming emotional over the smallest things."
+        y "A kind word from you, or just the thought of you... it brings 'easy tears' to my eyes."
+    
+    y "Here, listen to it with me."
+
+    # Open Browser Logic
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=RvtZ4XKFBN8", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=RvtZ4XKFBN8", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=RvtZ4XKFBN8", shell=True)
+
+    $ show_chr("A-ACAAA-ALAA")
+    y "It feels like being caught in a warm storm, doesn't it?"
     return

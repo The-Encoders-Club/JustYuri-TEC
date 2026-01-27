@@ -73,7 +73,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_5',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_4)"],
+        conditions = ["renpy.seen_label('idle_4')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -314,7 +314,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_35',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_4)", "renpy.seen_label(idle_5)"],
+        conditions = ["renpy.seen_label('idle_4')", "renpy.seen_label('idle_5')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -883,7 +883,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_106',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_4)", "renpy.seen_label(idle_5)", "ren.seen_label(idle_35)"],
+        conditions = ["renpy.seen_label('idle_4')", "renpy.seen_label('idle_5')", "ren.seen_label('idle_35')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -899,7 +899,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_108',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_4)", "renpy.seen_label(idle_5)", "ren.seen_label(idle_35)", "renpy.seen_label(idle_106)"],
+        conditions = ["renpy.seen_label('idle_4')", "renpy.seen_label('idle_5')", "ren.seen_label('idle_35')", "renpy.seen_label('idle_106')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -915,7 +915,7 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_110',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_109)"],
+        conditions = ["renpy.seen_label('idle_109')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -923,7 +923,15 @@ init -3 python:
     add_dialogue(Dialogue(
         label = 'idle_111',
         category = DialogueAPI.category_idle,
-        conditions = ["renpy.seen_label(idle_103)"],
+        conditions = ["renpy.seen_label('idle_103')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = 'idle_112',
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('idle_4')", "renpy.seen_label('idle_5')", "ren.seen_label('idle_35')", "renpy.seen_label('idle_106')", "renpy.seen_label('idle_108')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -1321,6 +1329,54 @@ init -3 python:
         label = "song_enjoythesilence",
         category = DialogueAPI.category_idle,
         conditions = ["renpy.seen_label('singing_yuri_intro'), persistent.yuri_sing"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_lorelei",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('topic_carolynsfingers')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_heavenorlasvegas",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('topic_carolynsfingers')", "renpy.seen_label('topic_lorelei')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_carolynsfingers",
+        category = DialogueAPI.category_idle,
+        conditions = [],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_waxandwane",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('topic_carolynsfingers')", "renpy.seen_label('topic_lorelei')", "renpy.seen_label('topic_heavenorlasvegas')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_pearlydewdrops",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('topic_carolynsfingers')", "renpy.seen_label('topic_lorelei')", "renpy.seen_label('topic_heavenorlasvegas')", "renpy.seen_label('topic_waxandwane')"],
+        importance = 0,
+        name = None,
+        sub_category = None))
+
+    add_dialogue(Dialogue(
+        label = "topic_loveseasytears",
+        category = DialogueAPI.category_idle,
+        conditions = ["renpy.seen_label('topic_carolynsfingers')", "renpy.seen_label('topic_lorelei')", "renpy.seen_label('topic_heavenorlasvegas')", "renpy.seen_label('topic_waxandwane')", "renpy.seen_label('topic_pearlydewdrops')"],
         importance = 0,
         name = None,
         sub_category = None))
@@ -1845,6 +1901,14 @@ init -3 python:
         importance = 0,
         name = "What is the weather like right now?",
         sub_category = "Activities"))
+
+    add_dialogue(Dialogue(
+        label = "active_takeover",
+        category = DialogueAPI.category_talk,
+        conditions = [],
+        importance = 0,
+        name = "What do you think about Doki Doki Takeover?",
+        sub_category = "Small Talk"))
 
     #add_dialogue(Dialogue(
     #    label = "krampuslore",

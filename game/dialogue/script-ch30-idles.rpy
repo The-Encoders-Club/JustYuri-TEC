@@ -3539,7 +3539,7 @@ label idle_52: # The Meaning of "Yuri" (Revised)
 
 label idle_53: # Tea Rituals & Coping Mechanisms
     $ show_chr("A-ACAAA-ZZAB") # Holding a teacup (assuming ZZAB is the tea pose)
-    y "You know, [player]... I often talk about tea, but I rarely explain *why* it means so much to me."
+    y "You know, [player]... I often talk about tea, but I rarely explain why it means so much to me."
     y "It isn't just about the flavor, or the warmth. It is about the ritual."
     
     $ show_chr("A-BCAAA-ZZAB")
@@ -3806,7 +3806,7 @@ label idle_57: #Feedback on Dan Salvato's Story
 
 label idle_58: # Portrait of Markov: The Third Eye & Meta-Horror
     $ show_chr("A-BCAAA-ZZAB") # Holding the book (or just thoughtful posture)
-    y "I picked up *The Portrait of Markov* again recently, just to read a few passages on my own."
+    y "I picked up The Portrait of Markov again recently, just to read a few passages on my own."
     
     $ show_chr("A-ACAAA-ZZAB")
     y "You know... the more I analyze the underlying lore, the more... unsettling... the parallels become."
@@ -3830,7 +3830,7 @@ label idle_58: # Portrait of Markov: The Third Eye & Meta-Horror
     if sanity() < 3:
         $ show_chr("A-CEBAA-AMAM") # Intense/Dark
         y "And maybe that is why I feel this... hunger."
-        y "Not for blood, like in the book... but for *you*."
+        y "Not for blood, like in the book... but for you."
         y "The knowledge of this reality makes everything else feel fake. You are the only real thing left to consume."
         y "It makes the story feel less like fiction and more like... a prophecy."
     else:
@@ -8712,4 +8712,170 @@ label idle_111: # The "True" Exclusive Poem
     y "But perhaps it is better that only you get to see it."
     y "It makes it a true exclusive."
 
+    return
+
+label idle_112: # The Diversity of Goth Music (Educational Hub)
+    $ show_chr("A-ACAAA-ALAA")
+    y "[player], I was thinking about our previous discussions regarding the misconceptions of the goth subculture."
+    y "We talked about fashion, but... music is the beating heart of it all. And it is so much more than just 'depressing songs for sad people'."
+    
+    $ show_chr("A-BCAAA-ALAA")
+    y "There is such a vast spectrum of emotion within the genre. Some songs feel ancient, some feel futuristic. Some are aggressive, others are fragile."
+    y "If you are willing, I would love to curate a small playlist for you. To show you the variety that lies beyond the stereotypes."
+    
+    y "What kind of atmosphere are you in the mood for right now?"
+
+    menu:
+        "Something atmospheric and ancient. Like a journey to the past.":
+            call music_neoclassical_ethereal
+        
+        "Something with synthesizers and energy. The 80s club vibe.":
+            call music_darkwave
+            
+        "Something emotional and raw. No beat needed.":
+            call music_emotional_raw
+            
+        "Something unique. Vocals that don't sound quite human.":
+            call music_cranes
+            
+        "Something heavier. Rock, Metal, or Goth 'n' Roll.":
+            call music_goth_rock_metal
+            
+        "The absolute classic. The song that started it all.":
+            call music_bauhaus
+
+    return
+
+# --- SUB-LABELS FOR RECOMMENDATIONS ---
+
+label music_neoclassical_ethereal:
+    $ show_chr("A-ACAAA-ACAB")
+    y "An excellent choice. Many people forget that goth music often draws heavily from classical and medieval influences."
+    
+    # Dead Can Dance - Persephone
+    y "You must listen to 'Persephone (The Gathering of Flowers)' by Dead Can Dance."
+    y "It does not sound like a rock song at all. It feels like... stepping into a grand party in the 15th or 16th century."
+    y "The strings, the rhythm... it transports you to another era entirely. It is elegant, refined, and utterly timeless."
+    
+    # Miranda Sex Garden - Gush Forth My Tears
+    $ show_chr("A-BCAAA-ALAA")
+    y "Or, if you want something even more stripped back, try 'Gush Forth My Tears' by Miranda Sex Garden."
+    y "It is a Madrigal—a secular vocal music composition from the Renaissance. They perform it almost entirely a cappella."
+    y "It proves that you do not need heavy guitars or drums to be 'goth'. Sometimes, the human voice alone is enough to stir the soul."
+    
+    # Open Browser (Dead Can Dance as priority)
+    y "Let me show you 'Persephone' first."
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=xGDxnRMNJTQ", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=xGDxnRMNJTQ", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=xGDxnRMNJTQ", shell=True)
+    return
+
+label music_darkwave:
+    $ show_chr("A-ACAAA-AMAM")
+    y "Ah, you want to feel the energy of the synthesizer. A staple of the 1980s Darkwave scene."
+    
+    # Psyche - Unveiling the Secret
+    y "You should listen to 'Unveiling the Secret' by Psyche."
+    y "It has that driving, electronic pulse that makes you want to move, yet it retains a dark, mysterious undercurrent."
+    
+    # Clan of Xymox - A Day
+    y "Another masterpiece is 'A Day' by Clan of Xymox."
+    y "It perfectly captures that transition between post-punk and the more electronic sound. It is powerful, danceable, yet melancholic."
+    
+    y "These songs prove that goth isn't just about sitting in the dark; it is also about dancing through it."
+    
+    # Open Browser (Psyche)
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=0hilyfyf8mI", shell=True) # Note: Replace with actual Psyche link
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=0hilyfyf8mI", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=0hilyfyf8mI", shell=True)
+    return
+
+label music_emotional_raw:
+    $ show_chr("A-AFBAA-ALAA")
+    y "Sometimes, we do not need a beat. We only need pure emotion."
+    
+    # This Mortal Coil - Song to the Siren
+    y "There is no better example than 'Song to the Siren' covered by This Mortal Coil."
+    y "It has no precise tempo to nod your head to. It is just... floating. Elizabeth Fraser's voice drifts over a simple guitar melody."
+    y "It stirs up emotions that are difficult to name. A sense of longing so deep it feels like drowning in the open ocean."
+    y "It is hauntingly beautiful."
+    
+    # Open Browser
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=HFWKJ2FUiAQ", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=HFWKJ2FUiAQ", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=HFWKJ2FUiAQ", shell=True)
+    return
+
+label music_cranes:
+    $ show_chr("A-BCAAA-ALAA")
+    y "This recommendation is... distinct. It challenges your expectations."
+    
+    # Cranes - Shining Road
+    y "I suggest 'Shining Road' by Cranes."
+    y "When you first hear the vocalist, Alison Shaw, you might ask yourself: 'Is this a child singing?'"
+    y "Her voice is incredibly high-pitched, almost doll-like. But the music behind her is atmospheric, sometimes industrial, sometimes dreamy."
+    y "That juxtaposition—the innocence of the voice against the dark, complex instrumentation—creates a very unique, surreal atmosphere."
+    
+    # Open Browser
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=VZnSik1HpWw", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=VZnSik1HpWw", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=VZnSik1HpWw", shell=True)
+    return
+
+label music_goth_rock_metal:
+    $ show_chr("A-ACAAA-AMAM")
+    y "You prefer something with a bit more edge? Excellent."
+    
+    # The 69 Eyes - Gothic Girl
+    y "For a pure 'Goth 'n' Roll' vibe, there is 'Gothic Girl' by The 69 Eyes."
+    y "It is catchy, rock-driven, and honestly... it makes one feel powerful. It celebrates the aesthetic rather than just mourning it."
+    
+    # Evanescence - Farther Away
+    y "And for something that drives you into unexpected territory... I recommend 'Farther Away' by Evanescence."
+    y "I know, I know. Some gatekeepers debate whether they are 'truly' goth."
+    y "But this is not one of their radio hits like 'Bring Me to Life' or 'My Immortal'. This is a deep cut."
+    y "The raw power in Amy Lee's voice on this track is undeniable. It transcends genre labels."
+    
+    # Open Browser (The 69 Eyes)
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=TRUYs2cKcX0", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=TRUYs2cKcX0", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=TRUYs2cKcX0", shell=True)
+    return
+
+label music_bauhaus:
+    $ show_chr("A-BFAAA-AMAM")
+    y "Ah... going back to the source."
+    
+    # Bauhaus - Bela Lugosi's Dead
+    y "We cannot speak of this culture without mentioning 'Bela Lugosi's Dead' by Bauhaus."
+    y "It is over nine minutes long. It is repetitive. It is dub-influenced."
+    y "It asks you to be patient. To let the atmosphere build."
+    
+    $ show_chr("A-ACAAA-ADAB")
+    y "And it invites you to learn about history. Who was Bela Lugosi? The actor who defined Dracula for generations, who was buried in his cape."
+    y "It is a song about ghosts... both literal and cinematic."
+    y "It creates a space where you can meet ghosts you have never met. It is the quintessential goth experience."
+    
+    # Open Browser
+    if renpy.windows:
+        $ subprocess.check_output("cmd /c start https://www.youtube.com/watch?v=Yy9h2q_dr9k", shell=True)
+    elif renpy.linux:
+        $ subprocess.check_output("xdg-open https://www.youtube.com/watch?v=Yy9h2q_dr9k", shell=True)
+    elif renpy.macintosh:
+        $ subprocess.check_output("open https://www.youtube.com/watch?v=Yy9h2q_dr9k", shell=True)
     return
