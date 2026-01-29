@@ -136,8 +136,8 @@ screen bsod_mac():
             spacing 8
             xalign 0.5
             # We use 'outlines []' to keep it clean and flat (no black borders)
-            text "You need to restart your computer. Hold down the Power button" font "gui/font/HelveticaNeueMedium.ttf" size 28 color "#fff" xalign 0.5 text_align 0.5 outlines []
-            text "for several seconds or press the Restart button." font "gui/font/HelveticaNeueMedium.ttf" size 28 color "#fff" xalign 0.5 text_align 0.5 outlines []
+            text "You need to restart your computer. Hold down the Power button" font "gui/font/HelveticaNeueMedium.otf" size 28 color "#fff" xalign 0.5 text_align 0.5 outlines []
+            text "for several seconds or press the Restart button." font "gui/font/HelveticaNeueMedium.otf" size 28 color "#fff" xalign 0.5 text_align 0.5 outlines []
 
         # --- TRANSLATIONS (Secondary) ---
         vbox:
@@ -145,13 +145,13 @@ screen bsod_mac():
             xalign 0.5
             
             # Spanish
-            text "Es necesario reiniciar el ordenador. Mantenga pulsado el botón de arranque\ndurante varios segundos o pulse el botón de reinicio." font "gui/font/HelveticaNeueMedium.ttf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
+            text "Es necesario reiniciar el ordenador. Mantenga pulsado el botón de arranque\ndurante varios segundos o pulse el botón de reinicio." font "gui/font/HelveticaNeueMedium.otf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
             
             # French
-            text "Veuillez redémarrer votre ordinateur. Maintenez la touche de démarrage\nenfoncée pendant plusieurs secondes ou bien appuyez sur le bouton de réinitialisation." font "gui/font/HelveticaNeueMedium.ttf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
+            text "Veuillez redémarrer votre ordinateur. Maintenez la touche de démarrage\nenfoncée pendant plusieurs secondes ou bien appuyez sur le bouton de réinitialisation." font "gui/font/HelveticaNeueMedium.otf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
             
             # German
-            text "Sie müssen Ihren Computer neu starten. Halten Sie den Ein-/Ausschalter\neinige Sekunden gedrückt oder drücken Sie die Neustart-Taste." font "gui/font/HelveticaNeueMedium.ttf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
+            text "Sie müssen Ihren Computer neu starten. Halten Sie den Ein-/Ausschalter\neinige Sekunden gedrückt oder drücken Sie die Neustart-Taste." font "gui/font/HelveticaNeueMedium.otf" size 18 color "#ccc" xalign 0.5 text_align 0.5 outlines []
 
 
 screen bsod_linux():

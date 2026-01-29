@@ -1,4 +1,4 @@
-# =================================================================================
+    # =================================================================================
 #  ADVANCED SYSTEM HEARTBEAT (MASTER VERSION)
 #  - Supports Windows Consumer & Server Editions (XP through Server 2022)
 #  - Supports macOS Codenames & Linux Distros
@@ -166,26 +166,22 @@ python early:
     elif sys.platform.startswith("linux"):
         # RENAMED to get_linux_cpu
         def get_linux_cpu():
+            if not sys.platform.startswith("linux"): return 0.0
             global last_cpu_times
             try:
                 with open('/proc/stat', 'r') as f: line = f.readline()
                 parts = [int(x) for x in line.split()[1:]]
                 c_idle, c_total = parts[3] + parts[4], sum(parts)
-                
-                if last_cpu_times is None:
-                    last_cpu_times = (c_idle, c_total)
-                    return 0.0
-
+                if last_cpu_times is None: last_cpu_times = (c_idle, c_total); return 0.0
                 p_idle, p_total = last_cpu_times
                 d_idle, d_total = c_idle - p_idle, c_total - p_total
                 last_cpu_times = (c_idle, c_total)
-
-                if d_total == 0: return 0.0
-                return ((d_total - d_idle) / d_total) * 100.0
+                return ((d_total - d_idle) / d_total) * 100.0 if d_total > 0 else 0.0
             except: return 0.0
 
         # RENAMED to get_linux_ram
         def get_linux_ram():
+            if not sys.platform.startswith("linux"): return 0.0
             try:
                 total, avail = 0, 0
                 with open('/proc/meminfo', 'r') as f:
@@ -197,6 +193,7 @@ python early:
 
         # RENAMED to get_linux_battery
         def get_linux_battery():
+            if not sys.platform.startswith("linux"): return None
             try:
                 bat = "/sys/class/power_supply/BAT0"
                 if not os.path.exists(bat): bat = "/sys/class/power_supply/BAT1"
@@ -210,29 +207,32 @@ python early:
     elif sys.platform == "darwin":
         # RENAMED to get_mac_cpu
         def get_mac_cpu():
+            if sys.platform != "darwin": return 0.0
             try:
                 out = subprocess.check_output("top -l 1 | grep -E '^CPU'", shell=True).decode("utf-8")
                 user = float(re.search(r"([\d\.]+)% user", out).group(1))
-                sys_u = float(re.search(r"([\d\.]+)% sys", out).group(1))
-                return user + sys_u
+                sys_val = float(re.search(r"([\d\.]+)% sys", out).group(1))
+                return user + sys_val
             except: return 0.0
+
 
         # RENAMED to get_mac_ram
         def get_mac_ram():
+            if sys.platform != "darwin": return 0.0
             try:
                 out = subprocess.check_output("vm_stat", shell=True).decode("utf-8")
                 free = int(re.search(r"Pages free:\s+(\d+)", out).group(1))
                 active = int(re.search(r"Pages active:\s+(\d+)", out).group(1))
-                inactive = int(re.search(r"Pages inactive:\s+(\d+)", out).group(1))
                 spec = int(re.search(r"Pages speculative:\s+(\d+)", out).group(1))
                 wired = int(re.search(r"Pages wired down:\s+(\d+)", out).group(1))
-                used = active + wired + spec
-                total = free + active + inactive + spec + wired
+                used = active + spec + wired
+                total = free + active + spec + wired
                 return (used / total) * 100.0
             except: return 0.0
 
         # RENAMED to get_mac_battery
         def get_mac_battery():
+            if sys.platform != "darwin": return None
             try:
                 out = subprocess.check_output("pmset -g batt", shell=True).decode("utf-8")
                 if "InternalBattery" not in out: return None
@@ -272,14 +272,14 @@ python early:
             report["battery"] = get_windows_battery()
         elif sys.platform == "darwin":
             report["os_name"] = get_mac_codename()
-            report["cpu"] = get_cpu_mac()
-            report["ram"] = get_ram_mac()
-            report["battery"] = get_battery_mac()
+            report["cpu"] = get_mac_cpu()
+            report["ram"] = get_mac_ram()
+            report["battery"] = get_mac_battery()
         elif sys.platform.startswith("linux"):
             report["os_name"] = get_linux_distro()
             report["cpu"] = get_linux_cpu()
             report["ram"] = get_linux_ram()
-            report["battery"] = get_battery_linux()
+            report["battery"] = get_linux_battery()
 
         return report
 
