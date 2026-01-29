@@ -22,6 +22,13 @@ python early:
                 copy_file(os.path.join(save_directory, "persistent"), os.path.join(backup_directory, "persistent_old_backup"))
                 print("- Done!")
 
+init -999 python:
+    if old_persistent:
+        print("Applying older persistent file...")
+        apply_persistent(old_persistent)
+        print("- Done!")
+
+
 #==================================================#
 # Base Variables
 #==================================================#
