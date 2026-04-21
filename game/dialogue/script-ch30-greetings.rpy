@@ -124,7 +124,7 @@ label greetings_uhhh:
 
 label greetings_of_course:
     #karma +2
-    karma +2)
+    karma +2
     $show_chr("A-DHBBA-ABAB")
     y "..."
     $show_chr("A-GABBA-LAB")

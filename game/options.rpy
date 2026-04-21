@@ -11,10 +11,10 @@
 ## title, and shows up in the interface and error reports.
 ##
 ## The _() surrounding the string marks it as eligible for translation.
-define config.name = "Just Yuri (Beta)"
+define config.name = "Just Yuri"
 
-## The version of the game.
-define config.version = "Beta-1.11.0-(Preview)"
+## The version of the whole game.
+define config.version = "2.0.0-Indev"
 
 ## Whether debug mode is enabled. Mainly used to change what persistent file is read
 define config.developer = dev_access

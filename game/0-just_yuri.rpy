@@ -109,6 +109,11 @@ python early:
     save_directory = get_home_directory() if initial_dev_access else os.path.join(get_home_directory(), "JustYuri")
     backup_directory = os.path.join(save_directory, "backups")
 
+    class Engine:
+        name = "YuyuEngine"
+        version = "1.0.0"
+
+
 #==================================================#
 # Initialization
 #==================================================#
@@ -167,6 +172,7 @@ init -999 python:
     
     #If game closed with HDY enabled, disable it
     persistent.HDY = False
+    print("- Initializing " + Engine.name + " - " + Engine.version + "...")
 
     def is_callable(obj):
         return hasattr(obj, "__call__")

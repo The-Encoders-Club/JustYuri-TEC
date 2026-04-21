@@ -1069,9 +1069,9 @@ label birthday_select_screen:
                     break
                 else:
                     if persistent.bday_month == 2 and day > 28:
-                         y("That day only exists in a leap year. Please try again.")
+                        y("That day only exists in a leap year. Please try again.")
                     else:
-                         y("That day doesn't exist in the month you chose. Please try again.")
+                        y("That day doesn't exist in the month you chose. Please try again.")
             except (ValueError, TypeError):
                 y("That doesn't seem to be a number. Could you please enter the day?")
 
