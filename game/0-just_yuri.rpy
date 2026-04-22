@@ -17,7 +17,7 @@ python early:
     from typing import Any
     from store import renpy
     from shutil import copyfile, SameFileError
-    
+
     dev_access = not "scripts" in config.archives
     initial_dev_access = bool(dev_access)
     me = singleton.SingleInstance()
@@ -172,7 +172,6 @@ init -999 python:
     
     #If game closed with HDY enabled, disable it
     persistent.HDY = False
-    print("- Initializing " + Engine.name + " - " + Engine.version + "...")
 
     def is_callable(obj):
         return hasattr(obj, "__call__")

@@ -8,11 +8,9 @@
 #==================================================#
 
 init -999 python:
-
     submods = {}
     submods.mods = {}
     submods.mod_count = 0
-
     submods.modinfo_template = {
         "name": "",
         "id": "",
@@ -73,14 +71,9 @@ You can feel free to delete these documents if you would like to free up space f
     "developer_mode": true
 }
 """
-    # Note: The above is intended for a TXT file, but the content looks like JSON with comments.
-    # If it should be a valid JSON file instead, remove the comments (#) or use a different format.
-    # Assuming it's intended as a descriptive TXT file as requested.
-
     #==================================================#
     #  Functions
     #==================================================#
-
     def parse_mod_id(name):
         match = regex.match("[a-z0-9\\_\\-]*", name.lower().replace(" ", "_"))
         return match.group(0) if match != None else "unknown"
@@ -91,6 +84,7 @@ You can feel free to delete these documents if you would like to free up space f
         version = "1.0.0"
         description = None
         dependencies = []
+        missing_dependencies = []
         icon = None
         path = None
 
@@ -101,158 +95,52 @@ You can feel free to delete these documents if you would like to free up space f
             # Default icon is still loaded from the *game* directory's images.
             self.icon = Transform(os.path.join(config.gamedir, "images", "default_submod.png"), size=(100,100), fit="contain")
 
-    print("Checking for submods...")
-    request_dev_access = True
-    dev_access = True
-
     #==================================================#
     #  Start Submod System
     #==================================================#
+    dir_submods = os.path.join(config.gamedir, "submods")
+    request_dev_access = False
+    print("Initializing submods...")
 
-    # Use game directory for submods
-    submods_dir = os.path.join(config.gamedir, "submods")
-    placeholder_dir = os.path.join(submods_dir, "_placeholder")
-    print("submods_dir is:", submods_dir)
-
-    # --- Create base submods directory if it doesn't exist ---
-    if not os.path.isdir(submods_dir):
-        print("Creating submods folder...")
+    # -- Check if base submod directory exists
+    if not os.path.isdir(dir_submods):
+        print_debug("  - Creating submods folder...")
         try:
-            os.makedirs(submods_dir, exist_ok=True)
+            os.makedirs(dir_submods, exist_ok=True)
         except Exception as e:
-            print(f"Error creating submods directory at {submods_dir}: {e}")
-
-    # --- Create placeholder directory and files if they don't exist ---
-    # (This part remains largely the same, creating the initial placeholder example)
-    if os.path.isdir(submods_dir) and not os.path.isdir(placeholder_dir):
-        print("Creating placeholder folder...")
-        try:
-            os.makedirs(placeholder_dir, exist_ok=True)
-
-            # Create placeholder modinfo.json
-            placeholder_info_path = os.path.join(placeholder_dir, "modinfo.json")
-            with open(placeholder_info_path, 'w', encoding='utf-8') as f:
-                placeholder_info = submods.modinfo_template.copy()
-                placeholder_info["name"] = "Placeholder"
-                placeholder_info["id"] = "placeholder"
-                json.dump(placeholder_info, f, indent=4)
-
-            # Copy default icon
-            placeholder_icon_path = os.path.join(placeholder_dir, "icon.png")
-            source_icon_path = os.path.join(config.gamedir, "images", "default_submod.png")
-            print(f"Attempting to copy icon from: {source_icon_path} to {placeholder_icon_path}")
-            try:
-                if os.path.isfile(source_icon_path):
-                    copyfile(source_icon_path, placeholder_icon_path)
-                    print("Icon copied successfully!")
-                else:
-                    print(f"Error: Source icon file not found at {source_icon_path}")
-            except Exception as e:
-                 print(f"An error occurred while copying the placeholder icon: {e}")
-
-
-            # Create placeholder documentation directory
-            placeholder_docs_dir = os.path.join(placeholder_dir, "documentation")
-            if not os.path.isdir(placeholder_docs_dir):
-                 os.makedirs(placeholder_docs_dir, exist_ok=True)
-
-            # --- Write the specific doc files for the placeholder ---
-            getting_started_path_placeholder = os.path.join(placeholder_docs_dir, "0 - Getting Started.txt")
-            modinfo_setup_path_placeholder = os.path.join(placeholder_docs_dir, "Setting Up Modinfo.txt")
-
-            try:
-                print("  - Creating placeholder '0 - Getting Started.txt'...")
-                with open(getting_started_path_placeholder, 'w', encoding='utf-8') as f:
-                    f.write(getting_started_content)
-            except Exception as e:
-                print(f"  - Failed to create placeholder '0 - Getting Started.txt': {e}")
-
-            try:
-                print("  - Creating placeholder 'Setting Up Modinfo.txt'...")
-                with open(modinfo_setup_path_placeholder, 'w', encoding='utf-8') as f:
-                    f.write(modinfo_setup_content)
-            except Exception as e:
-                print(f"  - Failed to create placeholder 'Setting Up Modinfo.txt': {e}")
-
-        except Exception as e:
-            print(f"Error creating placeholder files in {placeholder_dir}: {e}")
-
-    # --- Scan for actual submods ---
-    if os.path.isdir(submods_dir):
-        for directory in os.scandir(submods_dir):
-            if not directory.is_dir() or directory.path == placeholder_dir:
+            print_error(e)
+            print(f"  - Cannot create submods directory at {dir_submods}. Skipping submod loading...")
+            
+    # -- Scan for submods
+    if os.path.isdir(dir_submods):
+        for directory in os.scandir(dir_submods):
+            if not directory.is_dir():
                 continue
 
-            print("Scanning mod: " + directory.name)
             submods.mod_count += 1
             mod_docs_dir = os.path.join(directory.path, "documentation")
             mod_error_path = directory.path # Used for error reporting context
             mod_info_path = os.path.join(directory.path, "modinfo.json")
             mod_icon_path = os.path.join(directory.path, "icon.png")
-
-            print("mod_docs_dir:", mod_docs_dir)
-            print("mod_info_path:", mod_info_path)
-            print("mod_icon_path", mod_icon_path)
-
             submod = Submod(directory.name, parse_mod_id(directory.name), mod_error_path)
 
-            # --- Check if modinfo.json exists, create it and docs if not ---
+            # -- Read modinfo.json
             if not os.path.isfile(mod_info_path):
-                print("  - Mod " + submod.id + " does not contain a modinfo.json file. Creating default files...")
-
-                # 1. Ensure documentation directory exists
-                if not os.path.isdir(mod_docs_dir):
-                    print("  - Creating documentation directory...")
-                    try:
-                        os.makedirs(mod_docs_dir, exist_ok=True)
-                    except Exception as e:
-                        print(f"  - Failed to create documentation directory: {e}")
-                        # Log the error, but might still attempt to create modinfo.json
-                        print_error(e, path=mod_error_path)
-
-                # 2. Create the specific documentation files IF the docs directory exists
-                if os.path.isdir(mod_docs_dir):
-                    getting_started_path = os.path.join(mod_docs_dir, "0 - Getting Started.txt")
-                    modinfo_setup_path = os.path.join(mod_docs_dir, "Setting Up Modinfo.txt")
-
-                    # Write "Getting Started" doc
-                    try:
-                        print("  - Creating '0 - Getting Started.txt'...")
-                        with open(getting_started_path, 'w', encoding='utf-8') as f:
-                            f.write(getting_started_content)
-                    except Exception as e:
-                        print(f"  - Failed to create '0 - Getting Started.txt': {e}")
-                        print_error(e, path=mod_error_path) # Use existing error reporting
-
-                    # Write "Setting Up Modinfo" doc
-                    try:
-                        print("  - Creating 'Setting Up Modinfo.txt'...")
-                        with open(modinfo_setup_path, 'w', encoding='utf-8') as f:
-                            f.write(modinfo_setup_content)
-                    except Exception as e:
-                        print(f"  - Failed to create 'Setting Up Modinfo.txt': {e}")
-                        print_error(e, path=mod_error_path) # Use existing error reporting
-                else:
-                     print("  - Skipping documentation file creation because directory doesn't exist.")
-
-
-                # 3. Create modinfo.json
-                print("  - Creating modinfo.json...")
+                print_debug("  - Generating modinfo.json for submod \"" + submod.id + "\"...")
                 try:
                     with open(mod_info_path, 'w', encoding='utf-8') as file:
                         modinfo = submods.modinfo_template.copy()
-                        modinfo["name"] = submod.name or "" # Use existing name if available
-                        modinfo["id"] = submod.id or ""     # Use existing ID if available
+                        modinfo["name"] = submod.name or "" 
+                        modinfo["id"] = submod.id or ""
                         json.dump(modinfo, file, indent=4)
-                    print("  - Finished creating default files!")
+                    print_debug("  - Finished generating modinfo.json!")
                 except Exception as e:
-                    print("  - Failed to create modinfo.json")
+                    print_debug("  - Failed to generate modinfo.json. Skipping...")
                     print_error(e, path=mod_error_path)
-
-            # --- Load modinfo.json (if it exists now or existed before) ---
-            if os.path.isfile(mod_info_path):
+            else:
+                print(f"  - Reading modinfo.json for {submod.id}...")
                 try:
-                    with open(mod_info_path, 'r', encoding='utf-8') as file: # Read with utf-8
+                    with open(mod_info_path, 'r', encoding='utf-8') as file:
                         modinfo = json.load(file)
                         submod.name = str(modinfo.get("name", submod.name))
                         submod.id = str(modinfo.get("id", submod.id))
@@ -260,66 +148,49 @@ You can feel free to delete these documents if you would like to free up space f
                         submod.description = modinfo.get("description", submod.description)
                         submod.dependencies = modinfo.get("dependencies", submod.dependencies)
                         request_dev_access = modinfo.get("developer_mode", request_dev_access)
-
+                        print(str(submod.dependencies))
                         if submod.description is not None:
                             submod.description = str(submod.description)
                         if isinstance(submod.dependencies, str):
                             submod.dependencies = [submod.dependencies]
+                            print("STR " + str(submod.dependencies))
                         elif not isinstance(submod.dependencies, list):
                             submod.dependencies = []
-
-                except json.JSONDecodeError as e:
-                     print(f"  - Failed to load modinfo.json: Invalid JSON format - {e}")
-                     print_error(e, path=mod_error_path)
+                            print("NO " + type_str(submod.dependencies) + " " + type_str(list))
+                        else:
+                            print("YE " + str(submod.dependencies))
                 except Exception as e:
-                    print(f"  - Failed to load modinfo.json: {e}")
+                    print_debug("  - Failed to load modinfo.json")
                     print_error(e, path=mod_error_path)
 
-            # --- Load icon ---
+            # -- Load icon
             if os.path.isfile(mod_icon_path):
-                print("  - Mod " + submod.id + " has an icon. Loading image...")
                 try:
-                    # 1. Get the path to the icon relative to the game directory.
                     relative_icon_path = os.path.relpath(mod_icon_path, config.gamedir)
-                    # 2. Normalize the path separators to forward slashes, which Ren'Py prefers.
                     relative_icon_path = relative_icon_path.replace(os.path.sep, '/')
 
-                    # 3. Use this relative path for the Transform. Ren'Py will now find it correctly.
                     submod.icon = Transform(relative_icon_path, size=(100, 100), fit="contain")
-                    print(f"  - Successfully created Transform for icon at: {relative_icon_path}")
                 except Exception as e:
-                    print("  - Failed to load icon.png")
+                    print_debug("  - Failed to load icon.png")
                     print_error(e, path=mod_error_path)
-            # If no custom icon is found, the default icon set in Submod.__init__ will be used.
-
-            # This line now correctly registers the Transform (either the default or the custom one)
             renpy.image(submod.id + ":icon", submod.icon)
             submods.mods[submod.id] = submod
             print("  - Mod ID: " + submod.id + ", Version: " + submod.version)
-            print("  - Dependencies: " + str(submod.dependencies))
-
-    else:
-        print(f"Warning: Submod directory {submods_dir} does not exist or is not accessible. Skipping submod loading.")
-
 
     # --- Dependency check ---
     print("Checking loaded submods for missing dependencies...")
     should_continue = True
-    missing_dependency_errors = []
 
     for key, submod in submods.mods.items():
         if len(submod.dependencies) > 0:
+            error_message = f"  - Submod '{submod.id}' is missing one or more dependencies:"
             for dependency in submod.dependencies:
                 parsed_dependency_id = parse_mod_id(dependency)
                 if parsed_dependency_id not in submods.mods:
-                    error_message = f"Submod '{submod.id}' is missing dependency '{parsed_dependency_id}'"
-                    print(f"  - {error_message}")
-                    missing_dependency_errors.append({
-                        "submod_id": submod.id,
-                        "missing_dependency": parsed_dependency_id,
-                        "path": submod.path
-                    })
-                    print_error(KeyError(error_message), path=(submod.path, config.basedir))
+                    
+                    submod.missing_dependencies.append(parsed_dependency_id)
+                    error_message += f"\n    > {parsed_dependency_id}"
+                    print(error_message)
                     should_continue = False
 
     if not should_continue:
