@@ -119,10 +119,9 @@ You can feel free to delete these documents if you would like to free up space f
 
             submods.mod_count += 1
             mod_docs_dir = os.path.join(directory.path, "documentation")
-            mod_error_path = directory.path # Used for error reporting context
             mod_info_path = os.path.join(directory.path, "modinfo.json")
             mod_icon_path = os.path.join(directory.path, "icon.png")
-            submod = Submod(directory.name, parse_mod_id(directory.name), mod_error_path)
+            submod = Submod(directory.name, parse_mod_id(directory.name), directory.path)
 
             # -- Read modinfo.json
             if not os.path.isfile(mod_info_path):
@@ -148,17 +147,13 @@ You can feel free to delete these documents if you would like to free up space f
                         submod.description = modinfo.get("description", submod.description)
                         submod.dependencies = modinfo.get("dependencies", submod.dependencies)
                         request_dev_access = modinfo.get("developer_mode", request_dev_access)
-                        print(str(submod.dependencies))
+                        
                         if submod.description is not None:
                             submod.description = str(submod.description)
                         if isinstance(submod.dependencies, str):
                             submod.dependencies = [submod.dependencies]
-                            print("STR " + str(submod.dependencies))
-                        elif not isinstance(submod.dependencies, list):
+                        elif not isinstance(submod.dependencies, builtins.list):
                             submod.dependencies = []
-                            print("NO " + type_str(submod.dependencies) + " " + type_str(list))
-                        else:
-                            print("YE " + str(submod.dependencies))
                 except Exception as e:
                     print_debug("  - Failed to load modinfo.json")
                     print_error(e, path=mod_error_path)
@@ -199,7 +194,7 @@ You can feel free to delete these documents if you would like to free up space f
     # --- Developer mode check ---
     if request_dev_access:
         print("One or more mods have requested developer mode. Enabling developer mode...")
-        config.developer = True # Standard Ren'Py way
-        dev_access = True # Your script's flag
+        config.developer = True
+        dev_access = True
 
     print("Mod loading complete! Loaded " + str(submods.mod_count) + " mod(s)")

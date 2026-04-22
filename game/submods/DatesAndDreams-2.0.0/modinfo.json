@@ -1,7 +1,6 @@
 {
-    "name": "DatesAndDreams-2.0.0",
-    "id": "datesanddreams-2",
-    "version": "1.0.0",
-    "dependencies": [],
-    "developer_mode": true
+    "name": "Just Yuri DLC: Dates And Dreams",
+    "id": "datesanddreams",
+    "version": "2.0.0",
+    "dependencies": "base"
 }

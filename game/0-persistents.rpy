@@ -10,24 +10,23 @@
 #==================================================#
 python early:
     old_persistent = None
-    #if save_directory:
-        #old_persistent = load_persistent(save_directory)
-        #if old_persistent:
-            #if getattr(old_persistent, "version"):
-                #old_persistent = None
-            #else:
-                #print("Backing up older persistent file...")
-                #if not os.path.exists(backup_directory):
-                    #os.makedirs(backup_directory)
-                #copy_file(os.path.join(save_directory, "persistent"), os.path.join(backup_directory, "persistent_old_backup"))
-                #print("- Done!")
+    if save_directory:
+        old_persistent = load_persistent(save_directory)
+        if old_persistent:
+            if getattr(old_persistent, "version"):
+                old_persistent = None
+            else:
+                print("Backing up older persistent file...")
+                if not os.path.exists(backup_directory):
+                    os.makedirs(backup_directory)
+                copy_file(os.path.join(save_directory, "persistent"), os.path.join(backup_directory, "persistent_old_backup"))
+                print("  - Done!")
 
 init -999 python:
     if old_persistent:
         print("Applying older persistent file...")
         apply_persistent(old_persistent)
-        print("- Done!")
-
+        print("  - Done!")
 
 #==================================================#
 # Base Variables

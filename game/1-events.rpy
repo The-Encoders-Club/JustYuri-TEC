@@ -49,24 +49,9 @@ init -998 python:
 
     class CrashEvent(Event):
         pass
+    
     class TickEvent(Event):
         ticks = 0
-
-    callback_tick_event = TickEvent()
-
-    # Fires anytime Yuri's karma changes
-    class KarmaEvent(Event):
-        def __init__(self, karma, resulting_karma, is_setting_karma):
-            self.karma = karma
-            self.resulting_karma = resulting_karma
-            self.is_setting_karma = is_setting_karma
-
-    # Fires anytime Yuri's sanity changes
-    class SanityEvent(Event):
-        def __init__(self, sanity, resulting_sanity, is_setting_sanity):
-            self.sanity = sanity
-            self.resulting_sanity = resulting_sanity
-            self.is_setting_sanity = is_setting_sanity
 
     # Fires anytime the TimeCycle system wants to change the time id
     class TimeCycleEvent(Event):
@@ -85,18 +70,18 @@ init -998 python:
             else:
                 return "sunset"
 
-    def callback_jy_tick(event):
-        DetectionAPI.tick()
-        TimeCycle.tick()
-
+    # Fires anytime dialogue is displayed
     class TalkEvent(Event):
         def __init__(self, dialogue):
             self.label = str(label)
             self.original_label = str(label)
             self.dialogue = dialogue
 
+    def callback_yuyu_tick(event):
+        DetectionAPI.tick()
+        TimeCycle.tick()
 
-
+    callback_tick_event = TickEvent()
     EventAPI.register(StartEvent)
     EventAPI.register(LabelEvent)
     EventAPI.register(QuitEvent)
@@ -104,8 +89,5 @@ init -998 python:
     EventAPI.register(ExitEvent)
     EventAPI.register(CrashEvent)
     EventAPI.register(TickEvent)
-
-    EventAPI.register(KarmaEvent)
-    EventAPI.register(SanityEvent)
     EventAPI.register(TimeCycleEvent)
-    EventAPI.register(TickEvent, callback_jy_tick)
+    EventAPI.register(TickEvent, callback_yuyu_tick)

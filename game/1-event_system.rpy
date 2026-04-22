@@ -72,6 +72,16 @@ init -998 python:
                 print_error(NameError("Failed to execute event " + str(event.__class__.__name__) + " as the event was not registered prior to calling it"))
 
         @staticmethod
+        def unregister(event_class)
+            if not inspect.isclass(event_class):
+                print_fatal(TypeError("Expected an Event class, but got an instance instead"))
+                return
+            
+            if event_class in EventAPI.event_handlers:
+                EventAPI.event_handlers.remove(event_class)
+                print_debug("Removed event handler for class")
+
+        @staticmethod
         def is_registered(event_class):
             return event in EventAPI.event_handlers
 
@@ -141,7 +151,7 @@ init -997 python:
                 os.makedirs(backup_directory)
             now = datetime.datetime.today()
             save_persistent(old_persistent, backup_directory, "persistent_backup-" + str(now.year) + "-" + str(now.month) + "-" + str(now.day))
-            print("- Done!")
+            print("  - Done!")
 
         EventAPI.call(ExitEvent())
 
