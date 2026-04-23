@@ -22,5 +22,14 @@ init python:
             self.resulting_sanity = resulting_sanity
             self.is_setting_sanity = is_setting_sanity
 
+    class TalkGreetingEvent(TalkingEvent):
+        pass
+
+    class TalkIdleEvent(TalkingEvent):
+        pass
+
+    class TalkTopicEvent(TalkingEvent):
+        pass
+
     EventAPI.register(KarmaEvent)
     EventAPI.register(SanityEvent)
