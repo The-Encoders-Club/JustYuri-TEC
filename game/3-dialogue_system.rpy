@@ -318,9 +318,13 @@ init -999 python:
         elif selection_method == "pool":
             #The first thing is to scan the dialogue_db, and select out those dialogues which are 
             # within the right category and have conditions_met, then add said dialogues to a list
-            dialogue_list = []
+            dialogue_list =[]
             importance_value = -100
             for dialogue_name in dialogue_db.keys():
+
+                if dialogue_name.startswith("song_"):
+                    continue
+
                 current_dialogue = dialogue_db[dialogue_name]
                 if current_dialogue.category == selection_detail:
                     if current_dialogue.conditions_met():
