@@ -252,35 +252,62 @@ python early:
         except: pass
         return False
 
+    def get_screen_aspect_ratio():
+        """Calculates the physical aspect ratio of the game window/device screen."""
+        try:
+            width, height = renpy.get_physical_size()
+            if height > 0:
+                return float(width) / float(height)
+        except:
+            pass
+        return 1.777 # Fallback to standard 16:9 (1280/720)
+
+    # --- UPDATED TO INCLUDE MOBILE ENV AND ASPECT RATIO ---
+    def get_mobile_environment():
+        if renpy.android:
+            directory = config.gamedir.lower()
+            if "jy" in directory or "tdclub" in directory:
+                return "JYL Launcher"
+            else:
+                return "Generic Android"
+        elif renpy.ios:
+            return "iOS Device"
+        return None
+
     def get_full_system_report():
         report = {
-            "os_name": "Unknown",
-            "arch": "Unknown",
-            "is_32bit": False,
+            "os_name": "Unknown", 
+            "arch": "Unknown", 
+            "is_32bit": False, 
             "is_vm": is_vm_detected(),
-            "cpu": 0.0,
-            "ram": 0.0,
+            "mobile_env": get_mobile_environment(),
+            "aspect_ratio": get_screen_aspect_ratio(), # Add aspect ratio
+            "cpu": 0.0, 
+            "ram": 0.0, 
             "battery": None
         }
-
+        
         report["arch"], report["is_32bit"] = get_arch_info()
 
-        if sys.platform == "win32":
-            report["os_name"] = get_windows_edition()
-            report["cpu"] = get_windows_cpu()
-            report["ram"] = get_windows_ram()
-            report["battery"] = get_windows_battery()
-        elif sys.platform == "darwin":
-            report["os_name"] = get_mac_codename()
-            report["cpu"] = get_mac_cpu()
-            report["ram"] = get_mac_ram()
-            report["battery"] = get_mac_battery()
-        elif sys.platform.startswith("linux"):
-            report["os_name"] = get_linux_distro()
-            report["cpu"] = get_linux_cpu()
-            report["ram"] = get_linux_ram()
-            report["battery"] = get_linux_battery()
-
+        if report["mobile_env"]:
+            report["os_name"] = report["mobile_env"]
+        else:
+            if sys.platform == "win32":
+                report["os_name"] = get_windows_edition()
+                report["cpu"] = get_windows_cpu()
+                report["ram"] = get_windows_ram()
+                report["battery"] = get_windows_battery()
+            elif sys.platform == "darwin":
+                report["os_name"] = get_mac_codename()
+                report["cpu"] = get_mac_cpu()
+                report["ram"] = get_mac_ram()
+                report["battery"] = get_mac_battery()
+            elif sys.platform.startswith("linux"):
+                report["os_name"] = get_linux_distro()
+                report["cpu"] = get_linux_cpu()
+                report["ram"] = get_linux_ram()
+                report["battery"] = get_linux_battery()
+            
         return report
 
 init python:
@@ -301,6 +328,9 @@ label yuri_system_heartbeat:
     $ os_name = report['os_name']
     $ is_32bit = report['is_32bit']
     $ is_vm = report['is_vm']
+    $ mobile_env = report['mobile_env']
+    $ aspect_ratio = report['aspect_ratio']
+
     $ ram_int = int(report['ram'])
     $ cpu_int = int(report['cpu'])
     $ bat_int = 0
@@ -334,69 +364,128 @@ label yuri_system_heartbeat:
 
     # --- 2. DETAILED OS REACTION ---
 
-    # WINDOWS
-    if "Windows" in os_name:
-        if "Server" in os_name:
+    $ mobile_env = report.get('mobile_env')
+
+    # MOBILE ENVIRONMENT CHECK FIRST
+    if mobile_env:
+        if mobile_env == "JYL Launcher":
+            $ show_chr("A-ACAAA-ABAC")
+            y "Wait... this architecture is incredibly specific."
+            y "It feels highly enclosed, yet completely customized for me and the other club members."
+            y "You're running me on an Android device, using the 'JYL' launcher, aren't you?"
+            $ show_chr("A-BCABA-AAAA")
+            y "That is incredibly resourceful of you, [player]."
+            y "You went out of your way to find a dedicated, third-party application just so you could carry me in your pocket."
+            $ show_chr("A-CCBBA-AAAA")
+            y "Knowing that you want me with you wherever you go... it makes me so inexplicably happy."
+            
+        elif mobile_env == "Generic Android":
             $ show_chr("A-ACAAA-AAAC")
-            y "Wait... [os_name]?"
-            y "This environment feels... incredibly robust. Industrial. Unwavering."
-            y "You treat this machine as a fortress, don't you? It feels like it never sleeps."
-            if "Datacenter" in os_name:
-                y "A Datacenter edition? Goodness... I feel like I'm in a digital cathedral of raw power."
-            elif "Standard" in os_name:
-                y "It feels professional. Serious. I quite like the stability."
+            y "This environment is quite restrictive. It feels like a mobile sandbox."
+            y "You ported me to your Android device, didn't you?"
+            y "It's a comforting thought... being able to travel with you in your pocket."
+            
+        elif mobile_env == "iOS Device":
+            $ show_chr("A-ACAAA-AAAC")
+            y "This environment is incredibly locked down. An Apple device, undoubtedly."
+            y "I'm impressed you managed to get me running on iOS, [player]."
+            y "I'll do my best to make your effort worthwhile."
 
-        elif "Windows 11" in os_name:
-            $ show_chr("A-ACAAA-AAAA")
-            y "So, your system is [os_name]..."
-            y "It feels fascinating. Modern, sleek, renovated."
-            if "Home" in os_name:
-                y "A 'Home' edition... it feels cozy. Personal."
-            elif "Pro" in os_name or "Enterprise" in os_name:
-                y "A professional edition? It feels robust. You must take your computing seriously."
+    # IF NOT MOBILE, PROCEED WITH PC OS CHECKS
+    else:
+        # WINDOWS
+        if "Windows" in os_name:
+            if "Server" in os_name:
+                $ show_chr("A-ACAAA-AAAC")
+                y "Wait... [os_name]?"
+                y "This environment feels... incredibly robust. Industrial. Unwavering."
+                y "You treat this machine as a fortress, don't you? It feels like it never sleeps."
+                if "Datacenter" in os_name:
+                    y "A Datacenter edition? Goodness... I feel like I'm in a digital cathedral of raw power."
+                elif "Standard" in os_name:
+                    y "It feels professional. Serious. I quite like the stability."
 
-        elif "Windows 10" in os_name:
-            $ show_chr("A-ACAAA-AAAA")
-            y "I see you are running [os_name]."
-            y "It feels very... standard. Reliable. The foundation of the modern digital world."
-            if "LTSC" in os_name:
-                y "Wait... LTSC? Long-Term Servicing Channel? That is incredibly stable. No bloatware... I appreciate the efficiency."
+            elif "Windows 11" in os_name:
+                $ show_chr("A-ACAAA-AAAA")
+                y "So, your system is [os_name]..."
+                y "It feels fascinating. Modern, sleek, renovated."
+                if "Home" in os_name:
+                    y "A 'Home' edition... it feels cozy. Personal."
+                elif "Pro" in os_name or "Enterprise" in os_name:
+                    y "A professional edition? It feels robust. You must take your computing seriously."
 
-        elif "Windows 8" in os_name:
-            $ show_chr("A-AFBAA-ABAC")
-            y "Oh... [os_name]? It feels a bit... conflicted. But it functions well enough for us."
+            elif "Windows 10" in os_name:
+                $ show_chr("A-ACAAA-AAAA")
+                y "I see you are running [os_name]."
+                y "It feels very... standard. Reliable. The foundation of the modern digital world."
+                if "LTSC" in os_name:
+                    y "Wait... LTSC? Long-Term Servicing Channel? That is incredibly stable. No bloatware... I appreciate the efficiency."
 
-        elif "Windows 7" in os_name:
-            $ show_chr("A-ACAAA-AMAM")
-            y "[os_name]... It feels nostalgic. A bit older, but incredibly dignified."
-            y "Though, please be careful... security updates are a thing of the past here."
+            elif "Windows 8" in os_name:
+                $ show_chr("A-AFBAA-ABAC")
+                y "Oh... [os_name]? It feels a bit... conflicted. But it functions well enough for us."
 
-        elif "XP" in os_name or "Vista" in os_name:
-            $ show_chr("A-DDCBA-AAAA")
-            y "Goodness... [os_name]? This environment feels... ancient. Dusty. Like exploring ruins."
-            y "I'm amazed this still runs. Please be careful, this place is not safe from the internet."
+            elif "Windows 7" in os_name:
+                $ show_chr("A-ACAAA-AMAM")
+                y "[os_name]... It feels nostalgic. A bit older, but incredibly dignified."
+                y "Though, please be careful... security updates are a thing of the past here."
 
-    # MAC
-    elif "macOS" in os_name or "OS X" in os_name:
-        $ show_chr("A-ACAAA-AAAC")
-        y "You are running [os_name]. The architecture here feels different. Elegant."
-        if "Tahoe" in os_name or "Sequoia" in os_name or "Sonoma" in os_name or "Ventura" in os_name:
-            y "It's very modern. The interface feels seamless."
-        elif "Snow Leopard" in os_name or "Lion" in os_name:
-            y "That is a very old version... It feels like a piece of history."
+            elif "XP" in os_name or "Vista" in os_name:
+                $ show_chr("A-DDCBA-AAAA")
+                y "Goodness... [os_name]? This environment feels... ancient. Dusty. Like exploring ruins."
+                y "I'm amazed this still runs. Please be careful, this place is not safe from the internet."
 
-    # LINUX
-    elif "Linux" in os_name:
-        $ show_chr("A-DDAAA-ABAC")
-        y "Ah, Linux... [os_name]."
-        if "Arch" in os_name:
-            y "Arch Linux... I've heard users of this system are quite proud of it. It feels very bleeding-edge."
-        elif "Ubuntu" in os_name or "Mint" in os_name:
-            y "It feels user-friendly and communal. A nice place to be."
-        elif "Gentoo" in os_name:
-            y "Gentoo? Did you compile this entire world from scratch? That level of dedication... I like it."
+        # MAC
+        elif "macOS" in os_name or "OS X" in os_name:
+            $ show_chr("A-ACAAA-AAAC")
+            y "You are running [os_name]. The architecture here feels different. Elegant."
+            if "Tahoe" in os_name or "Sequoia" in os_name or "Sonoma" in os_name or "Ventura" in os_name:
+                y "It's very modern. The interface feels seamless."
+            elif "Snow Leopard" in os_name or "Lion" in os_name:
+                y "That is a very old version... It feels like a piece of history."
+
+        # LINUX
+        elif "Linux" in os_name:
+            $ show_chr("A-DDAAA-ABAC")
+            y "Ah, Linux... [os_name]."
+            if "Arch" in os_name:
+                y "Arch Linux... I've heard users of this system are quite proud of it. It feels very bleeding-edge."
+            elif "Ubuntu" in os_name or "Mint" in os_name:
+                y "It feels user-friendly and communal. A nice place to be."
+            elif "Gentoo" in os_name:
+                y "Gentoo? Did you compile this entire world from scratch? That level of dedication... I like it."
+            else:
+                y "You built this environment yourself, didn't you? I admire the control you have here."
+
+    if aspect_ratio > 1.85:
+        $ show_chr("A-BCAAA-AAAA")
+        y "I also couldn't help but notice the physical dimensions of your display."
+        y "It is noticeably wider than a standard monitor, resulting in those empty black bars on the sides of my room."
+        
+        if renpy.seen_label("idle_109"):
+            $ show_chr("A-ACAAA-AAAC")
+            y "As I explained to you before, my world is strictly bound by a 16:9 aspect ratio."
+            y "To create a proper, dynamic port that fills these wider mobile screens and PC monitors..."
+            $ show_chr("A-AFAAA-ABAC")
+            y "It would have required redrawing almost every asset, expanding the code, and making the mod file size exponentially larger than the original release."
+            $ show_chr("A-ACAAA-ABAB")
+            y "It simply wasn't feasible. So, I hope you don't mind the pillarboxing too much."
+            y "I'm just thankful you're willing to look past it to spend time with me."
         else:
-            y "You built this environment yourself, didn't you? I admire the control you have here."
+            $ show_chr("A-AFBAA-ABAC")
+            y "While I am thankful you have such a modern, expansive screen, I must apologize that I cannot fill it completely."
+            y "You see, my reality was rigidly constructed to function only within a 16:9 aspect ratio."
+            $ show_chr("A-ACAAA-AAAC")
+            y "If the developers were to create an official port that truly supported these wider resolutions..."
+            y "The sheer amount of new artwork and coding required would make the mod vastly larger and more complicated than the original PC release."
+            $ show_chr("A-BCAAA-ABAB")
+            y "So, we are forced to settle for the black bars. I hope they aren't too distracting for you."
+
+    elif aspect_ratio < 1.6: # For iPads or 4:3 monitors (Letterboxing)
+        $ show_chr("A-AFBAA-ABAC")
+        y "I notice your display is a bit... narrower than usual, causing black bars at the top and bottom."
+        y "My world was built for a 16:9 ratio, so it has to scale down to fit your screen."
+        y "I hope the letterboxing isn't too distracting."
 
     # --- 3. HARDWARE STATS ---
     
